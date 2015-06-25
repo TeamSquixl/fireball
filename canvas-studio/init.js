@@ -97,6 +97,9 @@ module.exports = function ( options, cb ) {
             // init compiler
             Editor.Compiler = require('./core/compiler');
 
+            // load scene utils
+            require('./core/scene-utils');
+
             next ();
         },
 
