@@ -94,6 +94,9 @@ module.exports = function ( options, cb ) {
             Editor.registerDefaultMainMenu(MainMenuTmplFn);
             Editor.MainMenu.reset();
 
+            // init compiler
+            Editor.Compiler = require('./core/compiler');
+
             next ();
         },
 
@@ -181,9 +184,6 @@ module.exports = function ( options, cb ) {
             // register packages = {project}/packages/
             Editor.registerPackagePath( Path.join(Editor.appHome, 'packages') );
             Editor.registerPackagePath( Path.join(Editor.projectPath, 'packages') );
-
-            // init compiler
-            Editor.Compiler = require('./core/compiler');
 
             next ();
         },
