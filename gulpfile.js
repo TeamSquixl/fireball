@@ -9,6 +9,8 @@ var pjson = JSON.parse(Fs.readFileSync('./package.json'));
 var shell = require('gulp-shell');
 var spawn = require('child_process').spawn;
 var chalk = require('chalk');
+var es = require('event-stream');
+var header = require('gulp-header');
 
 // require tasks
 require('./utils/download-shell');
@@ -375,15 +377,31 @@ gulp.task('check-deps', function(cb) {
     checkDeps.checkSubmoduleDeps(pjson.submodules);
 });
 
-gulp.task('cp-apisrc', ['del-apidocs'], function(cb) {
-    gulp.src(["./editor-framework/init.js",
-              "./editor-framework/core/*",
-              "./editor-framework/share/*",
-              "./editor-framework/page/*"
-            ], {
-                base: "./editor-framework"
-            })
-            .pipe(gulp.dest("utils/api/editor-framework"));
+gulp.task('cp-apisrc', ['del-apidocs'], function() {
+    var cpEditor = gulp.src([
+            "./editor-framework/init.js",
+            "./editor-framework/core/*",
+            "./editor-framework/share/*",
+            "./editor-framework/page/*"
+        ], {
+            base: "./editor-framework"
+        })
+        .pipe(gulp.dest("utils/api/editor-framework"));
+
+
+    var DefaultModuleHeader = "/**\n" +
+                              " * @module Fire\n" +
+                              " */\n";
+
+    var cpEngine = gulp.src([
+            "src/**/*"
+        ], {
+            cwd: "./engine-framework"
+        })
+        .pipe(header(DefaultModuleHeader))
+        .pipe(gulp.dest("utils/api/engine-framework"));
+
+    return es.merge(cpEditor, cpEngine);
 });
 
 gulp.task('del-apidocs', function(cb) {

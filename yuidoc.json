@@ -8,7 +8,8 @@
     "outdir": "./apidocs",
     "linkNatives": true,
     "paths": [
-        "utils/api/editor-framework"
+        "utils/api/editor-framework",
+        "utils/api/engine-framework"
     ],
     "tabtospace": 4
   }

@@ -361,7 +361,7 @@ Ipc.on('app:compile-worker:start', function (options) {
             var uuid = getUuidFromPath(file.path);
             // redirect dest path
             file.base = Path.join(paths.proj, 'assets');
-            var rawPath = Editor.assetdb.remote._uuid2path[uuid];
+            var rawPath = Editor.assetdb.remote.uuidToFspath(uuid);
             file.path = rawPath;
             callback(null, file);
         });
