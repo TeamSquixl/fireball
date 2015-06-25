@@ -279,6 +279,14 @@ function _getDefaultMainMenu () {
                         Editor.log(uuid.v4());
                     }
                 },
+                {
+                    label: 'Remove All Meta Files',
+                    click: function() {
+                        Editor.assetdb._rmMetas( function () {
+                            Editor.success('Meta files removed');
+                        });
+                    }
+                },
                 { type: 'separator' },
                 {
                     label: 'Run Tests (editor-framework)',
