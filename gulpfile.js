@@ -9,8 +9,7 @@ var pjson = JSON.parse(Fs.readFileSync('./package.json'));
 var shell = require('gulp-shell');
 var spawn = require('child_process').spawn;
 var chalk = require('chalk');
-var es = require('event-stream');
-var header = require('gulp-header');
+
 
 // require tasks
 require('./utils/download-shell');
@@ -345,11 +344,12 @@ gulp.task('update-shared-packages', function(cb) {
 gulp.task('npm', ['rm-native-modules'], function(cb) {
     var cmdstr = process.platform === 'win32' ? 'npm.cmd' : 'npm';
     var tmpenv = process.env;
-    var os = require('os');
+    var homepath = process.platform === 'win32' ? Path.join(tmpenv.HOMEPATH, '.node-gyp') : Path.join(tmpenv.HOME, '.electron-gyp');
     tmpenv.npm_config_disturl = 'https://atom.io/download/atom-shell';
     tmpenv.npm_config_target = pjson['electron-version'];
-    tmpenv.npm_config_arch = os.arch();
-    tmpenv.HOME = Path.join(tmpenv.HOME, '.electron-gyp');
+    tmpenv.npm_config_arch = process.platform === 'win32' ? 'ia32' : 'x64';
+    console.log(homepath);
+    tmpenv.HOME = homepath;
     var child = spawn(cmdstr, ['install'], {
         stdio: 'inherit',
         env: tmpenv
@@ -378,6 +378,8 @@ gulp.task('check-deps', function(cb) {
 });
 
 gulp.task('cp-apisrc', ['del-apidocs'], function() {
+    var es = require('event-stream');
+    var header = require('gulp-header');
     var cpEditor = gulp.src([
             "./editor-framework/init.js",
             "./editor-framework/core/*",
