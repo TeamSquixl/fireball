@@ -3,6 +3,8 @@
   "description": "Fireball is a hackable game editor works with many open sourced JavaScript game engines.",
   "version": "0.5.0-alpha",
   "url": "http://docs.fireball-x.com/",
+  "baseurl": "/api",
+  "local": true,
   "logo": "http://docs.fireball-x.com/images/logo.png",
   "options": {
     "outdir": "./apidocs",

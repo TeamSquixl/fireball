@@ -24,6 +24,11 @@ Learn what's going on from [Fireball Beta Roadmap](https://github.com/fireball-x
 - Install [gulp](https://github.com/gulpjs/gulp) command line tool
 - Install [bower](http://bower.io/) command line tool
 
+For **Windows** user, you need the following environment set up to be able to build nodejs native modules:
+
+- [Visual Studio Community 2013](http://www.visualstudio.com/products/visual-studio-community-vs)
+- [Python 2.7](http://www.python.org/download/releases/2.7/) - make sure you can run `python --verson` in your command line tool. Read [this](https://docs.python.org/2/using/windows.html#excursus-setting-environment-variables) for setting up path correctly.
+
 ## Install
 
 In cloned project folder, run the following command to setup dev environment:
@@ -50,7 +55,7 @@ gulp install-builtin
 gulp install-runtime
 
 # Install fireshell(electron)
-gulp update-fire-shell
+gulp update-electron
 
 # Install npm packages
 gulp npm # DO NOT use npm directly
