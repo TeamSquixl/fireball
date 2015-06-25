@@ -50,7 +50,7 @@ gulp install-builtin
 gulp install-runtime
 
 # Install fireshell(electron)
-gulp update-fire-shell
+gulp update-electron
 
 # Install npm packages
 gulp npm # DO NOT use npm directly
