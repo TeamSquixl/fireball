@@ -239,6 +239,13 @@ function _getDefaultMainMenu () {
                         Editor.App.reload();
                     }
                 },
+                {
+                    label: 'Compile',
+                    accelerator: 'F7',
+                    click: function() {
+                        Editor.Compiler.compileAndReload();
+                    }
+                },
                 { type: 'separator' },
                 {
                     label: 'Inspect Element',
@@ -295,13 +302,6 @@ function _getDefaultMainMenu () {
                             label: 'send2panel \'foo:bar\' foobar.panel',
                             click: function() {
                                 Editor.sendToPanel( "foobar.panel", "foo:bar" );
-                            }
-                        },
-                        {
-                            label: 'Recompile',
-                            accelerator: 'F7',
-                            click: function() {
-                                Editor.Compiler.compileAndReload();
                             }
                         },
                     ],
