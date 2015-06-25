@@ -100,17 +100,17 @@
 
             _onDropAreaEnter: function ( event ) {
                 event.stopPropagation();
-                this.classList.add('highlight')
+                this.classList.add('highlight');
             },
 
             _onDropAreaLeave: function ( event ) {
                 event.stopPropagation();
-                this.classList.remove('highlight')
+                this.classList.remove('highlight');
             },
 
             _onDropAreaAccept: function ( event ) {
                 event.stopPropagation();
-                this.classList.remove('highlight')
+                this.classList.remove('highlight');
 
                 event.detail.dragItems.forEach( function ( path ) {
                     Editor.sendRequestToCore('app:open-project', path, function ( err ) {

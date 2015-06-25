@@ -89,16 +89,8 @@ module.exports = function ( options, cb ) {
             // register default layout
             Editor.registerDefaultLayout( Editor.url('app://canvas-studio/static/layout.json') );
 
-            // apply default main menu
-            var MainMenuTmplFn = require('./core/main-menu');
-            Editor.registerDefaultMainMenu(MainMenuTmplFn);
-            Editor.MainMenu.reset();
-
-            // init compiler
-            Editor.Compiler = require('./core/compiler');
-
-            // load scene utils
-            require('./core/scene-utils');
+            // init core modules
+            require('./core/init');
 
             next ();
         },
@@ -121,6 +113,7 @@ module.exports = function ( options, cb ) {
                 library: 'library',
             });
             Editor.libraryPath = Editor.assetdb.library;
+            Editor.importPath = Editor.assetdb._importPath;
 
             // register uuid:// protocol
             function _url2path (urlInfo) {

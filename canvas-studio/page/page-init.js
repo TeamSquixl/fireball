@@ -1,6 +1,7 @@
 (function () {
     Editor.projectInfo = Editor.remote.projectInfo;
     Editor.libraryPath = Editor.remote.libraryPath;
+    Editor.importPath = Editor.remote.importPath;
 
     if ( !Editor.assets ) Editor.assets = {};
     if ( !Editor.metas ) Editor.metas = {};
