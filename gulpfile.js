@@ -409,3 +409,29 @@ gulp.task('cp-apisrc', ['del-apidocs'], function() {
 gulp.task('del-apidocs', function(cb) {
     del(['./apidocs', './utils/api'],cb);
 });
+
+
+gulp.task('check-dependencies', function(cb) {
+    var checkdeps = require('check-dependencies');
+    var count = 2;
+    checkdeps({
+        packageManager: 'npm',
+        verbose: true,
+        checkGitUrls: true
+    }, function() {
+        if (--count<=0) {
+            console.log('Run ' + chalk.cyan('"gulp update-deps"') + 'to install missing dependencies');
+            cb();
+        }
+    });
+    checkdeps({
+        packageManager: 'bower',
+        verbose: true,
+        checkGitUrls: true
+    }, function() {
+        if (--count<=0) {
+            console.log('Run ' + chalk.cyan('"gulp update-deps"') + 'to install missing dependencies');
+            cb();
+        }
+    });
+});
