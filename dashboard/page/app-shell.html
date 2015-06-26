@@ -1,5 +1,6 @@
 <link rel="import" href="app://bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="app://bower_components/iron-input/iron-input.html">
+<link rel="import" href="button/button.html">
 
 <link rel="import" href="app-navbar.html">
 <link rel="import" href="app-sidebar.html">
@@ -10,14 +11,28 @@
 <dom-module id="app-shell" >
     <link rel="import" type="css" href="styles/app-shell.css">
     <template>
-        <app-navbar></app-navbar>
-        <div id="shell" class="layout horizontal flex-1">
-            <app-sidebar on-select="_onSelect">
-                <div>Recent Projects</div>
-                <div>New Project</div>
-                <div>Open Other ...</div>
-                <div>Help</div>
-            </app-sidebar>
+        <div id="shell" class="layout vertical">
+            <div id="window-row" class="layout horizontal start-justified">
+                <div class="flex-1 window-title layout horizontal start-justified">
+                    <img height="30px" src="../static/img/logo_white.png">Fireball-Dashboard</div>
+                <div class="flex-1 window-control layout horizontal end-justified">
+                    <div class="layout horizontal">
+                        <span>minimize</span>
+                        <span>maximize</span>
+                        <span>close</span>
+                    </div>
+                </div>
+            </div>
+            <div id="tab-row" class="layout horizontal start-justified">
+                <app-sidebar class="flex-1" on-select="_onSelect">
+                    <div>Recent Projects</div>
+                    <div>New Project</div>
+                    <div>Open Other ...</div>
+                    <div>Help</div>
+                </app-sidebar>
+                <app-navbar class="flex-1 layout horizontal end-justified"></app-navbar>
+            </div>
+
             <div id="view">
                 <div hidden$="[[!_recentProject(curIndex)]]">
                     <app-recent></app-recent>
@@ -29,6 +44,8 @@
                     <app-help></app-help>
                 </div>
             </div>
+
+            <div id="project-path">{{projectPath}}</div>
         </div>
         <div id="status" class$={{statusType}}>{{status}}</div>
     </template>
@@ -38,13 +55,15 @@
             is: 'app-shell',
 
             listeners: {
-                'status-changed': '_onStatusChanged'
+                'status-changed': '_onStatusChanged',
+                'path-changed': '_onPathChanged'
             },
 
             ready: function () {
                 this.curIndex = 0;
                 this.status = '';
                 this.statusType = 'normal';
+                this.projectPath = '';
             },
 
             _onSelect: function ( event ) {
@@ -93,6 +112,10 @@
                 this.set('status', event.detail.status);
                 this.set('statusType', event.detail.type);
             },
+
+            _onPathChanged: function ( event ) {
+                this.set('projectPath', event.detail.path);
+            }
         });
     </script>
 </dom-module>

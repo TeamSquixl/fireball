@@ -3,6 +3,7 @@
     @apply(--layout-vertical);
 
     cursor: default;
+    background-color: #343435;
 }
 
 #shell {
@@ -10,9 +11,19 @@
 }
 
 #view {
-    @apply(--layout-flex);
+/*     @apply(--layout-flex);
+ */
+     position: relative;
+     height: 500px;
+     background-color: #262626;
+}
 
-    position: relative;
+#project-path {
+    height: 37px;
+    color: #808080;
+    background-color: #1E1E1E;
+    line-height: 37px;
+    padding-left: 10px;
 }
 
 #status {
@@ -31,4 +42,32 @@
 
 #status.normal {
     color: gray;
+}
+
+#window-row {
+    border-bottom: 2px #664d46 solid;
+    height: 56px;
+}
+
+#window-row .window-title {
+    color: #ccc;
+    font-size: 16px;
+    margin: auto 0 auto 30px;
+    line-height: 30px;
+}
+
+#window-row .window-title img {
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+#window-row .window-control {
+    list-style: none;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#window-row .window-control span {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }

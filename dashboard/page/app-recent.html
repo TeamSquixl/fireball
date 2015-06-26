@@ -2,33 +2,45 @@
     <link rel="import" type="css" href="styles/app-recent.css">
 
     <template>
-        <template is="dom-repeat" id="list" items="{{list}}">
-            <div class="project">
-                <div class$="{{_getItemNameClass(item)}}">{{item.name}}</div>
-                <div class="info" hidden$="{{_hideErrorInfo(item.error)}}">{{item.error}}</div>
-                <div class="layout horizontal center">
-                    <img class="logo" src$="{{_getRuntimeLogo(item.runtime)}}"></img>
-                    <div class="path">{{item.path}}</div>
-                    <span flex-1></span>
-                    <div class="btn-group">
-                        <button class="transparent"
-                            no-focus
-                            on-click="_onClose"
-                        >
-                            Close
-                        </button>
-                        <button
-                            class="flat"
-                            no-focus
-                            disabled$="{{!_hideErrorInfo(item.error)}}"
-                            on-click="_onOpen"
-                        >
-                            Open
-                        </button>
+        <iron-selector id="selector"
+            selected-class="selected"
+            on-selected-changed="_onSelectedChanged"
+        >
+            <template is="dom-repeat" id="list" items="{{list}}">
+                <div class="project layout vertical">
+                    <div class="logo">
+                        <img src$="{{_getRuntimeLogo(item.runtime)}}"></img>
+                        <div class="btn-group overlay">
+                            <div class="btn-anchor">
+                                <editor-button class="corner transparent"
+                                    no-focus
+                                    on-click="_onClose"
+                                >
+                                    Close
+                                </editor-button>
+                                <editor-button
+                                    class="flat"
+                                    no-focus
+                                    disabled$="{{!_hideErrorInfo(item.error)}}"
+                                    on-click="_onOpen"
+                                >
+                                    Open
+                                </editor-button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="name">
+                        <div class$="{{_getItemNameClass(item)}}">{{item.name}}</div>
                     </div>
                 </div>
-            </div>
-        </template>
+            </template>
+        </iron-selector>
+
+        <!--                     <div class="info" hidden$="{{_hideErrorInfo(item.error)}}">{{item.error}}</div> -->
+        <!-- <div class="layout horizontal center">
+            <div class="path">{{item.path}}</div>
+            <span flex-1></span>
+        </div> -->
     </template>
 
     <script>
@@ -121,6 +133,14 @@
                     }.bind(this));
                 }.bind(this));
             },
+
+            _onSelectedChanged: function ( event ) {
+                var itemEL = Polymer.dom(this.$.selector).children[event.detail.value];
+                var model = this.$.list.modelForElement(itemEL);
+                if ( model ) {
+                    this.fire( 'path-changed', { path: model.item.path } );
+                }
+            }
         });
     </script>
 </dom-module>
