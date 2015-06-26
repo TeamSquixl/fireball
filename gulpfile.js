@@ -18,7 +18,7 @@ require('./utils/download-shell');
 
 gulp.task('bootstrap', gulpSequence('init-submodules', 'install-builtin', 'install-runtime', 'install-shared-packages', 'update-electron', 'npm', 'bower'));
 
-gulp.task('update', gulpSequence('pull-fireball', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime', 'update-electron']));
+gulp.task('update', gulpSequence('pull-fireball', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime', 'update-electron'], 'check-dependencies'));
 
 gulp.task('update-deps', ['npm', 'bower']);
 
@@ -413,6 +413,7 @@ gulp.task('del-apidocs', function(cb) {
 
 gulp.task('check-dependencies', function(cb) {
     var checkdeps = require('check-dependencies');
+    console.log(chalk.cyan('====Checking Dependencies===='));
     var count = 2;
     checkdeps({
         packageManager: 'npm',
@@ -420,7 +421,7 @@ gulp.task('check-dependencies', function(cb) {
         checkGitUrls: true
     }, function() {
         if (--count<=0) {
-            console.log('Run ' + chalk.cyan('"gulp update-deps"') + 'to install missing dependencies');
+            console.log('If you see any version number in ' + chalk.red('red') + '. Please run ' + chalk.cyan('"gulp update-deps"') + 'to install missing dependencies');
             cb();
         }
     });
@@ -430,7 +431,7 @@ gulp.task('check-dependencies', function(cb) {
         checkGitUrls: true
     }, function() {
         if (--count<=0) {
-            console.log('Run ' + chalk.cyan('"gulp update-deps"') + 'to install missing dependencies');
+            console.log('If you see any version number in ' + chalk.red('red') + '. Please run ' + chalk.cyan('"gulp update-deps"') + 'to install missing dependencies');
             cb();
         }
     });
