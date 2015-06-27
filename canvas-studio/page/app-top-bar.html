@@ -1,0 +1,26 @@
+<link rel="import" href="app-play-buttons.html">
+
+<dom-module id="app-top-bar" >
+    <style>
+        :host {
+            @apply(--layout-horizontal);
+            height: 35px;
+            margin-bottom: 3px;
+        }
+    </style>
+
+    <template>
+        <div class="flex-1 layout horizontal end">
+        </div>
+        <div class="flex-3 layout horizontal center center-justified">
+            <app-play-buttons></app-play-buttons>
+        </div>
+        <div class="flex-1 layout horizontal end end-justified">
+            <editor-button nofocus class="small" on-click="_onProject">Project</editor-button>
+            <editor-button nofocus class="small" on-click="_onAssets">Assets</editor-button>
+            <editor-button nofocus class="small" on-click="_onLibrary">Library</editor-button>
+        </div>
+    </template>
+
+    <script type="text/javascript" src="app-top-bar.js"></script>
+</dom-module>
