@@ -1,10 +1,13 @@
 var Ipc = require('ipc');
 
-// init states
-var _states = {
-    paused: false,
-    playing: false,
-};
+Editor.projectInfo = Editor.remote.projectInfo;
+Editor.libraryPath = Editor.remote.libraryPath;
+Editor.importPath = Editor.remote.importPath;
+
+if ( !Editor.assets ) Editor.assets = {};
+if ( !Editor.metas ) Editor.metas = {};
+if ( !Editor.inspectors ) Editor.inspectors = {};
+
 Editor.states = {};
 function _defprop ( name, value ) {
     Editor.states['_'+name] = value;
@@ -17,21 +20,10 @@ function _defprop ( name, value ) {
         },
     });
 }
-for ( var name in _states ) {
-    _defprop ( name, _states[name] );
+for ( var name in Editor.remote.states ) {
+    var realName = name.substring(1);
+    _defprop ( realName, Editor.remote.states[name] );
 }
 Ipc.on('editor:state-changed', function ( name, value ) {
     Editor.states['_'+name] = value;
 });
-
-
-// apply default main menu
-var MainMenuTmplFn = require('./main-menu');
-Editor.registerDefaultMainMenu(MainMenuTmplFn);
-Editor.MainMenu.reset();
-
-// init compiler
-Editor.Compiler = require('./compiler');
-
-// load scene utils
-require('./scene-utils');
