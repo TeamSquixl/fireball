@@ -77,7 +77,7 @@ module.exports = function ( options, cb ) {
 
             // register selections
             Editor.Selection.register('asset');
-            Editor.Selection.register('entity');
+            Editor.Selection.register('node');
 
             // register global profile path =  ~/.fireball/canvas-studio/
             var globalProfilePath = Path.join(Editor.appHome, 'canvas-studio');
