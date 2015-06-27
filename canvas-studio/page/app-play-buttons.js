@@ -9,6 +9,7 @@ Polymer({
             case 'scene-playing':
                 if ( value ) {
                     this.setAttribute('playing','');
+                    this.$.play.setAttribute( 'selected', '' );
                 } else {
                     this.removeAttribute('playing');
                     this.$.play.removeAttribute( 'selected' );
@@ -17,27 +18,33 @@ Polymer({
                 break;
             }
         }.bind(this));
+
+        Ipc.on('editor:toggle-play', function () {
+            this.togglePlay();
+        }.bind(this));
     },
 
-    _onPlayClick: function ( event ) {
+    togglePlay () {
         if ( Editor.states['scene-initializing'] )
             return;
 
-        if ( !this.$.play.hasAttribute('selected') ) {
-            this.$.play.setAttribute( 'selected', '' );
-
+        if ( !Editor.states['scene-playing'] ) {
             Editor.states['scene-initializing'] = true;
             Editor.sendToAll('scene:play');
         } else {
-            this.$.play.removeAttribute( 'selected' );
-
             Editor.states['scene-initializing'] = true;
             Editor.sendToAll('scene:stop');
         }
+    },
 
+    _onPlayClick: function ( event ) {
+        event.stopPropagation();
+        this.togglePlay();
     },
 
     _onPauseClick: function ( event ) {
+        event.stopPropagation();
+
         if ( !this.$.pause.hasAttribute('selected') ) {
             this.$.pause.setAttribute( 'selected', '' );
 
@@ -50,6 +57,8 @@ Polymer({
     },
 
     _onStepClick: function ( event ) {
+        event.stopPropagation();
+
         Editor.log('Step');
     },
 });

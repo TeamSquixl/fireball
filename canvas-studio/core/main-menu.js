@@ -127,6 +127,14 @@ function _getDefaultMainMenu () {
                    accelerator: 'CmdOrCtrl+A',
                    selector: 'selectAll:'
                 },
+                { type: 'separator' },
+                {
+                   label: 'Play',
+                   accelerator: 'F5',
+                   click: function () {
+                       Editor.sendToMainWindow('editor:toggle-play');
+                   },
+                },
             ]
         },
 
