@@ -130,7 +130,7 @@ function _getDefaultMainMenu () {
                 { type: 'separator' },
                 {
                    label: 'Play',
-                   accelerator: 'F5',
+                   accelerator: 'CmdOrCtrl+P',
                    click: function () {
                        Editor.sendToMainWindow('editor:toggle-play');
                    },
@@ -220,7 +220,7 @@ function _getDefaultMainMenu () {
             submenu: [
                 {
                     label: 'Command Palette',
-                    accelerator: 'CmdOrCtrl+P',
+                    accelerator: 'CmdOrCtrl+:',
                     click: function() {
                         Editor.mainWindow.focus();
                         Editor.sendToMainWindow('cmdp:show');
