@@ -2,7 +2,7 @@ var Remote = require('remote');
 var App = Remote.require('app');
 
 Polymer({
-    is: 'status-bar',
+    is: 'app-status-bar',
 
     ready: function () {
         var appVer = App.getVersion();
