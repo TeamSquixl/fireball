@@ -2,8 +2,9 @@ var Ipc = require('ipc');
 
 // init states
 var _states = {
-    paused: false,
-    playing: false,
+    'scene-initializing': false,
+    'scene-playing': false,
+    'scene-paused': false,
 };
 Editor.states = {};
 function _defprop ( name, value ) {
@@ -12,8 +13,10 @@ function _defprop ( name, value ) {
     Object.defineProperty( Editor.states, name, {
         get: function () { return Editor.states['_'+name]; },
         set: function ( newValue ) {
-            Editor.states['_'+name] = newValue;
-            Editor.sendToAll( 'editor:state-changed', name, newValue );
+            if ( Editor.states['_'+name] !== newValue ) {
+                Editor.states['_'+name] = newValue;
+                Editor.sendToAll( 'editor:state-changed', name, newValue );
+            }
         },
     });
 }
