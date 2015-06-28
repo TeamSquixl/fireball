@@ -3,7 +3,7 @@
     @apply(--layout-horizontal);
     @apply(--layout-wrap);
     background: #262626;
-    padding-top: 5px;
+    padding: 5px;
 }
 
 [flex-1] {
@@ -27,6 +27,8 @@ iron-selector {
     background: #1E1E1E;
     border: 1px solid #626266;
     margin: 5px;
+
+    cursor: pointer;
 }
 
 .project:hover {

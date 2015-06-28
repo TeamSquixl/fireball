@@ -46,6 +46,7 @@ Editor.JS.mixin(Editor.App, {
                     name: pkgJsonObj.name,
                     version: pkgJsonObj.version,
                     description: pkgJsonObj.description,
+                    link: pkgJsonObj.link
                 };
             }
             catch ( err ) {
@@ -176,7 +177,7 @@ Editor.JS.mixin(Editor.App, {
                 var win = new Editor.Window('main', {
                     'title': 'Fireball Dashboard',
                     'width': 800,
-                    'height': 600,
+                    'height': 700,
                     'min-width': 800,
                     'min-height': 600,
                     'show': false,
@@ -292,4 +293,13 @@ Editor.JS.mixin(Editor.App, {
     'app:get-template-infos': function ( event ) {
         event.returnValue = Editor.App._templateInfos;
     },
+
+    'app:window-minimize': function ( event ) {
+        Editor.mainWindow.minimize();
+    },
+
+    'app:window-close': function ( event ) {
+        Editor.mainWindow.close();
+    }
+
 });

@@ -14,8 +14,13 @@
 /*     @apply(--layout-flex);
  */
      position: relative;
-     height: 500px;
+     min-height: 500px;
+     height: 100%;
      background-color: #262626;
+}
+
+#view .help {
+    height: 100%;
 }
 
 #project-path {
@@ -68,7 +73,6 @@
     margin-bottom: auto;
 }
 
-#window-row .window-control span {
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
+#window-row dashboard-button {
+    -webkit-app-region: no-drag;
 }

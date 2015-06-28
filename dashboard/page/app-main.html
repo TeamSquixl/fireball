@@ -17,9 +17,9 @@
                     <img height="30px" src="../static/img/logo_white.png">Fireball-Dashboard</div>
                 <div class="flex-1 window-control layout horizontal end-justified">
                     <div class="layout horizontal">
-                        <span>minimize</span>
-                        <span>maximize</span>
-                        <span>close</span>
+                        <dashboard-button class="square" on-click="_onMinimize">minimize</dashboard-button>
+                        <dashboard-button class="square" disabled on-click="_onMaximize">maximize</dashboard-button>
+                        <dashboard-button class="square" on-click="_onClose">close</dashboard-button>
                     </div>
                 </div>
             </div>
@@ -40,12 +40,12 @@
                 <div hidden$="[[!_newProject(curIndex)]]">
                     <app-new id="appNew"></app-new>
                 </div>
-                <div hidden$="[[!_help(curIndex)]]">
+                <div class="help layout vertical" hidden$="[[!_help(curIndex)]]">
                     <app-help></app-help>
                 </div>
             </div>
 
-            <div id="project-path">{{projectPath}}</div>
+            <div hidden$="[[!_recentProject(curIndex)]]" id="project-path">{{projectPath}}</div>
         </div>
         <div id="status" class$={{statusType}}>{{status}}</div>
     </template>
@@ -115,6 +115,18 @@
 
             _onPathChanged: function ( event ) {
                 this.set('projectPath', event.detail.path);
+            },
+
+            _onMinimize: function (event) {
+                Editor.sendToCore('app:window-minimize');
+            },
+
+            _onMaximize: function (event) {
+                Editor.sendToCore('app:window-maximize');
+            },
+
+            _onClose: function (event) {
+                Editor.sendToCore('app:window-close');
             }
         });
     </script>

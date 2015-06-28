@@ -6,6 +6,7 @@
   font-weight: bold;
   margin: 0px;
   min-width: 20px;
+  width: 100px;
   text-align: center;
   border: 1px solid #171717;
   border-radius: 2px;
@@ -47,7 +48,8 @@ size
   font-size: 0.8rem;
 }
 :host.small .btn {
-  font-size: 1rem;
+  font-size: 1.2rem;
+  width: 60px;
 }
 :host .btn {
   font-size: 1.2rem;
@@ -189,6 +191,17 @@ color
     border: none;
 }
 
+:host.square .btn {
+    background: none;
+    border:none;
+    font-size:1rem;
+    max-width: 40px;
+}
+
+:host.square .btn:hover {
+    font-size:1.1rem;
+}
+
 :host.flat .btn {
     background-color: #cc6454;
     background-image: none;
@@ -196,7 +209,6 @@ color
     color: #fafafa;
     border-radius: 2px;
     border: none;
-    width: 100px;
     height: 22px;
 }
 
