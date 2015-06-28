@@ -47,6 +47,7 @@
 #window-row {
     border-bottom: 2px #664d46 solid;
     height: 56px;
+    -webkit-app-region: drag;
 }
 
 #window-row .window-title {

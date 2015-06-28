@@ -1,5 +1,5 @@
-<dom-module id="app-sidebar" >
-    <link rel="import" type="css" href="styles/app-sidebar.css">
+<dom-module id="app-tabs" >
+    <link rel="import" type="css" href="styles/app-tabs.css">
 
     <template>
         <iron-selector class="layout horizontal start-justified"
@@ -13,7 +13,7 @@
 
     <script>
         Polymer({
-            is: 'app-sidebar',
+            is: 'app-tabs',
 
             _onSelectedChanged: function ( event ) {
                 this.fire('select', {

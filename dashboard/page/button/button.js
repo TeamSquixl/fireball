@@ -1,5 +1,5 @@
-Editor.registerWidget( 'editor-button', {
-    is: 'editor-button',
+Editor.registerWidget( 'dashboard-button', {
+    is: 'dashboard-button',
 
     behaviors: [EditorUI.focusable, Polymer.IronButtonState],
 

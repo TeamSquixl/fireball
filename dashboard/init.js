@@ -181,6 +181,7 @@ Editor.JS.mixin(Editor.App, {
                     'min-height': 600,
                     'show': false,
                     'resizable': true,
+                    'frame': false
                 });
                 Editor.mainWindow = win;
 

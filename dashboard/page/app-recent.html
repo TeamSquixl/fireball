@@ -12,20 +12,20 @@
                         <img src$="{{_getRuntimeLogo(item.runtime)}}"></img>
                         <div class="btn-group overlay">
                             <div class="btn-anchor">
-                                <editor-button class="corner transparent"
+                                <dashboard-button class="corner transparent"
                                     no-focus
                                     on-click="_onClose"
                                 >
                                     Close
-                                </editor-button>
-                                <editor-button
+                                </dashboard-button>
+                                <dashboard-button
                                     class="flat"
                                     no-focus
                                     disabled$="{{!_hideErrorInfo(item.error)}}"
                                     on-click="_onOpen"
                                 >
                                     Open
-                                </editor-button>
+                                </dashboard-button>
                             </div>
                         </div>
                     </div>
