@@ -2,6 +2,7 @@
   "name": "babylonjs",
   "version": "0.0.1",
   "runtime-version": "2.0.0",
+  "link": "http://www.babylonjs.com/",
   "description": "A babylonjs runtime",
   "repository": {
     "type": "git",

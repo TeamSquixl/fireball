@@ -2,6 +2,7 @@
   "name": "three.js",
   "version": "0.0.1",
   "runtime-version": "0.0.71",
+  "link": "http://threejs.org/",
   "description": "A three.js runtime",
   "repository": {
     "type": "git",
