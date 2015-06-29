@@ -1,0 +1,78 @@
+:host {
+    @apply(--layout-fit);
+    @apply(--layout-vertical);
+
+    cursor: default;
+    background-color: #343435;
+}
+
+#shell {
+    position: relative;
+}
+
+#view {
+/*     @apply(--layout-flex);
+ */
+     position: relative;
+     min-height: 500px;
+     height: 100%;
+     background-color: #262626;
+}
+
+#view .help {
+    height: 100%;
+}
+
+#project-path {
+    height: 37px;
+    color: #808080;
+    background-color: #1E1E1E;
+    line-height: 37px;
+    padding-left: 10px;
+}
+
+#status {
+    padding: 5px;
+    height: 20px;
+    border-top: 1px solid #555;
+}
+
+#status.error {
+    color: red;
+}
+
+#status.warn {
+    color: yellow;
+}
+
+#status.normal {
+    color: gray;
+}
+
+#window-row {
+    border-bottom: 2px #664d46 solid;
+    height: 56px;
+    -webkit-app-region: drag;
+}
+
+#window-row .window-title {
+    color: #ccc;
+    font-size: 16px;
+    margin: auto 0 auto 20px;
+    line-height: 30px;
+}
+
+#window-row .window-title img {
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+#window-row .window-control {
+    list-style: none;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#window-row dashboard-button {
+    -webkit-app-region: no-drag;
+}
