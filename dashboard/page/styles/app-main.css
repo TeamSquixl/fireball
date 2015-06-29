@@ -53,6 +53,7 @@
     border-bottom: 2px #664d46 solid;
     height: 56px;
     -webkit-app-region: drag;
+    flex: none;
 }
 
 #window-row .window-title {
@@ -75,4 +76,8 @@
 
 #window-row dashboard-button {
     -webkit-app-region: no-drag;
+}
+
+#tab-row {
+    flex: none;
 }
