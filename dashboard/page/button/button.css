@@ -191,11 +191,40 @@ color
     border: none;
 }
 
+:host.corner .btn {
+    width:40px;
+}
+
 :host.square .btn {
     background: none;
     border:none;
     font-size:1rem;
     max-width: 40px;
+    min-height: 18px;
+    padding:0;
+    line-height: 18px;
+    position: relative;
+}
+
+:host.square .btn ::content img {
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+:host[disabled] .btn ::content img {
+    -webkit-filter: brightness(0.3);
+}
+
+:host.square.search .btn {
+    margin-top: 8px;
 }
 
 :host.square .btn:hover {

@@ -138,7 +138,10 @@
                 var itemEL = Polymer.dom(this.$.selector).children[event.detail.value];
                 var model = this.$.list.modelForElement(itemEL);
                 if ( model ) {
-                    this.fire( 'path-changed', { path: model.item.path } );
+                    this.fire( 'project-changed', {
+                        path: model.item.path,
+                        error: model.item.error 
+                    } );
                 }
             }
         });

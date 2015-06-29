@@ -35,9 +35,9 @@
         <div class="content">
             <p>This is the dashboard of Fireball, you can take these actions by click the tab on the left sidebar to get started:</p>
             <ul>
-              <li><a href="#" action="_onRecent">Open a project that has been recently opened.</a></li>
-              <li><a href="#">Create a new project from one of game engine runtimes.</a></li>
-              <li><a href="#">Open a project anywhere on your disk by browsing.</a></li>
+              <li><a href="#" on-click="_onRecent">Open a project that has been recently opened.</a></li>
+              <li><a href="#" on-click="_onNew">Create a new project from one of game engine runtimes.</a></li>
+              <li><a href="#" on-click="_onBrowse">Open a project anywhere on your disk by browsing.</a></li>
             </ul>
 
             <p>To learn how to use Fireball, checkout the following links: </p>
@@ -60,8 +60,16 @@
             },
 
             _onRecent: function() {
-                console.log('click recent');
-            }
+                this.fire( 'tab-changed', { index: 0 } );
+            },
+
+            _onNew: function() {
+                this.fire( 'tab-changed', { index: 1 } );
+            },
+
+            _onBrowse: function() {
+                this.fire( 'tab-changed', { index: 2 } );
+            },
         });
     </script>
 </dom-module>

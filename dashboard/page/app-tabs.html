@@ -20,6 +20,11 @@
                     index: event.detail.value
                 });
             },
+
+            selectTab: function (index) {
+                this.$$('iron-selector').select(index);
+            }
+
         });
     </script>
 </dom-module>

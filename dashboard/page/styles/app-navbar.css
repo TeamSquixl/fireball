@@ -12,6 +12,7 @@
     border-left: 0px solid #666666;
     margin-top: auto;
     margin-bottom: auto;
+    position: relative;
 }
 
 [flex-1] {
@@ -27,10 +28,16 @@ input {
     width: 267px;
     height: 30px;
     background-color: #282829;
-    padding-left: 5px;
+    padding-left: 35px;
     color: #808080;
     border-radius: 15px;
     border: none;
+}
+
+dashboard-button {
+    position: absolute;
+    left:332px;
+    top:0;
 }
 
 img {
