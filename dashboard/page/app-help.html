@@ -25,12 +25,19 @@
         .content a:hover {
             color: #df7767;
         }
+
+        .logo .version {
+            font-size: 1.5rem;
+            margin-left:auto;
+            margin-right:auto;
+            margin-top: 10px;
+        }
     </style>
 
     <template>
         <div class="logo layout vertical">
             <img src="../static/img/logo_vertical.png" width="200px" alt="Fireball Logo">
-            <div class="version">{{_fireballVersion}}</div>
+            <div class="version"><span>Ver.</span>{{_ver}}</div>
         </div>
         <div class="content">
             <p>This is the dashboard of Fireball, you can take these actions by click the tab on the left sidebar to get started:</p>
@@ -55,8 +62,9 @@
         Polymer({
             is: 'app-help',
 
-            _fireballVersion: function() {
-                return Editor.versions['fireball'];
+            ready: function () {
+                this._ver = Editor.remote.versions['fireball'];
+                console.log("version set");
             },
 
             _onRecent: function() {
