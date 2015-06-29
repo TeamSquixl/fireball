@@ -152,6 +152,11 @@ npm run gendoc
 - If you have any suggestion/feedback/problem, feel free to [submit an issue](https://github.com/fireball-x/fireball/issues).
 - If you want to contribute to this project, please read [Contributing Guidelines](https://github.com/fireball-x/fireball/blob/master/CONTRIBUTING.md).
 
+## Trouble Shooting
+
+### [Windows] error MSB4025: Could not load project file. Invalid character in coding provided.
+
+This error is due to non-ascii character in your home path, please check this guide to [rename user profile](http://superuser.com/questions/495290/how-to-rename-user-folder-in-windows-8).
 
 ## Fireball 0.4
 

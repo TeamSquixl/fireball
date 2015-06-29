@@ -8,7 +8,7 @@ The following is a set of guidelines for contributing to Fireball and its packag
 
 ### General
 
-- Fireball recommend a tab size of **2** spaces.
+- Fireball recommend a tab size of **4** spaces.
 - use dash naming rules for files and folders ( e.g. `foo-bar` )
 - use camelCase naming rules for module methods and properties ( e.g. `fooBar` )
 - use CamelCase naming rules for modules ( e.g. `FooBar` )
