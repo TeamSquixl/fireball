@@ -1,3 +1,7 @@
+[Documentation](http://docs.fireball-x.com/) |
+[Community](https://fireball.slack.com) |
+[Contributing](https://github.com/fireball-x/fireball/blob/master/CONTRIBUTING.md)
+
 ![Fireball Game Engine](https://cloud.githubusercontent.com/assets/344547/6882303/a8b7a740-d5ba-11e4-9518-e6494b1c94fa.png)
 
 ![release badge](https://img.shields.io/github/tag/fireball-x/fireball.svg)
