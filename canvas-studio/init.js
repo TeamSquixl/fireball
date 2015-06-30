@@ -299,12 +299,4 @@ Editor.JS.mixin(Editor.App, {
     'app:explore-project': function () {
         Shell.showItemInFolder(Editor.projectPath);
     },
-
-    'app:explore-assets': function ( url ) {
-        Shell.showItemInFolder(Editor.assetdb._fspath(url));
-    },
-
-    'app:explore-library': function () {
-        Shell.showItemInFolder(Editor.assetdb.library);
-    },
 });
