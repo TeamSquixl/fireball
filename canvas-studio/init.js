@@ -300,8 +300,8 @@ Editor.JS.mixin(Editor.App, {
         Shell.showItemInFolder(Editor.projectPath);
     },
 
-    'app:explore-assets': function () {
-        Shell.showItemInFolder(Editor.assetdb._fspath('assets://'));
+    'app:explore-assets': function ( url ) {
+        Shell.showItemInFolder(Editor.assetdb._fspath(url));
     },
 
     'app:explore-library': function () {
