@@ -31,6 +31,7 @@ Learn what's going on from [Fireball Beta Roadmap](https://github.com/fireball-x
 
 For **Windows** user, you need the following environment set up to be able to build nodejs native modules:
 
+- [node-gyp](https://github.com/TooTallNate/node-gyp)
 - [Visual Studio Community 2013](http://www.visualstudio.com/products/visual-studio-community-vs)
 - [Python 2.7](http://www.python.org/download/releases/2.7/) - make sure you can run `python --verson` in your command line tool. Read [this](https://docs.python.org/2/using/windows.html#excursus-setting-environment-variables) for setting up path correctly.
 
@@ -41,13 +42,14 @@ In cloned project folder, run the following command to setup dev environment:
 ```bash
 # Initialize gulp task dependencies
 # npm is a builtin CLI when you install Node.js
-npm run init
-
-# bootstrap
-gulp bootstrap
+npm install
 ```
 
-Bootstrap task will run the following command in sequence, so if anything goes wrong during the bootstrap process, you can manually run these commands to get back on track:
+This is all you have to do to set Fireball development environment.
+
+### Run Tasks Manually
+
+Behind the scene, npm install script will run a series of gulp tasks. If anything goes wrong during the bootstrap process, you can manually run these commands to get back on track:
 
 ```bash
 # Initialize git submodules
@@ -62,8 +64,8 @@ gulp install-runtime
 # Install fireshell(electron)
 gulp update-electron
 
-# Install npm packages
-gulp npm # DO NOT use npm directly
+# rebuild npm native modules for Electron
+gulp npm-rebuild
 
 # Install bower packages
 bower install
@@ -113,16 +115,20 @@ To get the latest fireball build:
 ```bash
 # Update fireball from github repo,
 # also update builtin packages and electron binary
+# this command will also check dependencies
+# and report outdated or missing dependencies
 gulp update
 
-# Optional, update npm and bower dependencies
-gulp update-deps
-```
+# If you want to update all dependencies
+# this command will bootstrap and update the whole project and takes long
+npm install
 
-`gulp update` will run `git pull origin` in fireball's root folder. This way submodules will be updated according to fireball repo's commit. In case you want to update all submodules to latest commit, run following command:
+# or if you just want to quickly install a missing package:
+# please use the semver reported at the end of `gulp update` dependency check
+npm install some-npm-package@x.x.x
 
-```bash
-gulp pull-submodules
+# If you only want to update bower dependencies
+bower install
 ```
 
 ## Test
@@ -162,6 +168,10 @@ npm run gendoc
 ### [Windows] error MSB4025: Could not load project file. Invalid character in coding provided.
 
 This error is due to non-ascii character in your home path, please check this guide to [rename user profile](http://superuser.com/questions/495290/how-to-rename-user-folder-in-windows-8).
+
+### Error: Permission denied (publickey)
+
+Usually this is due to incorrect setup of ssh key. Please troubleshoot with this guide: https://help.github.com/articles/error-permission-denied-publickey/#platform-linux
 
 ## Fireball 0.4
 

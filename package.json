@@ -13,8 +13,9 @@
         "url": "https://github.com/fireball-x/fireball/issues"
     },
     "scripts": {
+        "preinstall": "node ./utils/init.js",
+        "install": "gulp bootstrap && bower install && gulp npm-rebuild && gulp update", 
         "test": "node ./utils/run-tests.js",
-        "init": "node ./utils/init.js",
         "gendoc": "gulp cp-apisrc && firedoc --theme firedoc-theme-notab && open apidocs/index.html"
     },
     "dependencies": {
