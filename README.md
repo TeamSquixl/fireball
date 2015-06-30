@@ -31,6 +31,7 @@ Learn what's going on from [Fireball Beta Roadmap](https://github.com/fireball-x
 
 For **Windows** user, you need the following environment set up to be able to build nodejs native modules:
 
+- [node-gyp](https://github.com/TooTallNate/node-gyp)
 - [Visual Studio Community 2013](http://www.visualstudio.com/products/visual-studio-community-vs)
 - [Python 2.7](http://www.python.org/download/releases/2.7/) - make sure you can run `python --verson` in your command line tool. Read [this](https://docs.python.org/2/using/windows.html#excursus-setting-environment-variables) for setting up path correctly.
 
