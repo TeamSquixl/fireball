@@ -119,13 +119,16 @@ To get the latest fireball build:
 # and report outdated or missing dependencies
 gulp update
 
-# If you need to update npm dependencies
+# If you want to update all dependencies
 # this command will bootstrap and update the whole project and takes long
 npm install
 
 # or if you just want to quickly install a missing package:
 # please use the semver reported at the end of `gulp update` dependency check
 npm install some-npm-package@x.x.x
+
+# If you only want to update bower dependencies
+bower install
 ```
 
 ## Test
