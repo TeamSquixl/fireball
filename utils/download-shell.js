@@ -106,3 +106,46 @@ gulp.task('copy-fire-shell', ['del-dist'], function(cb) {
         chinaMirror: true
     }, cb);
 });
+
+gulp.task('copy-electron-mac', function(cb) {
+    var ncp = require('ncp');
+    ncp('bin/electron/Electron.app', 'dist/Fireball.app', function(err) {
+        if (err) return console.log('ncp Error: ' + err);
+        else {
+            ncp('utils/res/atom.icns', 'dist/Fireball.app/Contents/Resources/atom.icns', {clobber: true}, function(err) {
+                cb();
+            });
+        }
+    });
+});
+
+gulp.task('rename-electron-mac', ['copy-electron-mac'], function (cb) {
+    var plist = require('plist');
+    var spawnSync = require('child_process').spawnSync;
+    var rename = require('gulp-rename');
+    var plistSrc = ['dist/Fireball.app/Contents/Info.plist', 'dist/Fireball.app/Contents/Frameworks/Electron Helper.app/Contents/Info.plist'];
+    plistSrc.forEach(function(file) {
+        var obj = plist.parse(Fs.readFileSync(file, 'utf8'));
+        obj.CFBundleDisplayName = 'Fireball';
+        obj.CFBundleIdentifier = 'com.fireball-x.www';
+        obj.CFBundleName = 'Fireball';
+        obj.CFBundleExecutable = 'Fireball';
+        Fs.writeFileSync(file, plist.build(obj), 'utf8');
+    });
+
+    var renameSrc = [
+        'dist/Fireball.app/Contents/MacOS/Electron',
+        'dist/Fireball.app/Contents/Frameworks/Electron Helper EH.app',
+        'dist/Fireball.app/Contents/Frameworks/Electron Helper NP.app',
+        'dist/Fireball.app/Contents/Frameworks/Electron Helper.app',
+        'dist/Fireball.app/Contents/Frameworks/Fireball Helper EH.app/Contents/MacOS/Electron Helper EH',
+        'dist/Fireball.app/Contents/Frameworks/Fireball Helper.app/Contents/MacOS/Electron Helper',
+        'dist/Fireball.app/Contents/Frameworks/Fireball Helper NP.app/Contents/MacOS/Electron Helper NP'
+    ];
+
+    renameSrc.forEach(function(file) {
+        spawnSync('mv', [file, file.replace(/Electron/, 'Fireball')]);
+    });
+
+    cb();
+});
