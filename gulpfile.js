@@ -28,6 +28,9 @@ gulp.task('fireball', ['run-canvasstudio']);
 
 gulp.task('package-studio', ['run-packagestudio']);
 
+gulp.task('make-dist-mac', gulpSequence('rename-electron-mac', 'copy-app-dist', 'flatten-modules'));
+
+gulp.task('make-dist-win', gulpSequence('rename-electron-win', 'copy-app-dist', 'flatten-modules'));
 
 // run
 gulp.task('run-electron', function(cb) {
@@ -434,5 +437,29 @@ gulp.task('check-dependencies', function(cb) {
             console.log('If you see any version number in ' + chalk.red('red') + '. Please run ' + chalk.cyan('"gulp update-deps"') + 'to install missing dependencies');
             cb();
         }
+    });
+});
+
+gulp.task('copy-app-dist', function(cb) {
+    var destPath = process.platform === 'win32' ? 'dist/resources/app' : 'dist/Fireball.app/Contents/Resources/app';
+    var src = [
+        'app.js', 'bower.json', 'License.md', 'package.json',
+        'apidocs/**/*', 'builtin/**/*', 'canvas-studio/**/*', 'dashboard/**/*', 'docs/**/*', 'runtime/**/*',
+        'share/**/*', 'test/**/*', 'asset-db/**/*', 'engine-framework/**/*', 'editor-framework/**/*', 'bower_components/**/*'
+    ];
+    var moduleDeps = Object.keys(pjson.dependencies);
+    src = src.concat(moduleDeps.map(function(module) {
+        return Path.join('node_modules', module, '**/*');
+    }));
+    return gulp.src(src, {base: './'})
+            .pipe(gulp.dest(destPath));
+});
+
+gulp.task('flatten-modules', function(cb) {
+    var appLoc = process.platform === "win32" ? 'dist/resources/app' : 'dist/Fireball.app/Contents/Resources/app';
+    var flatten = require('flatten-packages');
+    flatten(appLoc, {}, function (err, res) {
+      if (err) console.error(err);
+      if (res) return console.log(res);
     });
 });
