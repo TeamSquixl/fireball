@@ -75,6 +75,7 @@
         "tester",
         "timeline",
         "ui-kit",
+        "ui-property",
         "ui-tree"
     ],
     "runtimes": [

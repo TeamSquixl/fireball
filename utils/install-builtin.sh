@@ -28,6 +28,10 @@ if [ ! -d "ui-kit" ]; then
     git clone https://github.com/fireball-packages/ui-kit
 fi
 
+if [ ! -d "ui-property" ]; then
+    git clone https://github.com/fireball-packages/ui-property
+fi
+
 if [ ! -d "ui-tree" ]; then
     git clone https://github.com/fireball-packages/ui-tree
 fi

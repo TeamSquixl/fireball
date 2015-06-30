@@ -10,4 +10,7 @@
 
     // init canvas-assets
     Editor.require('packages://canvas-assets/init');
+
+    // init ui-property
+    Editor.require('packages://ui-property/init');
 })();
