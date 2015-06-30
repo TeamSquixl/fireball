@@ -7,18 +7,24 @@
             height: 35px;
             margin-bottom: 3px;
         }
+
+        .fa-folder-open {
+            color: #0af;
+            font-size: 15px;
+            font-weight: bold;
+        }
     </style>
 
     <template>
         <div class="flex-1 layout horizontal end">
+            <editor-button nofocus on-click="_onProject">
+                <i class="fa fa-folder-open"></i>
+            </editor-button>
         </div>
         <div class="flex-3 layout horizontal center center-justified">
             <app-play-buttons></app-play-buttons>
         </div>
         <div class="flex-1 layout horizontal end end-justified">
-            <editor-button nofocus class="small" on-click="_onProject">Project</editor-button>
-            <editor-button nofocus class="small" on-click="_onAssets">Assets</editor-button>
-            <editor-button nofocus class="small" on-click="_onLibrary">Library</editor-button>
         </div>
     </template>
 
