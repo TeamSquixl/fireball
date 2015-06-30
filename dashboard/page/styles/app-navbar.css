@@ -35,9 +35,11 @@ input {
 }
 
 dashboard-button {
-    position: absolute;
-    left:332px;
-    top:0;
+    position: relative;
+    margin-right:-40px;
+    /* float: left; */
+/* left:332px; */
+/*     top:0; */
 }
 
 img {
