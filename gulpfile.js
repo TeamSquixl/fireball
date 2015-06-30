@@ -16,11 +16,9 @@ require('./utils/download-shell');
 
 // public tasks
 
-gulp.task('bootstrap', gulpSequence('init-submodules', 'install-builtin', 'install-runtime', 'install-shared-packages', 'update-electron', 'npm', 'bower'));
+gulp.task('bootstrap', gulpSequence(['init-submodules', 'install-builtin', 'install-runtime', 'install-shared-packages', 'update-electron'], 'npm-rebuild'));
 
 gulp.task('update', gulpSequence('pull-fireball', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime', 'update-electron'], 'check-dependencies'));
-
-gulp.task('update-deps', ['npm', 'bower']);
 
 gulp.task('run', ['run-electron']);
 
@@ -344,36 +342,81 @@ gulp.task('update-shared-packages', function(cb) {
     });
 });
 
-gulp.task('npm', ['rm-native-modules'], function(cb) {
-    var cmdstr = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+function findNativeModulePathRecursive(path) {
+    var nativePaths = [];
+    if (Fs.existsSync(Path.join(path, 'binding.gyp'))) {
+        nativePaths.push(path);
+    } else {
+        if (Fs.isDirSync(Path.join(path, 'node_modules'))) {
+            var subPaths = Fs.readdirSync(Path.join(path, 'node_modules'));
+            subPaths.forEach(function(subpath) {
+                var subCollect = findNativeModulePathRecursive(Path.join(path, 'node_modules', subpath));
+                if (subCollect.length > 0) {
+                    nativePaths = nativePaths.concat(subCollect);
+                }
+            });
+        }
+    }
+    return nativePaths;
+}
+
+gulp.task('npm-rebuild', function(cb) {
+    var cmdstr = process.platform === 'win32' ? 'node-gyp.cmd' : 'node-gyp';
     var tmpenv = process.env;
-    var homepath = process.platform === 'win32' ? Path.join(tmpenv.HOMEPATH, '.node-gyp') : Path.join(tmpenv.HOME, '.electron-gyp');
-    tmpenv.npm_config_disturl = 'https://atom.io/download/atom-shell';
-    tmpenv.npm_config_target = pjson['electron-version'];
-    tmpenv.npm_config_arch = process.platform === 'win32' ? 'ia32' : 'x64';
-    console.log(homepath);
-    tmpenv.HOME = homepath;
-    var child = spawn(cmdstr, ['install'], {
-        stdio: 'inherit',
-        env: tmpenv
-    });
-    child.on('exit', cb);
-});
-
-gulp.task('bower', shell.task(['bower install']));
-
-gulp.task('rm-native-modules', function(cb) {
-    var del = require('del');
-    var nativeModules = pjson['native-modules'];
-    var nativePaths = nativeModules.map(function(filepath) {
-        return 'node_modules/' + filepath;
-    });
-    console.log("Deleting existing native modules to make sure rebuild triggers.");
-    del(nativePaths, function(err) {
-        if (err) throw err;
-        else cb();
+    tmpenv.HOME = process.platform === 'win32' ? Path.join(tmpenv.HOMEPATH, '.node-gyp') : Path.join(tmpenv.HOME, '.electron-gyp');
+    var disturl = 'https://atom.io/download/atom-shell';
+    var target = pjson['electron-version'];
+    var arch = process.platform === 'win32' ? 'ia32' : 'x64';
+    var nativePaths = findNativeModulePathRecursive('.');
+    console.log('rebuilding native modules: \n' + nativePaths);
+    var count = nativePaths.length;
+    nativePaths.forEach(function(path) {
+        var child = spawn(cmdstr, [
+            'rebuild', '--target='+target,
+            '--arch='+arch, '--dist-url='+disturl
+            ], {
+            stdio: 'inherit',
+            env: tmpenv,
+            cwd: path
+        });
+        child.on('exit', function() {
+            if (--count <= 0) {
+                cb();
+            }
+        });
     });
 });
+
+// gulp.task('npm', ['rm-native-modules'], function(cb) {
+//     var cmdstr = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+//     var tmpenv = process.env;
+//     var homepath = process.platform === 'win32' ? Path.join(tmpenv.HOMEPATH, '.node-gyp') : Path.join(tmpenv.HOME, '.electron-gyp');
+//     tmpenv.npm_config_disturl = 'https://atom.io/download/atom-shell';
+//     tmpenv.npm_config_target = pjson['electron-version'];
+//     tmpenv.npm_config_arch = process.platform === 'win32' ? 'ia32' : 'x64';
+//     console.log(homepath);
+//     tmpenv.HOME = homepath;
+//     var child = spawn(cmdstr, ['install'], {
+//         stdio: 'inherit',
+//         env: tmpenv
+//     });
+//     child.on('exit', cb);
+// });
+//
+// gulp.task('bower', shell.task(['bower install']));
+//
+// gulp.task('rm-native-modules', function(cb) {
+//     var del = require('del');
+//     var nativeModules = pjson['native-modules'];
+//     var nativePaths = nativeModules.map(function(filepath) {
+//         return 'node_modules/' + filepath;
+//     });
+//     console.log("Deleting existing native modules to make sure rebuild triggers.");
+//     del(nativePaths, function(err) {
+//         if (err) throw err;
+//         else cb();
+//     });
+// });
 
 gulp.task('check-deps', function(cb) {
     var checkDeps = require('./utils/check-deps');
