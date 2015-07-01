@@ -19,3 +19,21 @@ do
         echo
     fi
 done
+
+for name in runtime/*
+do
+    if [ -d "${name}" ]; then
+        echo ------------------------------------------
+        echo ${name}
+        echo ------------------------------------------
+
+        cd ${name}
+
+        # git status -s -b
+        git status -s
+        git cherry -v
+
+        cd ${ORIGINAL_PATH}
+        echo
+    fi
+done
