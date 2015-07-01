@@ -16,7 +16,6 @@ module.exports = function ( options, cb ) {
     Editor.requireLogin = !Editor.isDev || options.requireLogin;
     Editor.projectInfo = null;
 
-    if ( !Editor.assets ) Editor.assets = {};
     if ( !Editor.metas ) Editor.metas = {};
     if ( !Editor.inspectors ) Editor.inspectors = {};
     if ( !Editor.properties ) Editor.properties = {};
@@ -100,7 +99,6 @@ module.exports = function ( options, cb ) {
         function ( next ) {
             Editor.log( 'Initializing Engine Framework (Fire)' );
             require('../engine-framework');
-            Editor.assets.asset = Fire.Asset; // set the default asset
 
             next ();
         },
@@ -110,8 +108,9 @@ module.exports = function ( options, cb ) {
             Editor.log( 'Initializing Asset Database' );
             var AssetDB = require('../asset-db');
             Editor.assetdb = new AssetDB({
-                cwd: Path.join( Editor.projectPath ),
-                library: 'library',
+                'cwd': Path.join( Editor.projectPath ),
+                'library': 'library',
+                'default-asset': Fire.Asset,
             });
             Editor.libraryPath = Editor.assetdb.library;
             Editor.importPath = Editor.assetdb._importPath;

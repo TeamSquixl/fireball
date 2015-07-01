@@ -13,4 +13,7 @@
 
     // init ui-property
     Editor.require('packages://ui-property/init');
+
+    // init runtime-assets
+    Editor.require('app://runtime/runtime-' + Editor.projectInfo.runtime + '/init');
 })();
