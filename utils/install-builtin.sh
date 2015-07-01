@@ -40,6 +40,10 @@ if [ ! -d "pixi-grid" ]; then
     git clone https://github.com/fireball-packages/pixi-grid
 fi
 
+if [ ! -d "fire-ui-kit" ]; then
+    git clone https://github.com/fireball-packages/fire-ui-kit
+fi
+
 # builtin panels
 if [ ! -d "assets" ]; then
     git clone https://github.com/fireball-packages/assets

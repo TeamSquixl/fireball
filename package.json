@@ -78,7 +78,8 @@
         "timeline",
         "ui-kit",
         "ui-property",
-        "ui-tree"
+        "ui-tree",
+        "fire-ui-kit"
     ],
     "runtimes": [
         "runtime-cocos2d-js",
