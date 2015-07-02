@@ -2,7 +2,35 @@
   <head>
     <title>Fireball Editor</title>
     <script src="app://bower_components/pace/pace.js"></script>
-    <link href="app://bower_components/pace/themes/red/pace-theme-center-simple.css" rel="stylesheet">
+    <link href="static/css/pace-theme-center-simple.css" rel="stylesheet">
+    <style>
+        #launch-page {
+            z-index: 1999;
+            font-family: "Microsoft YaHei",Helvetica,Arial,sans-serif;
+            background-color: rgb(33,39,51);
+        }
+        #launch-page .logo {
+            margin: auto;
+            margin-top: -50px;
+        }
+        #launch-page .status {
+            font-size: 16px;
+            margin: auto;
+            margin-top: 20px;
+            white-space: nowrap;
+
+            color: rgb(255,75,2);
+        }
+        #launch-page .copyright {
+            font-size: 12px;
+            margin: 0 auto 5px;
+
+            color: rgb(104,104,104);
+        }
+        #launch-page .copyright span {
+            color: rgb(255,255,255);
+        }
+    </style>
 
     <script type="text/javascript" src="editor-framework://page/page-init.js"></script>
     <link rel="import" href="editor-framework://page/ui/ui.html">
@@ -12,15 +40,23 @@
   </head>
 
   <body class="layout vertical">
+    <div id="launch-page" class="layout vertical fit">
+        <span class="flex-1"></span>
+        <img class="logo" src="static/img/logo-with-text.png"></img>
+        <div class="status">Loading Fireball...</div>
+        <span class="flex-1"></span>
+        <div class="copyright">
+            &copy 2014 Fireball LLC All rights reserved. <span>Privacy Policy</span>
+        </div>
+    </div>
+
     <app-main></app-main>
 
     <script>
         Pace.once( 'hide', function () {
-            EditorUI.removeLoadingMask();
+            var launchPage = document.getElementById('launch-page');
+            launchPage.remove();
             Editor.sendToAll('editor:ready');
-        });
-        EditorUI.addLoadingMask({
-            background: '#333',
         });
     </script>
   </body>
