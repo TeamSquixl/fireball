@@ -284,7 +284,7 @@ Editor.JS.mixin(Editor.App, {
         });
         var BrowserWindow = require('browser-window');
         var workerWindow = new BrowserWindow({
-            show: true,
+            show: false,
         });
         workerWindow.loadUrl(url);
         if (onLoad) {
