@@ -7,7 +7,7 @@
             on-selected-changed="_onSelectedChanged"
         >
             <template is="dom-repeat" id="list" items="{{list}}">
-                <div class="project layout vertical">
+                <div class="project layout vertical" on-mouseenter="_onHover">
                     <div class="logo">
                         <img src$="{{_getRuntimeLogo(item.runtime)}}"></img>
                         <div class="btn-group overlay">
@@ -110,6 +110,17 @@
                 Editor.sendToCore('app:close-project', model.item.path );
             },
 
+            _onHover: function ( event ) {
+                event.stopPropagation();
+                var model = this.$.list.modelForElement(event.target);
+                if ( model ) {
+                    this.fire( 'project-changed', {
+                        path: model.item.path,
+                        error: model.item.error
+                    });
+                }
+            },
+
             _onDropAreaEnter: function ( event ) {
                 event.stopPropagation();
                 this.classList.add('highlight');
@@ -140,7 +151,7 @@
                 if ( model ) {
                     this.fire( 'project-changed', {
                         path: model.item.path,
-                        error: model.item.error 
+                        error: model.item.error
                     } );
                 }
             }
