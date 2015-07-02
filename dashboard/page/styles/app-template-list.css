@@ -35,6 +35,11 @@ input {
     color: #808080;
 }
 
+input::selection {
+    background-color: #6e6e73;
+    color: #fafafa;
+}
+
 h2 {
     margin: 0px 0px 0px 10px;
 }
@@ -120,6 +125,7 @@ display:block; */
 .description .action {
     margin-top: auto;
     margin-bottom: auto;
+    margin-right: 20px;
 }
 
 .description .info {

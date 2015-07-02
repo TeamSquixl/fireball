@@ -14,9 +14,9 @@
     },
     "scripts": {
         "preinstall": "node ./utils/init.js",
-        "install": "gulp bootstrap && bower install && gulp npm-rebuild && gulp update", 
+        "install": "gulp bootstrap && bower install && gulp npm-rebuild && gulp update",
         "test": "node ./utils/run-tests.js",
-        "gendoc": "gulp cp-apisrc && firedoc --theme firedoc-theme-notab && open apidocs/index.html"
+        "gendoc": "gulp cp-apisrc && firedoc build --theme firedoc-theme-notab && open apidocs/index.html"
     },
     "dependencies": {
         "async": "1.2.1",
@@ -101,5 +101,11 @@
     ],
     "fire-shell-version": "0.27.3",
     "electron-version": "0.28.3",
-    "main": "app.js"
+    "main": "app.js",
+    "firedoc": {
+        "linkNatives": true,
+        "attributesEmit": true,
+        "path": "./utils/api",
+        "dest": "./apidocs"
+    }
 }
