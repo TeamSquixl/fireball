@@ -7,7 +7,9 @@ This is the user manual of Fireball Editor. It introduces Fireball Editor and sh
 
 ## Get Started
 
+  * [What's Fireball](/manual/introduction)
   * [Dashboard](/manual/dashboard)
+  * [Project Structure](/manual/project-structure)
   * [Editor Overview](/manual/editor-overview)
 
 ## Script Attaching

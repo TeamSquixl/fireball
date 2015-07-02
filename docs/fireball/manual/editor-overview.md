@@ -1,5 +1,7 @@
-title: Meet Editor
-permalinks: 0.4/manual/start/editor-overview
+---
+title: Editor Overview
+category: manual
+permalinks: manual/editor-overview
 ---
 
 > This chapter will introduce you all the features of Fireball Editor. It would be a good place for being familiar with Fireball Editor, and getting ready for your future Fireball works.
