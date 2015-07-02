@@ -72,46 +72,10 @@ You can also click **Back** to go back and choose another engine.
 
 Can't find your project in **Recent Projects** page? Or just downloaded a project from online? You can find your project anywhere in your disk with **Open Other** tab.
 
-Click the tab will open a pop-up dialog with local file system. Choose your project folder in this dialog Fireball Engine maintains projects with **directories** instead of particular project files.
+Click the tab will open a pop-up dialog with local file system. Choose your project folder in this dialog. Fireball Editor maintains projects with directory instead of a particular project file.
 
-###Help
-You can access Fireball manuals and help documentations with **Help**.
+### Help
 
-##Project File Structure
-Files are structured in a Fireball project as below:
-```
-ProjectName
-├──assets
-├──library
-├──local
-├──settings
-└──temp
-```
-- Public folders to project collaborators
-  - **assets**
-    Project resource files, including all actual elements used to form up a project. Such as:
-    - Scenes
-    - Scripts
-    - Sprites
-    - Textures
-    - Audio files
-    - ...
-    Just think them as all loaded resources in the Assets Panel of the [Editor]（/start/editor-overview)
-  - **settings**
-    Global project settings, which are of project-level and shared by all project collaborators. Such as:
-    - Plug-in settings
-    - Button settings
-    - Physics settings
-    - ...
-- Private folders used by current client *(and you should ignore them in version control)*
-  - **library**
-    Files in this folder are for resource library management, and will be used by the [Editor](/manual/start/editor-overview) for library data persistence and resource display.
-  - **local**
-    Local project settings, which store user's customized settings, such as Editor layout.
-  - **temp**
-    Temporary files created by Fireball Engine.
+You can access Fireball manuals and help documentations in **Help** page.
 
-
----
-###Next...
-- Read [Editor Overview](/manual/start/editor-overview/) to learn more about the IDE.
+![dashboard help](https://cloud.githubusercontent.com/assets/344547/8475754/e5ea1ee0-20ec-11e5-9cbe-ab8ee3540de5.png)
