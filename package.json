@@ -72,14 +72,15 @@
         "inspector",
         "ipc-debugger",
         "package-manager",
-        "pixi-grid",
         "scene",
         "tester",
         "timeline",
         "ui-kit",
         "ui-property",
         "ui-tree",
-        "fire-ui-kit"
+        "fire-ui-kit",
+        "color-picker",
+        "pixi-grid"
     ],
     "runtimes": [
         "runtime-cocos2d-js",
