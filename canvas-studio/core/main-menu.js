@@ -323,6 +323,12 @@ function _getDefaultMainMenu () {
                     ],
                 },
                 { type: 'separator' },
+                {
+                    label: 'UI Preview',
+                    submenu: [
+                    ],
+                },
+                { type: 'separator' },
             ]
         },
     ];
