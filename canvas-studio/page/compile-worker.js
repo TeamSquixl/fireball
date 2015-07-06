@@ -15,11 +15,10 @@ var buffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 
-var Utils = require('../share/utils');
+var Utils = Editor.require('app://engine-framework/src/editor/utils');
 
-// init asset db
 Editor.require('app://asset-db');
-
+    
 
 var SCRIPT_SRC = 'library/imports';
 var SCRIPT_DEST = 'library/bundle.js';
