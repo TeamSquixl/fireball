@@ -16,7 +16,7 @@
     "preinstall": "node ./utils/init.js",
     "install": "gulp bootstrap && bower install && gulp npm-rebuild && gulp update",
     "test": "node ./utils/run-tests.js",
-    "gendoc": "gulp cp-apisrc && firedoc build --theme firedoc-theme-notab && open apidocs/index.html"
+    "gendoc": "gulp cp-apisrc && firedoc build ./utils/api --theme notab && open apidocs/index.html"
   },
   "dependencies": {
     "async": "1.2.1",
