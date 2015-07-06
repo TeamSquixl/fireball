@@ -6,7 +6,6 @@ var Format = require('util').format;
 var Ipc = require('ipc');
 var gulp = require('gulp');
 
-var gutil = require('gulp-util');
 var del = require('del');
 var es = require('event-stream');
 
@@ -372,7 +371,7 @@ Ipc.on('app:compile-worker:start', function (options) {
         var newLineFooter = '\n' + footer;
         return es.map(function (file, callback) {
             if (file.isStream()) {
-                callback(new gutil.PluginError('addMetaData', 'Streaming not supported'));
+                callback(new Error('addMetaData: Streaming not supported'));
                 return;
             }
             if (file.isNull()) {
