@@ -12,7 +12,7 @@ I'm using a game engine to develop my game, can I add Fireball to my arsenal to 
 
 Fireball is the first cross-engine integrated game development editor in the industry. It's structure can be described like this:
 
-![fireball-structure](https://cloud.githubusercontent.com/assets/344547/8514983/86aef2a6-23cc-11e5-953f-7c47899bf82a.png)
+![fireball-structure](https://cloud.githubusercontent.com/assets/344547/8515113/e3bceec4-23ce-11e5-97f6-ecbe87df5d90.png)
 
 With three layers of framework work together, it give users a full-featured game editor that can:
 

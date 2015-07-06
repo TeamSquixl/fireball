@@ -19,7 +19,10 @@ var files;
 var testDirs = [
     Path.join( cwd, './test/' ),
     Path.join( cwd, './editor-framework/test/' ),
-    Path.join( cwd, './dashboard/test/' ),
+    Path.join( cwd, './engine-framework/test/'),
+    Path.join( cwd, './asset-db/test'),
+    Path.join( cwd, './runtime/runtime-cocos2d-js/test/'),
+    Path.join( cwd, './dashboard/test/' )
 ];
 var singleTestFile = process.argv[2];
 var failedTest = [];
