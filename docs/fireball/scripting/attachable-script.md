@@ -1,5 +1,5 @@
 ---
-title: FireClass: Attachable Script in Fireball
+title: FireClass - Attachable Script in Fireball
 category: manual
 permalinks: manual/scripting/attachable-script
 ---
@@ -16,7 +16,15 @@ Once the script is attached to a node, the class name will be used for identifyi
 
 (screenshot)
 
-The whole process is similar to how you write component script for an entity-component system but behind the scene they are quite different. Learn more about how it's implemented at [here]().
+The whole process is similar to how you write component script for an entity-component system but behind the scene they are quite different.
+
+### Shared Instance of Attached Scripts
+
+Fireball use mixin to combine all scripts attached to a single node together. Thus for all of the scripts that attached to the same node, their instance (`this`) point to the same node.
+
+Compare to other entity-component system, Fireball don't have 'component' instance and 'entity' instance. There is only the node instance, with all properties and method available from scripts attached to the node.
+
+To learn more about how script mixin works in Fireball, see [here]().
 
 ## Basic Structure of an Attachable Script
 
@@ -120,25 +128,24 @@ The above example will increase `this.myCounter` by one each frame, and log the 
 
 In your FireClass script, you can use any game engine API, including creating a class instance defined in a pure game engine script.
 
-Let's take Cocos2d-js engine API for example. If we'd like to create a sprite and add it to scene in script, we have to rely on Cocos2d-js API:
+Let's take Cocos2d-js engine API for example. If we'd like to set position for the current node. We have to rely on Cocos2d-js API:
 ```js
 var MyClass = Fire.Class({
-    createMySprite: function() {
-        // for the simplicity of this example, we create a sprite with file path
-        // there are several ways to reference a resource in Fireball script  
-        // you will learn them later
-        var mySprite = cc.Sprite.create('mySprite.png');
-        var myLayer = cc.Layer.create(); // create a layer
-        var myLayer.addChild(mySprite); // add sprite to layer
-        cc.Director.getRunningScene().addChild(myLayer); // add layer to current scene.
+    properties: {
+        targetPosX: 0,
+        targetPosY: 0
+    }
+    changePosition: function() {
+        // call cc.Node.setPosition(x,y) to change node position
+        this.setPosition(this.targetPosX, this.targetPosY);
     }
 });
 module.exports = MyClass;
 ```
 
-Don't worry if you're not Cocos2d-js user, the only thing that matters is you can use your favorite engine's API in FireClass. Also you're responsible for codes that build hierarchy changes if you are adding/removing nodes in script.
+Don't worry if you're not Cocos2d-js user, the only thing that matters is you can use your favorite engine's API in FireClass.
 
-You can see exactly what you should do for a specific engine:
+You can see exactly what you should do for writing script for a specific engine:
 
 - [Cocos2d-js](runtimes/cocos2d-js.md)
 - Pixi (coming soon)

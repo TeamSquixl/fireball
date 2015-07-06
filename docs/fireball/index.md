@@ -7,11 +7,18 @@ This is the user manual of Fireball Editor. It introduces Fireball Editor and sh
 
 ## Get Started
 
-  * [What's Fireball](/manual/introduction)
-  * [Dashboard](/manual/dashboard)
-  * [Project Structure](/manual/project-structure)
-  * [Editor Overview](/manual/editor-overview)
+* [What's Fireball](/manual/introduction)
+* [Dashboard](/manual/dashboard)
+* [Project Structure](/manual/project-structure)
+* [Editor Overview](/manual/editor-overview)
 
-## Script Attaching
+## Scripting
 
-  * [Script Attaching With Mixin](/manual/mixin-script)
+* [JavaScript Primer](/manual/scripting/javascript-primer)
+* [Nodes In Scene](/manual/scripting/nodes-in-scene)
+* [Attachable Script](/manual/scripting/attachable-script)
+* [Access Script](/manual/scripting/access-script)
+
+### Engine Specific Scripting Guide
+
+* [Cocos2d-js](/manual/scripting/runtimes/cocos2d-js)

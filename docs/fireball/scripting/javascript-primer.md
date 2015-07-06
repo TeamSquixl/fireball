@@ -274,7 +274,7 @@ n.double().square(); //100
 
 ## This
 
-`this` is probably one of the hardest concept to master in all of JavaScript.
+`this` is probably one of the hardest concept to master in JavaScript.
 
 Basically, the `this` keyword lets you access the object on which you’re currently working: just like a chameleon, `this` keeps changing based on its surroundings.
 
@@ -299,6 +299,8 @@ myFunction = function (a, b) {
 ```
 
 While it might at first seem like this doesn’t accomplish anything, it lets you safely re-use `myObject` throughout your code, since unlike `this` its value won’t change depending on the context.
+
+In Fireball script, `this` usually refers to the instance of current class.
 
 ## Operators
 
