@@ -1,5 +1,5 @@
 ---
-title: Access Script
+title: Script Accessibility
 category: manual
 permalinks: manual/scripting/access-script
 ---

@@ -1,5 +1,5 @@
 ---
-title: FireClass - Attachable Script in Fireball
+title: Attachable Script (FireClass)
 category: manual
 permalinks: manual/scripting/attachable-script
 ---

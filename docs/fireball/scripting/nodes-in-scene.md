@@ -20,7 +20,7 @@ For different game engine there are different names for nodes:
 - [PIXI.DisplayObject](http://pixijs.github.io/docs/PIXI.DisplayObject.html) in Pixi.js
 - [EaselJS.DisplayObject](http://www.createjs.com/docs/easeljs/classes/DisplayObject.html) in CreateJS
 
-In some of the engines 'node' class is abstract and you can only create instance of child class that inherits 'node' class, for example 'sprite', 'text', 'button'. Fireball will take what an engine has and allow users to attach script to those instances.
+In some of the engines 'node' class is abstract and you can only create instance of child class that inherits 'node' class, for example 'sprite', 'text', 'button'. Fireball will take whatever an engine has and allow users to attach script to those instances.
 
 ## Extending Nodes in Fireball
 
