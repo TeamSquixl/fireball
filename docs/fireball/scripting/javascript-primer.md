@@ -1,5 +1,7 @@
+---
 title: JavaScript Primer
-permalinks: 0.4/wwmanual/scripting/javascript-primer
+category: manual
+permalinks: manual/scripting/javascript-primer
 ---
 
 > This guide is based on [A JavaScript Primer For Meteor](https://www.discovermeteor.com/blog/javascript-for-meteor/)
