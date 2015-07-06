@@ -36,6 +36,7 @@ Editor.JS.mixin(Editor.App, {
     loadRuntimeInfos: function ( runtimePath, cb ) {
         var paths = Globby.sync( Path.join(runtimePath,'*/package.json') );
         Async.eachSeries( paths, function ( path, done ) {
+            path = Path.normalize(path);
             Editor.log('Load runtime info: %s', path);
             try {
                 var pkgJsonObj = JSON.parse(Fs.readFileSync(path));
@@ -58,6 +59,7 @@ Editor.JS.mixin(Editor.App, {
     loadTemplate: function ( templatePath, cb ) {
         var paths = Globby.sync( Path.join(templatePath,'*/package.json') );
         Async.eachSeries( paths, function ( path, done ) {
+            path = Path.normalize(path);
             Editor.log('Load template: %s', path);
             try {
                 var pkgJsonObj = JSON.parse(Fs.readFileSync(path));
