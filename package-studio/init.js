@@ -16,9 +16,7 @@ module.exports = function ( options, cb ) {
 
     // initialize ~/.fireball/package-studio/
     var localPath = Path.join(Editor.appHome, 'package-studio');
-    if ( !Fs.existsSync(localPath) ) {
-        Fs.makeTreeSync(localPath);
-    }
+    Fs.ensureDirSync(localPath);
     Editor.registerProfilePath( 'local', localPath );
 
     Editor.App._profile = Editor.loadProfile( 'fireball', 'local', {

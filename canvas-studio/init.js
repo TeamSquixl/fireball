@@ -81,9 +81,7 @@ module.exports = function ( options, cb ) {
 
             // register global profile path =  ~/.fireball/canvas-studio/
             var globalProfilePath = Path.join(Editor.appHome, 'canvas-studio');
-            if ( !Fs.existsSync(globalProfilePath) ) {
-                Fs.makeTreeSync(globalProfilePath);
-            }
+            Fs.ensureDirSync(globalProfilePath);
             Editor.registerProfilePath( 'global', globalProfilePath );
 
             // register default layout

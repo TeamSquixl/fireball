@@ -43,7 +43,7 @@ Project.create = function ( path, runtime, template, cb ) {
         },
 
         function ( next ) {
-            Fs.makeTreeSync( path );
+            Fs.mkdirsSync( path );
             Fs.mkdirSync( Path.join(path, 'settings') );
             Fs.mkdirSync( Path.join(path, 'local') );
             Fs.mkdirSync( Path.join(path, 'packages') );

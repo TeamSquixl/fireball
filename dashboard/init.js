@@ -18,9 +18,7 @@ module.exports = function ( options, cb ) {
 
     // register global profile path =  ~/.fireball/dashboard/
     var settingsPath = Path.join(Editor.appHome, 'dashboard');
-    if ( !Fs.existsSync(settingsPath) ) {
-        Fs.makeTreeSync(settingsPath);
-    }
+    Fs.ensureDirSync(settingsPath);
     Editor.registerProfilePath( 'global', settingsPath );
 
     //
