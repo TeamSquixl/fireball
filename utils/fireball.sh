@@ -1,1 +1,1 @@
-./bin/electron/Electron.app/Contents/MacOS/Electron ./ --debug=3030 --dev --show-devtools "$@"
+./bin/electron/Electron.app/Contents/MacOS/Electron ./ --debug=4040 --dev --show-devtools "$@"
