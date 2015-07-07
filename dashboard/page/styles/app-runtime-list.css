@@ -40,13 +40,13 @@ iron-selector {
     height: 53px;
     padding-top: 10px;
     border-top: 1px solid #626266;
-    border-bottom: 1px solid #626266;
+    /* border-bottom: 1px solid #626266; */
     text-align: center;
 }
 
 .runtime {
     width: 275px;
-    height: 174px;
+    height: 175px;
     position: relative;
     padding: 0;
 
@@ -65,7 +65,7 @@ iron-selector {
 }
 
 .runtime.selected .name {
-    border-bottom: 1px solid #ed7461;
+    /* border-bottom: 1px solid #ed7461; */
 }
 
 .logo {

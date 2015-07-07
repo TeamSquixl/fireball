@@ -20,7 +20,7 @@ iron-selector {
 @apply(--layout-self-stretch);
  */
     width: 275px;
-    height: 174px;
+    height: 175px;
     position: relative;
     padding: 0;
 
@@ -40,7 +40,7 @@ iron-selector {
 }
 
 .project.selected .name {
-    border-bottom: 1px solid #ed7461;
+    /* border-bottom: 1px solid #ed7461; */
 }
 
 .name {
@@ -50,7 +50,7 @@ iron-selector {
     background-color: #343435;
     height: 53px;
     border-top: 1px solid #626266;
-    border-bottom: 1px solid #626266;
+    /* border-bottom: 1px solid #626266; */
     text-align: center;
     line-height: 53px;
 }

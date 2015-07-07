@@ -191,6 +191,10 @@ color
     border: none;
 }
 
+:host[pressed].transparent .btn {
+    color: #535353;
+}
+
 :host.corner .btn {
     width:40px;
 }
@@ -199,9 +203,10 @@ color
     background: none;
     border:none;
     font-size:1rem;
-    max-width: 40px;
-    min-height: 18px;
+    max-width: 25px;
+    min-height: 25px;
     padding:0;
+    margin: 5px;
     line-height: 18px;
     position: relative;
 }
@@ -223,8 +228,11 @@ color
     -webkit-filter: brightness(0.3);
 }
 
-:host.square.search .btn {
-    margin-top: 8px;
+:host[pressed].square.search .btn {
+    /* margin-top: 8px; */
+    color: #898989;
+    box-shadow: none;
+    background-image: none;
 }
 
 :host.square .btn:hover {
