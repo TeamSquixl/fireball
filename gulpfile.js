@@ -18,7 +18,7 @@ require('./utils/download-shell');
 
 gulp.task('bootstrap', gulpSequence(['init-submodules', 'install-builtin', 'install-runtime', 'install-shared-packages'], 'update-electron'));
 
-gulp.task('update', gulpSequence('pull-fireball', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime'], 'update-electron', 'check-dependencies'));
+gulp.task('update', gulpSequence('pull-fireball', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime'], 'remove-builtin-bin', 'update-electron', 'check-dependencies'));
 
 gulp.task('run', ['run-electron']);
 
@@ -477,5 +477,30 @@ gulp.task('flatten-modules', function(cb) {
     flatten(appLoc, {}, function (err, res) {
       if (err) console.error(err);
       if (res) return console.log(res);
+    });
+});
+
+gulp.task('remove-builtin-bin', function(cb) {
+    var builtinPaths = pjson.builtins.map(function(entry) {
+        return Path.join('builtin', entry);
+    });
+    var needBuildPaths = builtinPaths.filter(function(entry) {
+        var json = JSON.parse(Fs.readFileSync(Path.join(entry, 'package.json')));
+        if (json.build){
+            return true;
+        } else {
+            return false;
+        }
+    });
+    console.log('Clean built files for ' + needBuildPaths);
+    var needBuildBin = needBuildPaths.map(function(entry){
+        return Path.join(entry, 'bin');
+    });
+    del(needBuildBin, function(err) {
+        if (err) throw err;
+        else {
+            console.log('Builtin Packages Cleaned! Will be rebuilt when Fireball launches.');
+            cb();
+        }
     });
 });
