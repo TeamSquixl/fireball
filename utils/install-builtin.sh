@@ -24,6 +24,10 @@ if [ ! -d "tester" ]; then
 fi
 
 # builtin widgets
+if [ ! -d "ui-gizmos" ]; then
+    git clone https://github.com/fireball-packages/ui-gizmos
+fi
+
 if [ ! -d "ui-kit" ]; then
     git clone https://github.com/fireball-packages/ui-kit
 fi
