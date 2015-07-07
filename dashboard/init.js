@@ -18,14 +18,11 @@ module.exports = function ( options, cb ) {
 
     // register global profile path =  ~/.fireball/dashboard/
     var settingsPath = Path.join(Editor.appHome, 'dashboard');
-    if ( !Fs.existsSync(settingsPath) ) {
-        Fs.makeTreeSync(settingsPath);
-    }
+    Fs.ensureDirSync(settingsPath);
     Editor.registerProfilePath( 'global', settingsPath );
 
     //
-    Editor.unregisterPackagePath( Path.join( Editor.App.path, 'builtin' ) );
-    Editor.unregisterPackagePath( Path.join( Editor.appHome, 'packages' ) );
+    Editor.unregisterPackagePath( Path.join( Editor.appPath, 'builtin' ) );
 
     if ( cb ) cb ();
 };
@@ -39,6 +36,7 @@ Editor.JS.mixin(Editor.App, {
     loadRuntimeInfos: function ( runtimePath, cb ) {
         var paths = Globby.sync( Path.join(runtimePath,'*/package.json') );
         Async.eachSeries( paths, function ( path, done ) {
+            path = Path.normalize(path);
             Editor.log('Load runtime info: %s', path);
             try {
                 var pkgJsonObj = JSON.parse(Fs.readFileSync(path));
@@ -47,6 +45,7 @@ Editor.JS.mixin(Editor.App, {
                     name: pkgJsonObj.name,
                     version: pkgJsonObj.version,
                     description: pkgJsonObj.description,
+                    link: pkgJsonObj.link
                 };
             }
             catch ( err ) {
@@ -60,6 +59,7 @@ Editor.JS.mixin(Editor.App, {
     loadTemplate: function ( templatePath, cb ) {
         var paths = Globby.sync( Path.join(templatePath,'*/package.json') );
         Async.eachSeries( paths, function ( path, done ) {
+            path = Path.normalize(path);
             Editor.log('Load template: %s', path);
             try {
                 var pkgJsonObj = JSON.parse(Fs.readFileSync(path));
@@ -131,7 +131,7 @@ Editor.JS.mixin(Editor.App, {
         var Spawn = require('child_process').spawn;
         var App = require('app');
         var exePath = App.getPath('exe');
-        var child = Spawn(exePath, ['./', projectPath], {
+        var child = Spawn(exePath, [Editor.appPath, projectPath], {
             detached: true,
             stdio: 'ignore',
         });
@@ -177,11 +177,12 @@ Editor.JS.mixin(Editor.App, {
                 var win = new Editor.Window('main', {
                     'title': 'Fireball Dashboard',
                     'width': 800,
-                    'height': 600,
+                    'height': 700,
                     'min-width': 800,
                     'min-height': 600,
                     'show': false,
                     'resizable': true,
+                    'frame': false
                 });
                 Editor.mainWindow = win;
 
@@ -292,4 +293,13 @@ Editor.JS.mixin(Editor.App, {
     'app:get-template-infos': function ( event ) {
         event.returnValue = Editor.App._templateInfos;
     },
+
+    'app:window-minimize': function ( event ) {
+        Editor.mainWindow.minimize();
+    },
+
+    'app:window-close': function ( event ) {
+        Editor.mainWindow.close();
+    }
+
 });

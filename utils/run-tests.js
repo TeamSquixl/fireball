@@ -19,7 +19,10 @@ var files;
 var testDirs = [
     Path.join( cwd, './test/' ),
     Path.join( cwd, './editor-framework/test/' ),
-    Path.join( cwd, './dashboard/test/' ),
+    Path.join( cwd, './engine-framework/test/'),
+    Path.join( cwd, './asset-db/test'),
+    Path.join( cwd, './runtime/runtime-cocos2d-js/test/'),
+    Path.join( cwd, './dashboard/test/' )
 ];
 var singleTestFile = process.argv[2];
 var failedTest = [];
@@ -73,9 +76,13 @@ else {
             Async.eachSeries(files, function(file, callback) {
                 var testfile = Path.join( Path.dirname(indexFile), file );
                 console.log( Chalk.magenta( 'Start test: ') + Chalk.cyan( Path.relative(__dirname, testfile) ) );
-                var cp = Spawn(exePath, [cwd, '--test-full', testfile], {stdio:[0,1,2,'ipc']});
+                var cp = Spawn(exePath, [cwd, '--test', testfile, '--report-failures'], {stdio:[0,1,2,'ipc']});
                 cp.on('message', function(data) {
-                    failedTest.push(data);
+                    if ( data.channel === 'process:end' ) {
+                        if ( data.failures > 0 ) {
+                            failedTest.push(data.path);
+                        }
+                    }
                 });
                 cp.on('exit', function(){
                     callback();
@@ -88,7 +95,7 @@ else {
             //   // console.log(file);
             //     var testfile = Path.join( Path.dirname(indexFile), file );
             //     console.log( Chalk.magenta( 'Start test: ') + Chalk.cyan( Path.relative(__dirname, testfile) ) );
-            //     SpawnSync(exePath, [cwd, '--test-full', testfile], {stdio: 'inherit'});
+            //     SpawnSync(exePath, [cwd, '--test', testfile, '--report-failures'], {stdio: 'inherit'});
             // });
         }
         else {

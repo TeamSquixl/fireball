@@ -1,0 +1,19 @@
+<dom-module id="app-play-buttons" >
+    <link rel="import" type="css" href="app-play-buttons.css">
+    <template>
+        <div id="play" class="btn"
+            on-click="_onPlayClick"
+            selected="{{playing}}"
+        >
+            <i class="fa fa-play"></i>
+        </div>
+        <div id="pause" class="btn" on-click="_onPauseClick">
+            <i class="fa fa-pause"></i>
+        </div>
+        <div id="step" class="btn" on-click="_onStepClick">
+            <i class="fa fa-step-forward"></i>
+        </div>
+    </template>
+
+    <script type="text/javascript" src="app-play-buttons.js"></script>
+</dom-module>

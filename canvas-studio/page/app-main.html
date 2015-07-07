@@ -1,0 +1,22 @@
+<link rel="import" href="app-top-bar.html">
+<link rel="import" href="app-status-bar.html">
+
+<dom-module id="app-main" >
+    <style>
+        :host {
+            @apply(--layout-fit);
+            @apply(--layout-vertical);
+
+            cursor: default;
+            margin: 3px;
+        }
+    </style>
+
+    <template>
+        <app-top-bar id="tools"></app-top-bar>
+        <main-dock class="flex-1"></main-dock>
+        <app-status-bar id="status"></app-status-bar>
+    </template>
+
+    <script type="text/javascript" src="app-main.js"></script>
+</dom-module>

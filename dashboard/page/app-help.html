@@ -1,34 +1,82 @@
 <dom-module id="app-help" >
     <style>
         :host {
-            @apply(--layout-fit);
+            @apply(--layout-horizontal);
+            margin-left:10%;
+            margin-top:10%;
+        }
+
+        .content {
+            padding-left: 80px;
+            color: #C0C0C0;
+            width: 500px;
+        }
+
+        .content ul {
+            list-style: none;
+            margin-bottom: 50px;
+        }
+
+        .content a {
+            text-decoration: none;
+            color: #cc6454;
+        }
+
+        .content a:hover {
+            color: #df7767;
+        }
+
+        .logo .version {
+            font-size: 1.5rem;
+            margin-left:auto;
+            margin-right:auto;
+            margin-top: 10px;
         }
     </style>
 
     <template>
-        <h2>Welcome to Fireball, a hackable editor for all kinds of game engines.</h2>
+        <div class="logo layout vertical">
+            <img src="../static/img/logo_vertical.png" width="200px" alt="Fireball Logo">
+            <div class="version"><span>Ver.</span>{{_ver}}</div>
+        </div>
+        <div class="content">
+            <p>This is the dashboard of Fireball, you can take these actions by click the tab on the left sidebar to get started:</p>
+            <ul>
+              <li><a href="#" on-click="_onRecent">Open a project that has been recently opened.</a></li>
+              <li><a href="#" on-click="_onNew">Create a new project from one of game engine runtimes.</a></li>
+              <li><a href="#" on-click="_onBrowse">Open a project anywhere on your disk by browsing.</a></li>
+            </ul>
 
-        <img src="../static/img/logo.png" width="300px" alt="Fireball Logo">
+            <p>To learn how to use Fireball, checkout the following links: </p>
+            <ul>
+              <li><a href="#">Tutorial</a></li>
+              <li><a href="#">Get Started</a></li>
+              <li><a href="#">User Manual</a></li>
+              <li><a href="#">API Reference</a></li>
+            </ul>
+        </div>
 
-        <p>This is the dashboard of Fireball, you can take these actions by click the tab on the left sidebar to get started:</p>
-        <ul>
-          <li>Open a project that has been recently opened.</li>
-          <li>Create a new project from one of game engine runtimes.</li>
-          <li>Open a project anywhere on your disk by browsing.</li>
-        </ul>
-
-        <p>To learn how to use Fireball, checkout the following links: </p>
-        <ul>
-          <li><a href="#">Tutorial</a></li>
-          <li><a href="#">Get Started</a></li>
-          <li><a href="#">User Manual</a></li>
-          <li><a href="#">API Reference</a></li>
-        </ul>
     </template>
 
     <script>
         Polymer({
             is: 'app-help',
+
+            ready: function () {
+                this._ver = Editor.remote.versions['fireball'];
+            },
+
+            _onRecent: function() {
+                this.fire( 'tab-changed', { index: 0 } );
+            },
+
+            _onNew: function() {
+                this.fire( 'tab-changed', { index: 1 } );
+            },
+
+            _onBrowse: function() {
+                this.fire( 'tab-changed', { index: 2 } );
+            },
         });
     </script>
 </dom-module>

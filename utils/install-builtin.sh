@@ -28,8 +28,20 @@ if [ ! -d "ui-kit" ]; then
     git clone https://github.com/fireball-packages/ui-kit
 fi
 
+if [ ! -d "ui-property" ]; then
+    git clone https://github.com/fireball-packages/ui-property
+fi
+
 if [ ! -d "ui-tree" ]; then
     git clone https://github.com/fireball-packages/ui-tree
+fi
+
+if [ ! -d "fire-ui-kit" ]; then
+    git clone https://github.com/fireball-packages/fire-ui-kit
+fi
+
+if [ ! -d "color-picker" ]; then
+    git clone https://github.com/fireball-packages/color-picker
 fi
 
 if [ ! -d "pixi-grid" ]; then

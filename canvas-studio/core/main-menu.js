@@ -127,6 +127,14 @@ function _getDefaultMainMenu () {
                    accelerator: 'CmdOrCtrl+A',
                    selector: 'selectAll:'
                 },
+                { type: 'separator' },
+                {
+                   label: 'Play',
+                   accelerator: 'CmdOrCtrl+P',
+                   click: function () {
+                       Editor.sendToMainWindow('editor:toggle-play');
+                   },
+                },
             ]
         },
 
@@ -212,7 +220,7 @@ function _getDefaultMainMenu () {
             submenu: [
                 {
                     label: 'Command Palette',
-                    accelerator: 'CmdOrCtrl+P',
+                    accelerator: 'CmdOrCtrl+:',
                     click: function() {
                         Editor.mainWindow.focus();
                         Editor.sendToMainWindow('cmdp:show');
@@ -237,6 +245,13 @@ function _getDefaultMainMenu () {
                     label: 'Reload Editor.App',
                     click: function() {
                         Editor.App.reload();
+                    }
+                },
+                {
+                    label: 'Compile',
+                    accelerator: 'F7',
+                    click: function() {
+                        Editor.Compiler.compileAndReload();
                     }
                 },
                 { type: 'separator' },
@@ -266,10 +281,26 @@ function _getDefaultMainMenu () {
                 },
                 { type: 'separator' },
                 {
+                    label: 'Generate UUID',
+                    click: function() {
+                        var uuid = require('node-uuid');
+                        Editor.log(uuid.v4());
+                    }
+                },
+                {
+                    label: 'Remove All Meta Files',
+                    click: function() {
+                        Editor.assetdb._rmMetas( function () {
+                            Editor.success('Meta files removed');
+                        });
+                    }
+                },
+                { type: 'separator' },
+                {
                     label: 'Run Tests (editor-framework)',
                     accelerator: 'CmdOrCtrl+Alt+T',
                     click: function() {
-                        var testRunner = require('./test-runner');
+                        var testRunner = Editor.require('editor-framework://core/test-runner');
                         testRunner.liveRun( Editor.url('editor-framework://test/') );
                     }
                 },
@@ -289,6 +320,12 @@ function _getDefaultMainMenu () {
                                 Editor.sendToPanel( "foobar.panel", "foo:bar" );
                             }
                         },
+                    ],
+                },
+                { type: 'separator' },
+                {
+                    label: 'UI Preview',
+                    submenu: [
                     ],
                 },
                 { type: 'separator' },

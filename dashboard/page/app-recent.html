@@ -2,33 +2,45 @@
     <link rel="import" type="css" href="styles/app-recent.css">
 
     <template>
-        <template is="dom-repeat" id="list" items="{{list}}">
-            <div class="project">
-                <div class$="{{_getItemNameClass(item)}}">{{item.name}}</div>
-                <div class="info" hidden$="{{_hideErrorInfo(item.error)}}">{{item.error}}</div>
-                <div class="layout horizontal center">
-                    <img class="logo" src$="{{_getRuntimeLogo(item.runtime)}}"></img>
-                    <div class="path">{{item.path}}</div>
-                    <span flex-1></span>
-                    <div class="btn-group">
-                        <button class="transparent"
-                            no-focus
-                            on-click="_onClose"
-                        >
-                            Close
-                        </button>
-                        <button
-                            class="flat"
-                            no-focus
-                            disabled$="{{!_hideErrorInfo(item.error)}}"
-                            on-click="_onOpen"
-                        >
-                            Open
-                        </button>
+        <iron-selector id="selector"
+            selected-class="selected"
+            on-selected-changed="_onSelectedChanged"
+        >
+            <template is="dom-repeat" id="list" items="{{list}}">
+                <div class="project layout vertical" on-mouseenter="_onHover">
+                    <div class="logo">
+                        <img src$="{{_getRuntimeLogo(item.runtime)}}"></img>
+                        <div class="btn-group overlay">
+                            <div class="btn-anchor">
+                                <dashboard-button class="corner transparent"
+                                    no-focus
+                                    on-click="_onClose"
+                                >
+                                    Close
+                                </dashboard-button>
+                                <dashboard-button
+                                    class="flat"
+                                    no-focus
+                                    disabled$="{{!_hideErrorInfo(item.error)}}"
+                                    on-click="_onOpen"
+                                >
+                                    Open
+                                </dashboard-button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="name">
+                        <div class$="{{_getItemNameClass(item)}}">{{item.name}}</div>
                     </div>
                 </div>
-            </div>
-        </template>
+            </template>
+        </iron-selector>
+
+        <!--                     <div class="info" hidden$="{{_hideErrorInfo(item.error)}}">{{item.error}}</div> -->
+        <!-- <div class="layout horizontal center">
+            <div class="path">{{item.path}}</div>
+            <span flex-1></span>
+        </div> -->
     </template>
 
     <script>
@@ -98,19 +110,30 @@
                 Editor.sendToCore('app:close-project', model.item.path );
             },
 
+            _onHover: function ( event ) {
+                event.stopPropagation();
+                var model = this.$.list.modelForElement(event.target);
+                if ( model ) {
+                    this.fire( 'project-changed', {
+                        path: model.item.path,
+                        error: model.item.error
+                    });
+                }
+            },
+
             _onDropAreaEnter: function ( event ) {
                 event.stopPropagation();
-                this.classList.add('highlight')
+                this.classList.add('highlight');
             },
 
             _onDropAreaLeave: function ( event ) {
                 event.stopPropagation();
-                this.classList.remove('highlight')
+                this.classList.remove('highlight');
             },
 
             _onDropAreaAccept: function ( event ) {
                 event.stopPropagation();
-                this.classList.remove('highlight')
+                this.classList.remove('highlight');
 
                 event.detail.dragItems.forEach( function ( path ) {
                     Editor.sendRequestToCore('app:open-project', path, function ( err ) {
@@ -121,6 +144,17 @@
                     }.bind(this));
                 }.bind(this));
             },
+
+            _onSelectedChanged: function ( event ) {
+                var itemEL = Polymer.dom(this.$.selector).children[event.detail.value];
+                var model = this.$.list.modelForElement(itemEL);
+                if ( model ) {
+                    this.fire( 'project-changed', {
+                        path: model.item.path,
+                        error: model.item.error
+                    } );
+                }
+            }
         });
     </script>
 </dom-module>

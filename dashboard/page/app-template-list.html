@@ -2,28 +2,41 @@
     <link rel="import" type="css" href="styles/app-template-list.css">
 
     <template>
-        <h2>{{runtimeInfo.name}}</h2>
-        <span class="version">{{runtimeInfo.version}}</span>
+<!--         <h2>{{runtimeInfo.name}}</h2>
+<span class="version">{{runtimeInfo.version}}</span> -->
         <div class="template-list" flex-1>
             <iron-selector id="selector"
                 selected="0"
                 selected-class="selected"
             >
                 <template id="list" is="dom-repeat" items="{{infos}}">
-                    <div class="template">
-                        <h2 class="name">{{item.name}}</h2>
-                        <h3 class="version">{{item.version}}</h3>
+                    <div class="template layout vertical">
+                        <div class="logo">
+                            <img src$="{{_getTemplateBanner(item.name)}}"></img>
+                        </div>
+                        <div class="name">
+                            <div>{{item.name}}</div>
+                            <div class="version">{{item.version}}</div>
+                        </div>
                     </div>
                 </template>
             </iron-selector>
         </div>
-        <div row>{{description}}</div>
-        <div row>
-            <button class="flat" on-click="_onBrowse">Browse...</button>
-            <input id="pathInput" is="iron-input" bind-value="{{path}}" flex-1></input>
-            <div class="btn-group">
-                <button class="transparent" on-click="_onBack">Back</button>
-                <button class="flat" on-click="_onCreate">Create</button>
+        <div class="description layout horizontal">
+            <div class="text flex-6">
+                <div class="info layout horizontal">
+                    <span class="runtime-name flex-1">{{runtimeInfo.name}}</span><span class="version flex-1">{{runtimeInfo.version}}</span><span class="desc flex-5">{{description}}</span>
+                </div>
+                <div class="browse layout horizontal start-justified">
+                    <dashboard-button class="flat small flex-1" on-click="_onBrowse">Browse...</dashboard-button>
+                    <input class="flex-8" id="pathInput" is="iron-input" bind-value="{{path}}"></input>
+                </div>
+            </div>
+            <div class="link flex-1">
+                <dashboard-button class="transparent" on-click="_onBack">Back</a>
+            </div>
+            <div class="action flex-1">
+                <dashboard-button class="flat" on-click="_onCreate">Create</button>
             </div>
         </div>
     </template>
@@ -54,7 +67,7 @@
             updateTemplateInfos: function () {
                 var infos = [{
                     name: 'Empty',
-                    description: 'An empty project',
+                    description: 'Create a project from scratch.'
                 }];
 
                 if ( this.runtimeInfo ) {
@@ -78,6 +91,11 @@
                         this.path.length
                     );
                 });
+            },
+
+            _getTemplateBanner: function (name) {
+                //TODO: read template banner
+                return 'static/img/empty-project.png';
             },
 
             _onSelectedChanged: function ( event ) {

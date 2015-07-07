@@ -1,5 +1,6 @@
 var Fs = require('fire-fs');
 var Path = require('fire-path');
+var Url = require('fire-url');
 var Async = require('async');
 var Shell = require('shell');
 
@@ -15,9 +16,9 @@ module.exports = function ( options, cb ) {
     Editor.requireLogin = !Editor.isDev || options.requireLogin;
     Editor.projectInfo = null;
 
-    if ( !Editor.assets ) Editor.assets = {};
     if ( !Editor.metas ) Editor.metas = {};
     if ( !Editor.inspectors ) Editor.inspectors = {};
+    if ( !Editor.properties ) Editor.properties = {};
 
     var Project = require('../share/project');
 
@@ -67,27 +68,8 @@ module.exports = function ( options, cb ) {
             } );
         },
 
-        // register
+        // initialize canvas studio
         function ( next ) {
-            Editor.log( 'Initializing Engine Framework (Fire)' );
-            require('../engine-framework');
-            Editor.assets.asset = Fire.Asset; // set the default asset
-
-            Editor.log( 'Initializing Asset Database' );
-            var AssetDB = require('../asset-db');
-            Editor.assetdb = new AssetDB({
-                cwd: Path.join( Editor.projectPath ),
-                library: 'library',
-            });
-            Editor.libraryPath = Editor.assetdb.library;
-
-            Editor.log( 'Initializing Runtime %s', Editor.projectInfo.runtime );
-            require( Editor.runtimePath );
-            Runtime.init(Editor.assetdb);
-
-            // register {runtime-path}/packages
-            Editor.registerPackagePath( Path.join(Editor.runtimePath, 'packages') );
-
             Editor.log( 'Initializing Fireball Canvas Studio' );
 
             // register panel window
@@ -95,14 +77,96 @@ module.exports = function ( options, cb ) {
 
             // register selections
             Editor.Selection.register('asset');
-            Editor.Selection.register('entity');
+            Editor.Selection.register('node');
 
             // register global profile path =  ~/.fireball/canvas-studio/
             var globalProfilePath = Path.join(Editor.appHome, 'canvas-studio');
-            if ( !Fs.existsSync(globalProfilePath) ) {
-                Fs.makeTreeSync(globalProfilePath);
-            }
+            Fs.ensureDirSync(globalProfilePath);
             Editor.registerProfilePath( 'global', globalProfilePath );
+
+            // register default layout
+            Editor.registerDefaultLayout( Editor.url('app://canvas-studio/static/layout.json') );
+
+            // init core modules
+            require('./core/init');
+
+            next ();
+        },
+
+        // initialize engine-framework
+        function ( next ) {
+            Editor.log( 'Initializing Engine Framework (Fire)' );
+            require('../engine-framework');
+
+            next ();
+        },
+
+        // initialize asset-database
+        function ( next ) {
+            Editor.log( 'Initializing Asset Database' );
+            var AssetDB = require('../asset-db');
+            Editor.assetdb = new AssetDB({
+                'cwd': Path.join( Editor.projectPath ),
+                'library': 'library',
+                'default-asset': Fire.Asset,
+            });
+            Editor.libraryPath = Editor.assetdb.library;
+            Editor.importPath = Editor.assetdb._importPath;
+
+            // register uuid:// protocol
+            function _url2path (urlInfo) {
+                var root;
+                var uuid = urlInfo.hostname;
+
+                if ( urlInfo.query === 'thumbnail' ) {
+                    root = Editor.assetdb._thumbnailPath;
+                    return Path.join( root, uuid.substring(0,2), uuid + '.png' );
+                }
+
+                //
+                root = Editor.assetdb._importPath;
+                return Path.join( root, uuid.substring(0,2), uuid );
+            }
+
+            var Protocol = require('protocol');
+            Protocol.registerProtocol('uuid', function(request) {
+                var url = decodeURIComponent(request.url);
+                var data = Url.parse(url);
+                var file = _url2path(data);
+                return new Protocol.RequestFileJob(file);
+            });
+            Editor.registerProtocol('uuid', _url2path );
+
+            next ();
+        },
+
+        // load builtin packages
+        function ( next ) {
+            Editor.log( 'Loading builtin packages' );
+            Editor.loadPackagesAt( Path.join( Editor.appPath, 'builtin' ), next );
+        },
+
+        // initialize runtime
+        function ( next ) {
+            Editor.log( 'Initializing Runtime %s', Editor.projectInfo.runtime );
+            require( Editor.runtimePath );
+            Runtime.init(Editor.assetdb);
+
+            next ();
+        },
+
+        // load runtime packages
+        function ( next ) {
+            Editor.log( 'Loading runtime packages' );
+
+            // register {runtime-path}/packages
+            Editor.registerPackagePath( Path.join(Editor.runtimePath, 'packages') );
+            Editor.loadPackagesAt( Path.join(Editor.runtimePath, 'packages'), next );
+        },
+
+        // initialize project
+        function ( next ) {
+            Editor.log( 'Initializing project %s', Editor.projectPath );
 
             // register profile 'project' = {project}/settings/
             Editor.registerProfilePath( 'project', Path.join(Editor.projectPath, 'settings') );
@@ -110,19 +174,14 @@ module.exports = function ( options, cb ) {
             // register profile 'local' = {project}/local/
             Editor.registerProfilePath( 'local', Path.join(Editor.projectPath, 'local') );
 
+            // register packages = ~/.fireball/packages/
             // register packages = {project}/packages/
+            Editor.registerPackagePath( Path.join(Editor.appHome, 'packages') );
             Editor.registerPackagePath( Path.join(Editor.projectPath, 'packages') );
-
-            // register default layout
-            Editor.registerDefaultLayout( Editor.url('app://canvas-studio/static/layout.json') );
-
-            // apply default main menu
-            var MainMenuTmplFn = require('./core/main-menu');
-            Editor.registerDefaultMainMenu(MainMenuTmplFn);
-            Editor.MainMenu.reset();
 
             next ();
         },
+
     ], function ( err ) {
         if ( cb ) cb ( err );
     });
@@ -134,7 +193,7 @@ Editor.JS.mixin(Editor.App, {
         var Spawn = require('child_process').spawn;
         var App = require('app');
         var exePath = App.getPath('exe');
-        var child = Spawn(exePath, ['./'], {
+        var child = Spawn(exePath, Editor.appPath, {
             detached: true,
             stdio: 'ignore',
         });
@@ -206,15 +265,35 @@ Editor.JS.mixin(Editor.App, {
         // console.log('app unload');
     },
 
+    // @param {string} scriptUrl
+    // @param {object} [query]
+    // @param {function} [onLoad]
+    spawnWorker: function (scriptUrl, query, onLoad) {
+        if (typeof query === "function") {
+            onLoad = query;
+            query = {};
+        }
+        query.scriptUrl = scriptUrl;
+        var url = Url.format({
+            protocol: 'file',
+            pathname: Editor.url('app://canvas-studio/static/general-worker.html'),
+            slashes: true,
+            hash: encodeURIComponent(JSON.stringify(query))
+        });
+        var BrowserWindow = require('browser-window');
+        var workerWindow = new BrowserWindow({
+            show: false,
+        });
+        workerWindow.loadUrl(url);
+        if (onLoad) {
+            workerWindow.webContents.on('did-finish-load', function () {
+                onLoad(workerWindow);
+            });
+        }
+        return workerWindow;
+    },
+
     'app:explore-project': function () {
         Shell.showItemInFolder(Editor.projectPath);
-    },
-
-    'app:explore-assets': function () {
-        Shell.showItemInFolder(Editor.assetdb._fspath('assets://'));
-    },
-
-    'app:explore-library': function () {
-        Shell.showItemInFolder(Editor.assetdb.library);
     },
 });

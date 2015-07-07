@@ -16,7 +16,7 @@ function runGitCmdInPath(cmdArgs, path, callback) {
             console.log(data.toString());
             process.kill();
         }
-        console.log(data.toString());
+        console.error(data.toString());
     });
     child.on('exit', function () {
         return callback();

@@ -9,17 +9,27 @@
                 on-selected-changed="_onSelectedChanged"
             >
                 <template id="list" is="dom-repeat" items="{{infos}}">
-                    <div class="runtime">
-                        <img class="banner" src$="{{_getRuntimeBanner(item.name)}}"></img>
-                        <h2 class="name">{{item.name}}</h2>
-                        <h3 class="version">{{item.version}}</h3>
+                    <div class="runtime layout vertical">
+                        <div class="logo">
+                            <img src$="{{_getRuntimeBanner(item.name)}}"></img>
+                        </div>
+                        <div class="name">
+                            <div>{{item.name}}</div>
+                            <div class="version">{{item.version}}</div>
+                        </div>
                     </div>
                 </template>
             </iron-selector>
         </div>
-        <div row>{{description}}</div>
-        <div row end>
-            <button class="flat" on-click="_onNext">Next</button>
+        <div class="description layout horizontal">
+            <div class="title flex-1"><span>About </span>{{curRuntimeName}}</div>
+            <div class="text flex-5">{{description}}</div>
+            <div class="link flex-1">
+                <dashboard-button class="transparent" on-click="_onMoreInfo">Learn more</a>
+            </div>
+            <div class="action flex-1">
+                <dashboard-button class="flat" on-click="_onNext">Next</button>
+            </div>
         </div>
     </template>
 
@@ -38,6 +48,8 @@
 
                 if ( this.infos.length > 0 )
                     this.description = this.infos[0].description;
+                    this.curRuntimeName = this.infos[0].name;
+                    this.curRuntimeLink = this.infos[0].link;
             },
 
             reset: function () {
@@ -47,7 +59,7 @@
             _getRuntimeBanner: function ( name ) {
                 var info = Dashboard.runtimeInfos[name];
                 if ( info ) {
-                    return Path.join(info.path, 'res/banner.png');
+                    return Path.join(info.path, 'res/logo.png');
                 }
                 return '';
             },
@@ -57,6 +69,8 @@
                 var model = this.$.list.modelForElement(itemEL);
                 if ( model ) {
                     this.set('description', model.item.description);
+                    this.set('curRuntimeName', model.item.name);
+                    this.set('curRuntimeLink', model.item.link);
                 }
             },
 
@@ -66,6 +80,11 @@
 
                 this.fire( 'next', { info: model.item } );
             },
+
+            _onMoreInfo: function ( event ) {
+                var shell = require('shell');
+                shell.openExternal(this.curRuntimeLink);
+            }
         });
     </script>
 </dom-module>

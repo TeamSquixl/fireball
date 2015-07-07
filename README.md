@@ -1,9 +1,14 @@
+[Documentation](http://docs.fireball-x.com/) |
+[Community](https://fireball.slack.com) |
+[Contributing](https://github.com/fireball-x/fireball/blob/master/CONTRIBUTING.md)
+
 ![Fireball Game Engine](https://cloud.githubusercontent.com/assets/344547/6882303/a8b7a740-d5ba-11e4-9518-e6494b1c94fa.png)
 
 ![release badge](https://img.shields.io/github/tag/fireball-x/fireball.svg)
 [![Dependency Status](https://david-dm.org/fireball-x/fireball.svg)](https://david-dm.org/fireball-x/fireball)
 [![devDependency Status](https://david-dm.org/fireball-x/fireball/dev-status.svg)](https://david-dm.org/fireball-x/fireball#info=devDependencies)
 <a href="https://fireball-slack.herokuapp.com"><img src="http://fireball-slack.herokuapp.com/badge.svg"></a>
+[![experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://img.shields.io/badge/stability-experimental-orange.svg)
 
 Fireball is a hackable game editor for creating mobile and HTML5 games, providing powerful scene editor and other integrated tools for open source game engines such as [Cocos2D-JS](https://github.com/cocos2d/cocos2d-js), [Pixi.js](https://github.com/GoodBoyDigital/pixi.js). We will be supporting more engines in the future.
 
@@ -24,6 +29,12 @@ Learn what's going on from [Fireball Beta Roadmap](https://github.com/fireball-x
 - Install [gulp](https://github.com/gulpjs/gulp) command line tool
 - Install [bower](http://bower.io/) command line tool
 
+For **Windows** user, you need the following environment set up to be able to build nodejs native modules:
+
+- [node-gyp](https://github.com/TooTallNate/node-gyp)
+- [Visual Studio Community 2013](http://www.visualstudio.com/products/visual-studio-community-vs)
+- [Python 2.7](http://www.python.org/download/releases/2.7/) - make sure you can run `python --verson` in your command line tool. Read [this](https://docs.python.org/2/using/windows.html#excursus-setting-environment-variables) for setting up path correctly.
+
 ## Install
 
 In cloned project folder, run the following command to setup dev environment:
@@ -31,13 +42,14 @@ In cloned project folder, run the following command to setup dev environment:
 ```bash
 # Initialize gulp task dependencies
 # npm is a builtin CLI when you install Node.js
-npm run init
-
-# bootstrap
-gulp bootstrap
+npm install
 ```
 
-Bootstrap task will run the following command in sequence, so if anything goes wrong during the bootstrap process, you can manually run these commands to get back on track:
+This is all you have to do to set Fireball development environment.
+
+### Run Tasks Manually
+
+Behind the scene, npm install script will run a series of gulp tasks. If anything goes wrong during the bootstrap process, you can manually run these commands to get back on track:
 
 ```bash
 # Initialize git submodules
@@ -50,10 +62,10 @@ gulp install-builtin
 gulp install-runtime
 
 # Install fireshell(electron)
-gulp update-fire-shell
+gulp update-electron
 
-# Install npm packages
-gulp npm # DO NOT use npm directly
+# rebuild npm native modules for Electron
+gulp npm-rebuild
 
 # Install bower packages
 bower install
@@ -103,16 +115,20 @@ To get the latest fireball build:
 ```bash
 # Update fireball from github repo,
 # also update builtin packages and electron binary
+# this command will also check dependencies
+# and report outdated or missing dependencies
 gulp update
 
-# Optional, update npm and bower dependencies
-gulp update-deps
-```
+# If you want to update all dependencies
+# this command will bootstrap and update the whole project and takes long
+npm install
 
-`gulp update` will run `git pull origin` in fireball's root folder. This way submodules will be updated according to fireball repo's commit. In case you want to update all submodules to latest commit, run following command:
+# or if you just want to quickly install a missing package:
+# please use the semver reported at the end of `gulp update` dependency check
+npm install some-npm-package@x.x.x
 
-```bash
-gulp pull-submodules
+# If you only want to update bower dependencies
+bower install
 ```
 
 ## Test
@@ -133,6 +149,12 @@ npm run test -- editor-framework
 
 All test files are located in [test](/test/) folder or submodule's `test/` folder.
 
+## API Docs
+
+```bash
+# Generate and preview API docs
+npm run gendoc
+```
 
 ## Feedback & Contribution
 
@@ -141,6 +163,15 @@ All test files are located in [test](/test/) folder or submodule's `test/` folde
 - If you have any suggestion/feedback/problem, feel free to [submit an issue](https://github.com/fireball-x/fireball/issues).
 - If you want to contribute to this project, please read [Contributing Guidelines](https://github.com/fireball-x/fireball/blob/master/CONTRIBUTING.md).
 
+## Trouble Shooting
+
+### [Windows] error MSB4025: Could not load project file. Invalid character in coding provided.
+
+This error is due to non-ascii character in your home path, please check this guide to [rename user profile](http://superuser.com/questions/495290/how-to-rename-user-folder-in-windows-8).
+
+### Error: Permission denied (publickey)
+
+Usually this is due to incorrect setup of ssh key. Please troubleshoot with this guide: https://help.github.com/articles/error-permission-denied-publickey/#platform-linux
 
 ## Fireball 0.4
 

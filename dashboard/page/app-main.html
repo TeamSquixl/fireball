@@ -1,0 +1,148 @@
+<link rel="import" href="app://bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="app://bower_components/iron-input/iron-input.html">
+<link rel="import" href="button/button.html">
+
+<link rel="import" href="app-navbar.html">
+<link rel="import" href="app-tabs.html">
+<link rel="import" href="app-recent.html">
+<link rel="import" href="app-new.html">
+<link rel="import" href="app-help.html">
+
+<dom-module id="app-main" >
+    <link rel="import" type="css" href="styles/app-main.css">
+    <template>
+        <div id="shell" class="layout vertical">
+            <div id="window-row" class="layout horizontal start-justified">
+                <div class="flex-1 window-title layout horizontal start-justified">
+                    <img height="30px" src="../static/img/logo_white.png">Fireball-Dashboard</div>
+                <div class="flex-1 window-control layout horizontal end-justified">
+                    <div class="layout horizontal">
+                        <dashboard-button class="square" on-click="_onMinimize"><img src="../static/img/ctrl-windows-min.png"></dashboard-button>
+                        <dashboard-button class="square" disabled><img src="../static/img/ctrl-windows-max.png"></dashboard-button>
+                        <dashboard-button class="square" on-click="_onClose"><img src="../static/img/ctrl-windows-close.png"></dashboard-button>
+                    </div>
+                </div>
+            </div>
+            <div id="tab-row" class="layout horizontal start-justified">
+                <app-tabs id="appTabs" class="flex-1" on-select="_onSelect">
+                    <div>Recent Projects</div>
+                    <div>New Project</div>
+                    <div>Open Other ...</div>
+                    <div>Help</div>
+                </app-tabs>
+                <app-navbar class="flex-1 layout horizontal end-justified"></app-navbar>
+            </div>
+
+            <div id="view">
+                <div hidden$="[[!_recentProject(curIndex)]]">
+                    <app-recent></app-recent>
+                </div>
+                <div hidden$="[[!_newProject(curIndex)]]">
+                    <app-new id="appNew"></app-new>
+                </div>
+                <div class="help layout vertical" hidden$="[[!_help(curIndex)]]">
+                    <app-help></app-help>
+                </div>
+            </div>
+
+            <div hidden$="[[!_recentProject(curIndex)]]" id="project-path">{{projectPath}}</div>
+        </div>
+        <div id="status" class$={{statusType}}>{{status}}</div>
+    </template>
+
+    <script type="text/javascript">
+        Polymer({
+            is: 'app-main',
+
+            listeners: {
+                'status-changed': '_onStatusChanged',
+                'project-changed': '_onProjectChanged',
+                'tab-changed': '_onTabChanged'
+            },
+
+            ready: function () {
+                this.curIndex = 0;
+                this.status = '';
+                this.statusType = 'normal';
+                this.projectPath = '';
+            },
+
+            _onSelect: function ( event ) {
+                this.curIndex = event.detail.index;
+
+                // new project
+                if ( this.curIndex === 1 ) {
+                    this.$.appNew.reset();
+                    return;
+                }
+
+                // open others
+                if ( this.curIndex === 2 ) {
+                    var dialog = Remote.require('dialog');
+
+                    var result = dialog.showOpenDialog ( {
+                        title: "Choose a project",
+                        properties: [ 'openDirectory' ]
+                    } );
+
+                    if ( result ) {
+                        Editor.sendRequestToCore('app:open-project', result[0], function ( err ) {
+                            this.fire( 'status-changed', {
+                                type: 'error',
+                                status: err.message,
+                            } );
+                        }.bind(this));
+                    } else {
+                        this._resetFromBrowse();
+                    }
+                    return;
+                }
+            },
+
+            _resetFromBrowse: function () {
+                // jump back to help if cancel from browse project dialog
+                this.$.appTabs.selectTab(3);
+            },
+
+            _onTabChanged: function( event ) {
+                this.$.appTabs.selectTab(event.detail.index);
+                this._onSelect(event);
+            },
+
+            _recentProject: function ( idx ) {
+                return idx === 0;
+            },
+
+            _newProject: function ( idx ) {
+                return idx === 1;
+            },
+
+            _help: function ( idx ) {
+                return idx === 3;
+            },
+
+            _onStatusChanged: function ( event ) {
+                this.set('status', event.detail.status);
+                this.set('statusType', event.detail.type);
+            },
+
+            _onProjectChanged: function ( event ) {
+                this.set('projectPath', event.detail.path);
+                this.set('status', event.detail.error);
+                this.set('statusType', 'error');
+            },
+
+            _onMinimize: function (event) {
+                Editor.sendToCore('app:window-minimize');
+            },
+
+            _onMaximize: function (event) {
+                Editor.sendToCore('app:window-maximize');
+            },
+
+            _onClose: function (event) {
+                Editor.sendToCore('app:window-close');
+            }
+        });
+    </script>
+</dom-module>

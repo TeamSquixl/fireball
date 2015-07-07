@@ -2,6 +2,7 @@
   "name": "cocos2d-js",
   "version": "0.0.1",
   "runtime-version": "3.6.1",
+  "link": "www.cocos2d-x.org/products#cocos2d-js",
   "description": "A cocos2d-js runtime",
   "repository": {
     "type": "git",

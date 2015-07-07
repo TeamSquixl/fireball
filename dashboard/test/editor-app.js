@@ -20,24 +20,28 @@ describe('Editor.App (Dashboard)', function() {
                     "cocos2d-js": {
                         "description": "A cocos2d-js runtime",
                         "name": "cocos2d-js",
+                        "link": "www.cocos2d-x.org/products#cocos2d-js",
                         "path": Editor.url("app://dashboard/test/fixtures/runtime-simple/runtime-cocos2d-js"),
                         "version": "0.0.1",
                     },
                     "pixi": {
                         "description": "A pixi runtime",
                         "name": "pixi",
+                        "link": "https://github.com/GoodBoyDigital/pixi.js",
                         "path": Editor.url("app://dashboard/test/fixtures/runtime-simple/runtime-pixi"),
                         "version": "0.0.1",
                     },
                     "three.js": {
                         "description": "A three.js runtime",
                         "name": "three.js",
+                        "link": "http://threejs.org/",
                         "path": Editor.url("app://dashboard/test/fixtures/runtime-simple/runtime-three-js"),
                         "version": "0.0.1",
                     },
                     "babylonjs": {
                         "description": "A babylonjs runtime",
                         "name": "babylonjs",
+                        "link": "http://www.babylonjs.com/",
                         "path": Editor.url("app://dashboard/test/fixtures/runtime-simple/runtime-babylonjs"),
                         "version": "0.0.1"
                     },
@@ -54,6 +58,7 @@ describe('Editor.App (Dashboard)', function() {
                     "pixi": {
                         "description": "A pixi runtime",
                         "name": "pixi",
+                        "link": "https://github.com/GoodBoyDigital/pixi.js",
                         "path": Editor.url("app://dashboard/test/fixtures/runtime-with-error/runtime-pixi"),
                         "version": "0.0.1"
                     },

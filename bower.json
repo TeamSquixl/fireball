@@ -10,6 +10,7 @@
   ],
   "dependencies": {
     "chai": "2.3.0",
+    "chroma-js": "0.8.0",
     "fontawesome": "4.3.0",
     "iron-behaviors": "PolymerElements/iron-behaviors#^1.0.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
@@ -20,7 +21,7 @@
     "numeral": "1.5.3",
     "pace": "1.0.2",
     "pixi": "3.0.6",
-    "polymer": "Polymer/polymer#^1.0.4",
+    "polymer": "Polymer/polymer#^1.0.5",
     "stats.js": "mrdoob/stats.js#master",
     "svg.js": "1.0.1",
     "web-animations-js": "web-animations/web-animations-js#master"
