@@ -69,6 +69,7 @@
     "assets",
     "canvas-assets",
     "console",
+    "code-editor",
     "hierarchy",
     "inspector",
     "ipc-debugger",

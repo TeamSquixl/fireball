@@ -69,6 +69,10 @@ if [ ! -d "timeline" ]; then
     git clone https://github.com/fireball-packages/timeline
 fi
 
+if [ ! -d "code-editor" ]; then
+    git clone https://github.com/fireball-packages/code-editor
+fi
+
 # builtin assets
 
 if [ ! -d "canvas-assets" ]; then
