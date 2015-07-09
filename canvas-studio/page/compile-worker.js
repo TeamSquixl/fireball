@@ -311,14 +311,9 @@ Ipc.on('app:compile-worker:start', function (options) {
     }
 
     function getUuidFromPath (path) {
-        var filename = Path.basenameNoExt(path);
-        var dotIndex = filename.indexOf('.');
-        if (dotIndex !== -1) {
-            return filename.slice(0, dotIndex);
-        }
-        else {
-            return filename;
-        }
+        var dirname = Path.dirname(path);
+        var uuid = Path.basename(dirname);
+        return uuid;
     }
 
     //// read uuid and script's name from library
@@ -360,8 +355,13 @@ Ipc.on('app:compile-worker:start', function (options) {
             // redirect dest path
             file.base = Path.join(paths.proj, 'assets');
             var rawPath = Editor.assetdb.remote.uuidToFspath(uuid);
-            file.path = rawPath;
-            callback(null, file);
+            if (rawPath) {
+                file.path = rawPath;
+                callback(null, file);
+            }
+            else {
+                Editor.error('Invalid uuid:', uuid);
+            }
         });
     }
 
