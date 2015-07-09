@@ -7,6 +7,7 @@ Editor.importPath = Editor.remote.importPath;
 if ( !Editor.metas ) Editor.metas = {};
 if ( !Editor.inspectors ) Editor.inspectors = {};
 if ( !Editor.properties ) Editor.properties = {};
+if ( !Editor.gizmos ) Editor.gizmos = {};
 
 Editor.states = {};
 function _defprop ( name, value ) {
