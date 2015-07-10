@@ -360,25 +360,11 @@ function findNativeModulePathRecursive(path) {
     return nativePaths;
 }
 
-function getNodeGypPath() {
-    var basepath = process.platform === 'win32' ? Path.join(process.env.HOMEPATH, '.node-gyp') : Path.join(process.env.HOME, '.electron-gyp');
-    var version = pjson['electron-version'];
-    if (Fs.isDirSync(Path.join(basepath, version))) {
-        return basepath;
-    } else {
-        if (Fs.isDirSync(Path.join(basepath, '.node-gyp', version))) {
-            return Path.join(basepath, '.node-gyp');
-        } else {
-            console.log(chalk.red('Not able to locate Electron node-gyp folder at ' + basepath + '. Please contact author for help.'));
-            process.exit(1);
-        }
-    }
-}
-
 gulp.task('npm-rebuild', function(cb) {
     var cmdstr = process.platform === 'win32' ? 'node-gyp.cmd' : 'node-gyp';
     var tmpenv = process.env;
-    tmpenv.HOME = getNodeGypPath();
+    tmpenv.HOME = process.platform === 'win32' ? Path.join(tmpenv.HOMEPATH, '.electron-gyp') : Path.join(tmpenv.HOME, '.electron-gyp');
+    tmpenv.HOMEPATH = tmpenv.HOME;
     var disturl = 'https://atom.io/download/atom-shell';
     var target = pjson['electron-version'];
     var arch = process.platform === 'win32' ? 'ia32' : 'x64';
