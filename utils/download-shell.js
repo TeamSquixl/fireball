@@ -4,8 +4,8 @@
  */
 
 var gulp = require('gulp');
-var updateFireShell = require('gulp-download-fire-shell');
 var shell = require('gulp-shell');
+var gulpSequence = require('gulp-sequence');
 
 var Path = require('path');
 var Fs = require('fs');
@@ -13,6 +13,7 @@ var Fs = require('fs');
 var pjson = JSON.parse(Fs.readFileSync('./package.json'));
 var fireshellVer = pjson['fire-shell-version'];
 var electronVer = pjson['electron-version'];
+var spawn = require('child_process').spawn;
 
 /////////////////////////////////////////////////////
 // inits
@@ -32,80 +33,9 @@ if ( electronVer === null || electronVer === undefined ) {
 // downloads
 /////////////////////////////////////////////////////
 
-gulp.task('update-electron', function(cb) {
-    updateFireShell.downloadAtomShell({
-        version: electronVer,
-        outputDir: 'bin/electron'
-    }, cb);
-});
+gulp.task('update-electron', gulpSequence('install-electron-global','electron-to-bin'));
 
-gulp.task('update-fire-shell', function(cb) {
-    updateFireShell.downloadFireShell({
-        version: fireshellVer,
-        outputDir: 'bin/fire-shell'
-    }, cb);
-});
-
-gulp.task('update-fire-shell-china', function(cb) {
-    updateFireShell.downloadFireShell({
-        version: fireshellVer,
-        outputDir: 'bin/fire-shell',
-        chinaMirror: true
-    }, cb);
-});
-
-gulp.task('prebuild-native-module', shell.task(['node config.js true']));
-
-gulp.task('update-atom-native-module', ['prebuild-native-module'], function(cb) {
-    var setcmd = process.platform === 'win32' ? 'set' : 'export';
-    var stream = shell([
-        'apm install'
-    ], {
-        cwd: 'bin',
-        env: {
-            ATOM_NODE_VERSION: electronVer
-        }
-    });
-    stream.write(process.stdout);
-    stream.end();
-    stream.on('finish', cb);
-});
-
-gulp.task('update-fire-native-module', function(cb) {
-    var nativeModules = require('../../src/main/package.json')['native-modules'];
-    updateFireShell.downloadNativeModules({
-        version: fireshellVer,
-        outputDir: Path.join('bin','node_modules'),
-        nativeModules: nativeModules,
-        isFireShell: true
-    }, cb);
-});
-
-gulp.task('update-fire-native-module-china', function(cb) {
-    var nativeModules = require('../../src/main/package.json')['native-modules'];
-    updateFireShell.downloadNativeModules({
-        version: fireshellVer,
-        outputDir: Path.join('bin','node_modules'),
-        nativeModules: nativeModules,
-        isFireShell: true,
-        chinaMirror: true
-    }, cb);
-});
-
-gulp.task('clear-cached-downloads', function(cb) {
-    updateFireShell.clearCachedDownloads({
-        versionAtom: electronVer,
-        versionFire: fireshellVer
-    }, cb);
-});
-
-gulp.task('copy-fire-shell', ['del-dist'], function(cb) {
-    updateFireShell.downloadFireShell({
-        version: fireshellVer,
-        outputDir: 'dist/',
-        chinaMirror: true
-    }, cb);
-});
+gulp.task('update-electron-china', gulpSequence('install-electron-china', 'electron-to-bin'));
 
 gulp.task('copy-electron-mac', function(cb) {
     var ncp = require('ncp');
@@ -170,4 +100,43 @@ gulp.task('rename-electron-mac', ['copy-electron-mac'], function (cb) {
     });
 
     cb();
+});
+
+
+function installElectron (isChina, cb) {
+    var cmdstr = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+    var tmpenv = process.env;
+    if(isChina) {
+        tmpenv.ELECTRON_MIRROR = 'http://npm.taobao.org/mirrors/electron/';
+    }
+    var child = spawn(cmdstr, ['install', '-g', 'electron-prebuilt'+'@'+pjson['electron-version']], {
+        stdio: 'inherit',
+        env: tmpenv
+    });
+    child.on('exit', function() {
+        cb();
+    });
+}
+
+gulp.task('install-electron-china', function(cb) {
+    installElectron(true, cb);
+});
+
+gulp.task('install-electron-global', function(cb) {
+    installElectron(false, cb);
+});
+
+gulp.task('electron-to-bin', function(cb) {
+    var ncp = require('ncp');
+    var prefix = require('global-prefix');
+    var libMod = process.platform === 'win32' ? '' : 'lib';
+    var electronPath = Path.join(prefix, libMod, 'node_modules', 'electron-prebuilt', 'dist');
+    console.log("copying electron from: " + electronPath);
+    ncp(electronPath, 'bin/electron', {clobber: true}, function(err){
+        if (err) return console.log('ncp Error: ' + err);
+        else {
+            console.log('Electron ' + Fs.readFileSync(Path.join(electronPath, 'version')) + ' has been download to bin/electron folder');
+            cb();
+        }
+    });
 });
