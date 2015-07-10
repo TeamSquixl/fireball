@@ -1,0 +1,34 @@
+<link rel="import" href="app://bower_components/paper-input/paper-input.html">
+<link rel="import" href="app://bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="app://bower_components/paper-button/paper-button.html">
+<dom-module id="fire-login">
+    <link rel="import" type="css" href="fire-login.css">
+    <style is="custom-style">
+
+    </style>
+    <template>
+        <div id="progress" class="pace pace-inactive">
+            <div class="progress"></div>
+            <div class="pace-activity"></div>
+        </div>
+        <div class="header">Welcome to fireball</div>
+        <div class="form">
+            <paper-input id="username" label="Username" value="{{userName}}" error-message="please input"></paper-input>
+            <paper-input id="pwd" label="Password" value="{{passWord}}"  error-message="please input" type="password"></paper-input>
+        </div>
+        <div class="setting">
+            <paper-radio-button checked="{{remember}}" class="blue">Remember</paper-radio-button>
+            <div class="link" on-click="_forgetPwd">Forget the Password?</div>
+        </div>
+        <div class="buttons">
+            <paper-button raised class="colorful pink custom" toggles on-click="_onSignClick">Sign in</paper-button>
+            <paper-button raised class="colorful dark custom" toggles>
+                <i class="fa fa-github icon"></i>
+                Sign in for Github
+            </paper-button>
+        </div>
+        <div id="mask"></div>
+    </template>
+
+    <script type="text/javascript" src="fire-login.js"></script>
+</dom-module>

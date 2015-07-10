@@ -1,0 +1,165 @@
+:host {
+    display: flex;
+    width: 400px;
+    height: 450px;
+    border-radius: 3px;
+    padding: 60px 45px;
+    flex-direction: column;
+    background: rgb(35,40,49);
+}
+
+.header {
+    font-size: 22px;
+    padding: 10px 0px;
+}
+
+.form {
+    padding: 10px 0px;
+}
+
+.setting {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 0px;
+}
+
+.link {
+    cursor: pointer;
+}
+
+.link:hover {
+    color: #01b3ff;
+    text-decoration: underline;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.icon {
+    font-size: 26px;
+    padding: 0px 15px;
+}
+
+.pace {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: none;
+}
+
+.progress {
+    position: fixed;
+    width: 100%;
+    height: 4px;
+    background: rgb(110, 110, 110);
+    background-image:
+                linear-gradient(45deg,rgba(255,255,255,0.15) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255,255,255,0.15) 50%,
+                rgba(255,255,255,0.15) 75%,
+                transparent 75%,transparent);
+    background-size: 20px 20px;
+    -webkit-animation: progress-bar-stripes 2s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+    from {
+        background-position: 40px 0;
+    }
+    to {
+        background-position: 0 0;
+    }
+}
+
+.pace .pace-activity {
+    display: block;
+    position: fixed;
+    z-index: 2000;
+    top: 35px;
+    right: 15px;
+    width: 14px;
+    height: 14px;
+    border: solid 2px transparent;
+    border-top-color: #FFFFFF;
+    border-left-color: #FFFFFF;
+    border-radius: 10px;
+    -webkit-animation: pace-spinner 400ms linear infinite;
+}
+
+@keyframes pace-spinner {
+    0% { transform: rotate(0deg); transform: rotate(0deg); }
+    100% { transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+#mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background: #000;
+    opacity: 0.5;
+    display: none;
+}
+
+paper-input {
+    margin-bottom: 10px;
+}
+
+paper-button {
+    width: 100%;
+    margin: 15px 0px;
+}
+
+:host ::content .paper-input-container-0 .input-content.paper-input-container input {
+    color: white;
+}
+
+paper-radio-button {
+    cursor: pointer;
+    display: block;
+    margin-bottom: 40px;
+}
+
+paper-radio-button.blue {
+    --paper-radio-button-checked-color: white;
+    --paper-radio-button-checked-ink-color: white;
+    --paper-radio-button-unchecked-color: #c7c5c3;
+    --paper-radio-button-unchecked-ink-color: #c7c5c3;
+}
+
+paper-button {
+    height: 50px;
+    color: #fff;
+    text-transform: none;
+}
+
+paper-button[raised].pink {
+    background: rgb(231, 53, 84);
+}
+
+paper-button[raised].dark {
+    background: rgb(42, 48, 60);
+}
+
+:host::shadow paper-material, :host::shadow .content.paper-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+    height: 50px;
+}
+
+paper-button.ripple paper-ripple {
+    color: #ff0a4c;
+}
+
+:host ::content .paper-radio-button-0 #radioLabel.paper-radio-button {
+    color: white;
+}
