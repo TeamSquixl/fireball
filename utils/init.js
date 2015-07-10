@@ -5,7 +5,6 @@ var packages = [
     'gulp-shell@0.4.1',
     'fire-fs@0.1.5',
     'mkdirp@0.5.1',
-    'gulp-download-fire-shell',
     'del@1.2.0',
     'chalk@1.0.0'
 ];

@@ -49,23 +49,23 @@ gulp.task('run-electron', function(cb) {
     });
 });
 
-gulp.task('run-fireshell', function(cb) {
-    var cmdStr = '';
-    var optArr = [];
-    if (process.platform === "win32") {
-        cmdStr = 'bin\\fire-shell\\fireball.exe';
-        optArr = ['.\\', '--debug=3030', '--dev', '--show-devtools'];
-    } else {
-        cmdStr = 'bin/fire-shell/Fireball.app/Contents/MacOS/Fireball';
-        optArr = ['./', '--debug=3030', '--dev', '--show-devtools'];
-    }
-    var child = spawn(cmdStr, optArr, {
-        stdio: 'inherit'
-    });
-    child.on('exit', function() {
-        cb();
-    });
-});
+// gulp.task('run-fireshell', function(cb) {
+//     var cmdStr = '';
+//     var optArr = [];
+//     if (process.platform === "win32") {
+//         cmdStr = 'bin\\fire-shell\\fireball.exe';
+//         optArr = ['.\\', '--debug=3030', '--dev', '--show-devtools'];
+//     } else {
+//         cmdStr = 'bin/fire-shell/Fireball.app/Contents/MacOS/Fireball';
+//         optArr = ['./', '--debug=3030', '--dev', '--show-devtools'];
+//     }
+//     var child = spawn(cmdStr, optArr, {
+//         stdio: 'inherit'
+//     });
+//     child.on('exit', function() {
+//         cb();
+//     });
+// });
 
 gulp.task('run-packagestudio', function(cb) {
     var Commander = require('commander');
@@ -440,7 +440,7 @@ gulp.task('check-dependencies', function(cb) {
         checkGitUrls: true
     }, function() {
         if (--count<=0) {
-            console.log('If you see any version number in ' + chalk.red('red') + '. Please run ' + chalk.cyan('"gulp update-deps"') + 'to install missing dependencies');
+            console.log('If you see any version number in ' + chalk.red('red') + '. Please run ' + chalk.cyan('"npm install && bower install"') + 'to install missing dependencies');
             cb();
         }
     });
@@ -450,7 +450,7 @@ gulp.task('check-dependencies', function(cb) {
         checkGitUrls: true
     }, function() {
         if (--count<=0) {
-            console.log('If you see any version number in ' + chalk.red('red') + '. Please run ' + chalk.cyan('"gulp update-deps"') + 'to install missing dependencies');
+            console.log('If you see any version number in ' + chalk.red('red') + '. Please run ' + chalk.cyan('"npm install && bower install"') + 'to install missing dependencies');
             cb();
         }
     });
