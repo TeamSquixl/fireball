@@ -7,6 +7,7 @@ Editor.importPath = Editor.remote.importPath;
 if ( !Editor.metas ) Editor.metas = {};
 if ( !Editor.inspectors ) Editor.inspectors = {};
 if ( !Editor.properties ) Editor.properties = {};
+if ( !Editor.gizmos ) Editor.gizmos = {};
 
 Editor.states = {};
 function _defprop ( name, value ) {
@@ -28,4 +29,9 @@ for ( var name in Editor.remote.states ) {
 }
 Ipc.on('editor:state-changed', function ( name, value ) {
     Editor.states['_'+name] = value;
+});
+
+window.addEventListener('beforeunload', function ( event ) {
+    Editor.Selection.clear('node');
+    // TODO: event.returnValue =
 });
