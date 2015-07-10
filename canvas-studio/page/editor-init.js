@@ -30,3 +30,8 @@ for ( var name in Editor.remote.states ) {
 Ipc.on('editor:state-changed', function ( name, value ) {
     Editor.states['_'+name] = value;
 });
+
+window.addEventListener('beforeunload', function ( event ) {
+    Editor.Selection.clear('node');
+    // TODO: event.returnValue =
+});
