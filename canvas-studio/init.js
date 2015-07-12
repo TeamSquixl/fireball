@@ -19,6 +19,7 @@ module.exports = function ( options, cb ) {
     if ( !Editor.metas ) Editor.metas = {};
     if ( !Editor.inspectors ) Editor.inspectors = {};
     if ( !Editor.properties ) Editor.properties = {};
+    if ( !Editor.nodeCreateMenus ) Editor.nodeCreateMenus = [];
 
     var Project = require('../share/project');
 
