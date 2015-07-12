@@ -24,7 +24,11 @@
     "polymer": "Polymer/polymer#^1.0.6",
     "stats.js": "mrdoob/stats.js#master",
     "svg.js": "2.0.5",
-    "web-animations-js": "web-animations/web-animations-js#master"
+    "web-animations-js": "web-animations/web-animations-js#master",
+    "paper-input": "PolymerElements/paper-input#^1.0.0",
+    "paper-button": "PolymerElements/paper-button#^1.0.0",
+    "paper-radio-button": "PolymerElements/paper-radio-button#^1.0.0",
+    "paper-styles": "fireball-x/paper-styles#1.0.8"
   },
   "devDependencies": {}
 }
