@@ -19,7 +19,7 @@ module.exports = function ( options, cb ) {
     if ( !Editor.metas ) Editor.metas = {};
     if ( !Editor.inspectors ) Editor.inspectors = {};
     if ( !Editor.properties ) Editor.properties = {};
-    if ( !Editor.nodeCreateMenus ) Editor.nodeCreateMenus = [];
+    if ( !Editor.menus ) Editor.menus = {};
 
     var Project = require('../share/project');
 
@@ -297,4 +297,8 @@ Editor.JS.mixin(Editor.App, {
     'app:explore-project': function () {
         Shell.showItemInFolder(Editor.projectPath);
     },
+
+    'app:register-menu': function (type, menu) {
+        Editor.menus[type] = menu;
+    }
 });
