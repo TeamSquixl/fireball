@@ -23,6 +23,10 @@ if [ ! -d "tester" ]; then
     git clone https://github.com/fireball-packages/tester
 fi
 
+if [ ! -d "asset-db-debugger" ]; then
+    git clone https://github.com/fireball-packages/asset-db-debugger
+fi
+
 # builtin widgets
 if [ ! -d "ui-gizmos" ]; then
     git clone https://github.com/fireball-packages/ui-gizmos

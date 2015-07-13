@@ -67,6 +67,7 @@
   },
   "builtins": [
     "assets",
+    "asset-db-debugger",
     "canvas-assets",
     "console",
     "code-editor",
