@@ -15,7 +15,10 @@
     <template>
         <app-top-bar id="tools"></app-top-bar>
         <main-dock class="flex-1"></main-dock>
-        <app-status-bar id="status"></app-status-bar>
+        <app-status-bar id="status"
+            db-state="{{dbState}}"
+            db-watch-state="{{dbWatchState}}"
+        ></app-status-bar>
     </template>
 
     <script type="text/javascript" src="app-main.js"></script>

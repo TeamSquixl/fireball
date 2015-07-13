@@ -3,6 +3,8 @@
         :host {
             @apply(--layout-horizontal);
 
+            align-items: center;
+
             position: relative;
             box-sizing: border-box;
             font-size: 12px;
@@ -15,9 +17,39 @@
         .version {
             color: #f90;
         }
+
+        i {
+            margin-right: 10px;
+        }
+
+        i.idle {
+            color: #0f0;
+        }
+
+        i.busy {
+            color: #f90;
+        }
+
+        i.red {
+            color: #900;
+        }
+
+        i.green {
+            color: #0f0;
+        }
+
+        i.orange {
+            color: #f90;
+        }
+
+        i.gray {
+            color: #888;
+        }
     </style>
 
     <template>
+        <i class$="{{_dbState(dbState)}}"></i>
+        <i class$="{{_dbWatchState(dbWatchState)}}"></i>
         <div class="flex-1"></div>
         <span class="version">{{version}}</span>
     </template>

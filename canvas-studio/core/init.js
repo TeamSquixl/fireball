@@ -38,3 +38,16 @@ Editor.Compiler = require('./compiler');
 
 // load scene utils
 require('./scene-utils');
+
+
+// ====================
+// register events
+// ====================
+
+Editor.events.on('focus', function () {
+    Editor.assetdb.watchOFF();
+});
+
+Editor.events.on('blur', function () {
+    Editor.assetdb.watchON();
+});
