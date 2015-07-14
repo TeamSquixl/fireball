@@ -302,5 +302,5 @@ Editor.JS.mixin(Editor.App, {
 
     'app:register-menu': function (type, menu) {
         Editor.menus[type] = menu;
-    }
+    },
 });

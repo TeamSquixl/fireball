@@ -16,8 +16,9 @@
         <app-top-bar id="tools"></app-top-bar>
         <main-dock class="flex-1"></main-dock>
         <app-status-bar id="status"
-            db-state="{{dbState}}"
-            db-watch-state="{{dbWatchState}}"
+            db-state="[[dbState]]"
+            db-watch-state="[[dbWatchState]]"
+            compiler-state="[[compilerState]]"
         ></app-status-bar>
     </template>
 

@@ -1,10 +1,9 @@
 ﻿var Path = require('path');
 var Ipc = require('ipc');
 
-var RELOAD_WINDOW_SCRIPTS = 'app:reload-window-scripts';
+var WAIT_MS = 100;
+var RELOAD_WINDOW_SCRIPTS = 'scene:stash-and-reload';
 //var COMPILE_AND_RELOAD = 'app:compile-and-reload';
-var COMPILE_BEGIN = 'app:compile-begin';
-var COMPILE_END = 'app:compile-end';
 
 var needRecompile = false;
 
@@ -33,7 +32,7 @@ function stopWorker () {
 var Compiler = {
 
     compileScripts: function (callback) {
-        Editor.sendToWindows(COMPILE_BEGIN);
+        Editor.sendToWindows('compiler:state-changed', 'compiling');
 
         var options = {
             project: Editor.projectPath,
@@ -47,7 +46,7 @@ var Compiler = {
                 if (callback) {
                     callback(!error);
                 }
-                Editor.sendToWindows(COMPILE_END);
+                Editor.sendToWindows('compiler:state-changed', error ? 'failed' : 'idle');
             }
         );
     },
@@ -80,6 +79,16 @@ var Compiler = {
     }
 };
 
+var debounceId;
+function compileLater () {
+    if (debounceId) {
+        clearTimeout(debounceId);
+    }
+    debounceId = setTimeout(function () {
+        Compiler.compileAndReload();
+    }, WAIT_MS);
+}
+
 //Ipc.on(COMPILE_AND_RELOAD, function () {
 //    Compiler.compileAndReload();
 //});
@@ -91,11 +100,12 @@ var Compiler = {
 //function isScriptResult (res) {
 //    return isScript(res.url);
 //}
-//Ipc.on('asset:changed', function (detail) {
-//    var uuid = detail.uuid;
-//    var path = Editor.AssetDB.uuidToFspath(uuid);
-//    needRecompile = needRecompile || isScript(path);
-//});
+Ipc.on('asset:changed', function (type, uuid) {
+    console.log(arguments);
+    if (type === 'javascript') {
+        compileLater();
+    }
+});
 //Ipc.on('asset:moved', function ( detail ) {
 //    var uuid = detail.uuid;
 //    var destUrl = detail['dest-url'];

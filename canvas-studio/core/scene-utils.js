@@ -27,7 +27,7 @@ Editor.showDialogSaveScene = function () {
                     title: 'Warning',
                     message: 'Warning: please save the scene in the assets folder.',
                     detail: 'The scene needs to be saved inside the assets folder of your project.',
-                } );
+                });
 
                 // try to popup the dailog for user to save the scene
                 Editor.showDialogSaveScene();
@@ -36,6 +36,6 @@ Editor.showDialogSaveScene = function () {
     }
 
     if ( saveUrl ) {
-        Editor.sendToPanel('scene.panel', 'scene:save-current', saveUrl);
+        Editor.sendToPanel('scene.panel', 'scene:save-scene-from-page', saveUrl);
     }
 };

@@ -11,6 +11,11 @@ Polymer({
             type: String,
             value: 'watch-off',
         },
+
+        compilerState: {
+            type: String,
+            value: 'idle',
+        }
     },
 
     ready: function () {
@@ -22,6 +27,10 @@ Polymer({
 
         Ipc.on( 'asset-db:watch-state-changed', function ( state ) {
             this.set( 'dbWatchState', state );
+        }.bind(this) );
+
+        Ipc.on( 'compiler:state-changed', function ( state ) {
+            this.set( 'compilerState', state );
         }.bind(this) );
     },
 });

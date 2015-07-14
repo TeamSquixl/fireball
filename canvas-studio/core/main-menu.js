@@ -58,8 +58,7 @@ function _getDefaultMainMenu () {
                     label: 'New Scene',
                     accelerator: 'CmdOrCtrl+N',
                     click: function () {
-                        Editor.currentSceneUuid = null;
-                        // Editor.sendToWindows('scene:new-scene');
+                        Editor.sendToPanel('scene.panel', 'scene:new-scene');
                     }
                 },
                 {

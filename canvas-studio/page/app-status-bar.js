@@ -11,6 +11,11 @@ Polymer({
             type: String,
             value: 'watch-off',
         },
+
+        compilerState: {
+            type: String,
+            value: 'idle',
+        }
     },
 
     ready: function () {
@@ -25,6 +30,10 @@ Polymer({
         return 'fa fa-database ' + state;
     },
 
+    _dbTitle: function ( state ) {
+        return "AssetDB State: " + state;
+    },
+
     _dbWatchState: function ( state ) {
         if ( state === 'watch-starting' )
             return 'fa fa-eye orange';
@@ -37,5 +46,21 @@ Polymer({
 
         if ( state === 'watch-off' )
             return 'fa fa-eye-slash gray';
+    },
+
+    _dbWatchTitle: function ( state ) {
+        return "AssetDB Watch State: " + state;
+    },
+
+    _compilerState: function ( state ) {
+        return ({
+            idle: 'fa fa-retweet gray',
+            compiling: 'fa fa-retweet busy',
+            failed: 'fa fa-retweet red',
+        })[state];
+    },
+
+    _compilerTitle: function ( state ) {
+        return "Compiler State: " + state;
     },
 });
