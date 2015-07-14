@@ -302,5 +302,13 @@ Editor.JS.mixin(Editor.App, {
 
     'app:register-menu': function (type, menu) {
         Editor.menus[type] = menu;
-    }
+    },
+
+    'app:save-scene': function (url, json) {
+        if ( Editor.currentSceneUuid ) {
+            // TODO
+        } else {
+            // TODO
+        }
+    },
 });
