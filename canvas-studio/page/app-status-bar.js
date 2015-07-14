@@ -27,7 +27,10 @@ Polymer({
     },
 
     _dbState: function ( state ) {
-        return 'fa fa-database ' + state;
+        return ({
+            idle: 'fa fa-database gray',
+            busy: 'fa fa-database orange',
+        })[state];
     },
 
     _dbTitle: function ( state ) {
@@ -55,7 +58,7 @@ Polymer({
     _compilerState: function ( state ) {
         return ({
             idle: 'fa fa-retweet gray',
-            compiling: 'fa fa-retweet busy',
+            compiling: 'fa fa-retweet orange',
             failed: 'fa fa-retweet red',
         })[state];
     },
