@@ -58,18 +58,15 @@ function _getDefaultMainMenu () {
                     label: 'New Scene',
                     accelerator: 'CmdOrCtrl+N',
                     click: function () {
-                        Editor.log('TODO @jwu');
-                        // TODO:
-                        // Editor.sendToWindows('scene:new');
+                        Editor.currentSceneUuid = null;
+                        // Editor.sendToWindows('scene:new-scene');
                     }
                 },
                 {
                     label: 'Save Scene',
                     accelerator: 'CmdOrCtrl+S',
                     click: function () {
-                        Editor.log('TODO @jwu');
-                        // TODO:
-                        // Editor.sendToWindows('scene:save');
+                        Editor.showDialogSaveScene();
                     }
                 },
                 { type: 'separator' },
@@ -231,6 +228,7 @@ function _getDefaultMainMenu () {
                     label: 'Reload',
                     accelerator: 'CmdOrCtrl+R',
                     click: function() {
+                        Editor.stashedScene = null;
                         BrowserWindow.getFocusedWindow().reload();
                     }
                 },
@@ -238,6 +236,7 @@ function _getDefaultMainMenu () {
                     label: 'Reload Ignoring Cache',
                     accelerator: 'CmdOrCtrl+Shift+R',
                     click: function() {
+                        Editor.stashedScene = null;
                         BrowserWindow.getFocusedWindow().reloadIgnoringCache();
                     }
                 },
