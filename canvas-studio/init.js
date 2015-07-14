@@ -13,6 +13,7 @@ Editor.requireLogin = false;
 module.exports = function ( options, cb ) {
     Editor.projectPath = options.args[0];
     Editor.runtimePath = '';
+    Editor.runtimeUrl = '';
     Editor.requireLogin = !Editor.isDev || options.requireLogin;
     Editor.projectInfo = null;
 
@@ -63,7 +64,8 @@ module.exports = function ( options, cb ) {
                 }
 
                 Editor.projectInfo = info;
-                Editor.runtimePath = Editor.url('app://runtime/runtime-' + info.runtime);
+                Editor.runtimeUrl = 'app://runtime/runtime-' + info.runtime;
+                Editor.runtimePath = Editor.url(Editor.runtimeUrl);
 
                 next();
             } );
