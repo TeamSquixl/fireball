@@ -53,6 +53,8 @@ gulp.task('update-electron', function(cb) {
 
 gulp.task('copy-electron-mac', function(cb) {
     var ncp = require('ncp');
+    var mkdirp = require('mkdirp');
+    mkdirp.sync('dist');
     ncp('bin/electron/Electron.app', 'dist/Fireball.app', function(err) {
         if (err) return console.log('ncp Error: ' + err);
         else {
@@ -65,6 +67,8 @@ gulp.task('copy-electron-mac', function(cb) {
 
 gulp.task('copy-electron-win', function(cb) {
     var ncp = require('ncp');
+    var mkdirp = require('mkdirp');
+    mkdirp.sync('dist');
     ncp('bin/electron', 'dist', function(err){
         if (err) return console.log('ncp Error: ' + err);
         else {
