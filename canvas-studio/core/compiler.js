@@ -4,8 +4,6 @@ var Ipc = require('ipc');
 var WAIT_MS = 100;
 var RELOAD_WINDOW_SCRIPTS = 'scene:stash-and-reload';
 //var COMPILE_AND_RELOAD = 'app:compile-and-reload';
-var COMPILE_BEGIN = 'app:compile-begin';
-var COMPILE_END = 'app:compile-end';
 
 var needRecompile = false;
 
@@ -34,7 +32,7 @@ function stopWorker () {
 var Compiler = {
 
     compileScripts: function (callback) {
-        Editor.sendToWindows(COMPILE_BEGIN);
+        Editor.sendToWindows('compiler:state-changed', 'compiling');
 
         var options = {
             project: Editor.projectPath,
@@ -48,7 +46,7 @@ var Compiler = {
                 if (callback) {
                     callback(!error);
                 }
-                Editor.sendToWindows(COMPILE_END);
+                Editor.sendToWindows('compiler:state-changed', error ? 'failed' : 'idle');
             }
         );
     },

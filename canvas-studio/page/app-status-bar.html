@@ -48,8 +48,9 @@
     </style>
 
     <template>
-        <i class$="{{_dbState(dbState)}}"></i>
-        <i class$="{{_dbWatchState(dbWatchState)}}"></i>
+        <i class$="{{_compilerState(compilerState)}}" title$="{{_compilerTitle(compilerState)}}"></i>
+        <i class$="{{_dbState(dbState)}}" title$="{{_dbTitle(dbState)}}"></i>
+        <i class$="{{_dbWatchState(dbWatchState)}}" title$="{{_dbWatchTitle(dbWatchState)}}"></i>
         <div class="flex-1"></div>
         <span class="version">{{version}}</span>
     </template>
