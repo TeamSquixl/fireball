@@ -27,11 +27,11 @@ var COMPILED_LINE_OFFSET = -3;   // 扣除 pre compile 时加上的行数
 
 
 function compileEnd () {
-    Editor.sendToCore('app:compile-worker:end');
+    Editor.sendToCore('app:compile-worker-end');
 }
 
 function compileError (err) {
-    Editor.sendToCore('app:compile-worker:error', err);
+    Editor.sendToCore('app:compile-worker-error', err);
 }
 
 function getScriptGlob(dir) {
