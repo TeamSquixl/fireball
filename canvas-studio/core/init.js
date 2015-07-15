@@ -39,6 +39,9 @@ Editor.Compiler = require('./compiler');
 // load scene utils
 require('./scene-utils');
 
+// asset-db ipc
+require('./asset-db-ipc');
+
 
 // ====================
 // register events

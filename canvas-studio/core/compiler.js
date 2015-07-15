@@ -9,6 +9,7 @@ var needRecompile = false;
 
 var compilingWorker = null;
 var firstError = null;
+var debounceId;
 
 function stopWorker () {
     if (compilingWorker) {
@@ -68,6 +69,15 @@ var Compiler = {
         });
     },
 
+    compileLater: function () {
+        if (debounceId) {
+            clearTimeout(debounceId);
+        }
+        debounceId = setTimeout(function () {
+            Compiler.compileAndReload();
+        }, WAIT_MS);
+    },
+
     _onWorkerError: function (error) {
         firstError = firstError || error;
         stopWorker();
@@ -78,52 +88,5 @@ var Compiler = {
         stopWorker();
     }
 };
-
-var debounceId;
-function compileLater () {
-    if (debounceId) {
-        clearTimeout(debounceId);
-    }
-    debounceId = setTimeout(function () {
-        Compiler.compileAndReload();
-    }, WAIT_MS);
-}
-
-//Ipc.on(COMPILE_AND_RELOAD, function () {
-//    Compiler.compileAndReload();
-//});
-
-//// register messages so that it will recompile scripts if needed
-//function isScript (path) {
-//    return Path.extname(path).toLowerCase() === '.js';
-//}
-//function isScriptResult (res) {
-//    return isScript(res.url);
-//}
-Ipc.on('asset:changed', function (type, uuid) {
-    console.log(arguments);
-    if (type === 'javascript') {
-        compileLater();
-    }
-});
-//Ipc.on('asset:moved', function ( detail ) {
-//    var uuid = detail.uuid;
-//    var destUrl = detail['dest-url'];
-//    needRecompile = needRecompile || isScript(destUrl);
-//});
-//Ipc.on('assets:created', function (detail) {
-//    var results = detail.results;
-//    needRecompile = needRecompile || results.some(isScriptResult);
-//});
-//Ipc.on('assets:deleted', function (detail) {
-//    var results = detail.results;
-//    needRecompile = needRecompile || results.some(isScriptResult);
-//});
-//Ipc.on('asset-db:synced', function () {
-//    if (needRecompile) {
-//        needRecompile = false;
-//        Compiler.compileAndReload();
-//    }
-//});
 
 module.exports = Compiler;
