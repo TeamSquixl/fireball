@@ -10,16 +10,6 @@ var needRecompile = false;
 var compilingWorker = null;
 var firstError = null;
 
-Ipc.on('app:compile-worker:error', function (error) {
-    firstError = firstError || error;
-    stopWorker();
-});
-
-Ipc.on('app:compile-worker:end', function () {
-    Editor.log('Compiled successfully');
-    stopWorker();
-});
-
 function stopWorker () {
     if (compilingWorker) {
         compilingWorker.close();
@@ -76,6 +66,16 @@ var Compiler = {
         this.compileScripts(function (compiled) {
             Editor.sendToWindows(RELOAD_WINDOW_SCRIPTS, compiled);
         });
+    },
+
+    _onWorkerError: function (error) {
+        firstError = firstError || error;
+        stopWorker();
+    },
+
+    _onWorkerEnd: function () {
+        Editor.log('Compiled successfully');
+        stopWorker();
     }
 };
 

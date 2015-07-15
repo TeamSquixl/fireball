@@ -303,4 +303,12 @@ Editor.JS.mixin(Editor.App, {
     'app:register-menu': function (type, menu) {
         Editor.menus[type] = menu;
     },
+
+    'app:compile-worker-error': function (error) {
+        Editor.Compiler._onWorkerError(error);
+    },
+
+    'app:compile-worker-end': function () {
+        Editor.Compiler._onWorkerEnd();
+    }
 });
