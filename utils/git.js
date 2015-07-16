@@ -12,7 +12,8 @@ function runGitCmdInPath(cmdArgs, path, callback) {
         if (data.toString().indexOf('error') !== -1) {
             console.log('=========error stderr===========');
         }
-        if (data.toString().indexOf('Aborting') !== -1 ) {
+        if (data.toString().indexOf('Aborting') !== -1  ||
+            data.toString().indexOf('fatal') !== -1) {
             console.log(data.toString());
             process.kill();
         }
