@@ -252,19 +252,16 @@ Editor.JS.mixin(Editor.App, {
             function ( next ) {
                 Editor.App.createProject ( opts, next );
             },
-
-            function ( next ) {
-                Editor.App.runCanvasStudio(opts.path, next );
-            },
         ], function ( err ) {
             if ( err ) {
                 reply ( Editor.Utils.wrapError(err) );
                 return;
             }
 
-            //
-            Editor.App.addProject(opts.path);
-            Editor.quit();
+            Editor.App.runCanvasStudio(opts.path, function () {
+                Editor.App.addProject(opts.path);
+                Editor.quit();
+            });
         });
     },
 

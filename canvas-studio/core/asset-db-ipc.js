@@ -7,9 +7,9 @@ function _needCompile ( metaType ) {
     ;
 }
 
-Ipc.on('asset-db:asset-changed', function (type, uuid) {
+Ipc.on('asset-db:asset-changed', function ( result ) {
     // console.log(arguments);
-    if ( _needCompile(type) ) {
+    if ( _needCompile( result.type ) ) {
         Editor.Compiler.compileLater();
     }
 });
