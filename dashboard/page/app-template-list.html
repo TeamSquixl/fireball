@@ -27,8 +27,8 @@
                 <div class="info layout horizontal">
                     <span class="runtime-name flex-1">{{runtimeInfo.name}}</span><span class="version flex-1">{{runtimeInfo.version}}</span><span class="desc flex-5">{{description}}</span>
                 </div>
-                <div class="browse layout horizontal start-justified">
-                    <dashboard-button class="flat small flex-1" on-click="_onBrowse">Browse...</dashboard-button>
+                <div class="browse layout horizontal">
+                    <dashboard-button id="browseBtn" class="flat small" on-click="_onBrowse">Browse...</dashboard-button>
                     <input class="flex-8" id="pathInput" is="iron-input" bind-value="{{path}}"></input>
                 </div>
             </div>

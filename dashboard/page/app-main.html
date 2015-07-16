@@ -11,8 +11,8 @@
 <dom-module id="app-main" >
     <link rel="import" type="css" href="styles/app-main.css">
     <template>
-        <div id="shell" class="layout vertical">
-            <div id="window-row" class="layout horizontal start-justified">
+        <div id="shell" class="flex-1 layout vertical">
+            <div id="window-row" class="layout horizontal">
                 <div class="flex-1 window-title layout horizontal start-justified">
                     <img height="30px" src="../static/img/logo_white.png">Fireball-Dashboard</div>
                 <div class="flex-1 window-control layout horizontal end-justified">
@@ -23,14 +23,14 @@
                     </div>
                 </div>
             </div>
-            <div id="tab-row" class="layout horizontal start-justified">
+            <div id="tab-row" class="layout horizontal">
                 <app-tabs id="appTabs" class="flex-1" on-select="_onSelect">
                     <div>Recent Projects</div>
                     <div>New Project</div>
                     <div>Open Other ...</div>
                     <div>Help</div>
                 </app-tabs>
-                <app-navbar class="flex-1 layout horizontal end-justified"></app-navbar>
+                <app-navbar class="layout horizontal end-justified"></app-navbar>
             </div>
 
             <div id="view">
@@ -78,6 +78,7 @@
 
                 // open others
                 if ( this.curIndex === 2 ) {
+                    var Remote = require('remote');
                     var dialog = Remote.require('dialog');
 
                     var result = dialog.showOpenDialog ( {

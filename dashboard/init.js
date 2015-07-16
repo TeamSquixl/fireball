@@ -176,10 +176,10 @@ Editor.JS.mixin(Editor.App, {
                 // create main window
                 var win = new Editor.Window('main', {
                     'title': 'Fireball Dashboard',
-                    'width': 800,
-                    'height': 700,
-                    'min-width': 800,
-                    'min-height': 600,
+                    'width': 1024,
+                    'height': 680,
+                    'min-width': 1024,
+                    'min-height': 680,
                     'show': false,
                     'resizable': true,
                     'frame': false

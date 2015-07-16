@@ -252,3 +252,9 @@ color
 :host.flat .btn:hover {
   background-color: #dd7565;
 }
+
+:host.flat[pressed] .btn {
+  box-shadow: none;
+  color: #a9a9a9;
+  background-color: #bb5343;
+}
