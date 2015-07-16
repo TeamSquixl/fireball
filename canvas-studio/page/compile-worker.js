@@ -360,7 +360,13 @@ Ipc.on('app:compile-worker:start', function (options) {
                 callback(null, file);
             }
             else {
-                Editor.error('Invalid uuid:', uuid);
+                var info = 'Can not get fs path of: ' + uuid;
+                if (gulp.isRunning) {
+                    gulp.stop(info);
+                }
+                else {
+                    callback(new Error(info), null);
+                }
             }
         });
     }
