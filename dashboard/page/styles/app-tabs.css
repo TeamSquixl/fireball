@@ -19,7 +19,8 @@
 
     transition: color 500ms ease;
 
-    flex: 1 1 150px;
+    flex: none;
+    width: 150px;
     text-align: center;
 }
 

@@ -25,8 +25,14 @@ iron-selector {
     @apply(--layout-wrap);
 }
 
+#browseBtn::shadow .btn {
+    border-radius: 0px;
+}
+
 input {
     height: 34px;
+    padding: 10px;
+
     border-bottom: 1px solid #666;
     border-right: 1px solid #666;
     border-top: 1px solid #666;
@@ -36,7 +42,7 @@ input {
 }
 
 input::selection {
-    background-color: #6e6e73;
+    background-color: #09f;
     color: #fafafa;
 }
 
