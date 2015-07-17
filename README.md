@@ -12,6 +12,8 @@
 
 Fireball is a hackable game editor for creating mobile and HTML5 games, providing powerful scene editor and other integrated tools for open source game engines such as [Cocos2D-JS](https://github.com/cocos2d/cocos2d-js), [Pixi.js](https://github.com/GoodBoyDigital/pixi.js). We will be supporting more engines in the future.
 
+![fireball-0 5](https://cloud.githubusercontent.com/assets/174891/8702658/bde3be74-2b4b-11e5-917a-3ccb7f0c1830.png)
+
 Fireball consists of:
 
 - [Editor framework](https://github.com/fireball-x/editor-framework) for creating multi panel editor UI.
