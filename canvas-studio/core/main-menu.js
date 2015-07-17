@@ -70,14 +70,6 @@ function _getDefaultMainMenu () {
                 },
                 { type: 'separator' },
                 {
-                    label: 'Build Settings',
-                    accelerator: 'CmdOrCtrl+Shift+B',
-                    click: function () {
-                        // TODO:
-                        Editor.log('TODO @jwu');
-                    }
-                },
-                {
                     label: 'Build',
                     accelerator: 'CmdOrCtrl+B',
                     click: function () {
