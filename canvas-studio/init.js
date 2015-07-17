@@ -137,7 +137,7 @@ module.exports = function ( options, cb ) {
                 var data = Url.parse(url);
                 var file = _url2path(data);
                 return new Protocol.RequestFileJob(file);
-            });
+            }, Editor.protocolRegisterCallback);
             Editor.registerProtocol('uuid', _url2path );
 
             next ();

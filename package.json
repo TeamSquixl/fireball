@@ -108,7 +108,7 @@
     "benchmark"
   ],
   "fire-shell-version": "0.27.3",
-  "electron-version": "0.29.2",
+  "electron-version": "0.30.0",
   "main": "app.js",
   "firedoc": {
     "linkNatives": true,
