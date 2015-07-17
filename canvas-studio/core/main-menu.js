@@ -16,6 +16,12 @@ function _getDefaultMainMenu () {
             label: 'Editor Framework',
             position: 'before=help',
             submenu: [
+                {
+                    label: 'About Fireball',
+                    click: function () {
+                        Editor.info('Fireball v0.5 alpha2 20150717');
+                    }
+                },
                 { type: 'separator' },
                 {
                     label: 'Hide',

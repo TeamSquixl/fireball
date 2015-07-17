@@ -7,7 +7,7 @@ var _ = require('lodash');
 var Project = require('../share/project');
 
 //
-Editor.versions.dashboard = '0.1.0';
+Editor.versions.dashboard = '0.2.0';
 var requireLogin = false;
 
 // init

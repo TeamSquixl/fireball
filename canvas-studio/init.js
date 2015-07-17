@@ -5,7 +5,7 @@ var Async = require('async');
 var Shell = require('shell');
 
 //
-Editor.versions['canvas-studio'] = '0.1.0';
+Editor.versions['canvas-studio'] = '0.2.0';
 Editor.projectPath = '';
 Editor.requireLogin = false;
 
