@@ -172,7 +172,7 @@ Editor.JS.mixin(Editor.App, {
         var Spawn = require('child_process').spawn;
         var App = require('app');
         var exePath = App.getPath('exe');
-        var child = Spawn(exePath, Editor.appPath, {
+        var child = Spawn(exePath, [Editor.appPath], {
             detached: true,
             stdio: 'ignore',
         });
