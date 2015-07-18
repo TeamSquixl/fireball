@@ -11,7 +11,7 @@ var Path = require('path');
 var Fs = require('fs');
 
 var pjson = JSON.parse(Fs.readFileSync('./package.json'));
-var electronVer = pjson['electron-version'];
+var electronVer = pjson.electronVersion;
 var spawn = require('child_process').spawn;
 
 /////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ function installElectron (isChina, cb) {
     if(isChina) {
         tmpenv.ELECTRON_MIRROR = 'http://npm.taobao.org/mirrors/electron/';
     }
-    var child = spawn(cmdstr, ['install', 'electron-prebuilt'+ '@' + electronVer], {
+    var child = spawn(cmdstr, ['install', 'nantas/electron-prebuilt'], {
         stdio: 'inherit',
         env: tmpenv
     });

@@ -363,18 +363,20 @@ function findNativeModulePathRecursive(path) {
 gulp.task('npm-rebuild', function(cb) {
     var cmdstr;
     var tmpenv = process.env;
+    var arch;
     if (process.platform === 'win32') {
         cmdstr = 'node-gyp.cmd';
         tmpenv.HOME = Path.join(tmpenv.HOMEPATH, '.electron-gyp');
+        arch = 'ia32';
     } else {
         cmdstr = 'node-gyp';
         tmpenv.HOME = Path.join(tmpenv.HOME, '.electron-gyp');
+        var os = require('os');
+        arch = os.arch();
     }
-    var os = require('os');
     var disturl = 'https://atom.io/download/atom-shell';
-    var target = pjson['electron-version'];
+    var target = pjson.electronVersion;
     // var arch = process.platform === 'win32' ? 'ia32' : 'x64';
-    var arch = os.arch();
     var nativePaths = findNativeModulePathRecursive('.');
     console.log('rebuilding native modules: \n' + nativePaths);
     var count = nativePaths.length;
