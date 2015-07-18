@@ -5,7 +5,7 @@ var Async = require('async');
 var Shell = require('shell');
 
 //
-Editor.versions['canvas-studio'] = '0.1.0';
+Editor.versions['canvas-studio'] = '0.2.0';
 Editor.projectPath = '';
 Editor.requireLogin = false;
 
@@ -115,30 +115,6 @@ module.exports = function ( options, cb ) {
             });
             Editor.libraryPath = Editor.assetdb.library;
             Editor.importPath = Editor.assetdb._importPath;
-
-            // register uuid:// protocol
-            function _url2path (urlInfo) {
-                var root;
-                var uuid = urlInfo.hostname;
-
-                if ( urlInfo.query === 'thumbnail' ) {
-                    root = Editor.assetdb._thumbnailPath;
-                    return Path.join( root, uuid.substring(0,2), uuid + '.png' );
-                }
-
-                //
-                root = Editor.assetdb._importPath;
-                return Path.join( root, uuid.substring(0,2), uuid );
-            }
-
-            var Protocol = require('protocol');
-            Protocol.registerProtocol('uuid', function(request) {
-                var url = decodeURIComponent(request.url);
-                var data = Url.parse(url);
-                var file = _url2path(data);
-                return new Protocol.RequestFileJob(file);
-            });
-            Editor.registerProtocol('uuid', _url2path );
 
             next ();
         },
