@@ -45,6 +45,7 @@
     "jsondiffpatch": "0.1.33",
     "lodash": "3.9.3",
     "lwip": "0.0.7",
+    "mkdirp": "0.5.1",
     "minimatch": "2.0.8",
     "mocha": "2.2.5",
     "node-uuid": "1.4.2",
@@ -63,7 +64,6 @@
     "gulp-shell": "0.4.1",
     "gulp-watch": "4.2.4",
     "jshint-stylish": "2.0.0",
-    "mkdirp": "0.5.1",
     "ncp": "2.0.0",
     "vulcanize": "1.8.1"
   },
@@ -108,7 +108,7 @@
     "benchmark"
   ],
   "fire-shell-version": "0.27.3",
-  "electron-version": "0.30.0",
+  "electronVersion": "0.29.2",
   "main": "app.js",
   "firedoc": {
     "linkNatives": true,
