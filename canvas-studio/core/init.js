@@ -33,8 +33,9 @@ var MainMenuTmplFn = require('./main-menu');
 Editor.registerDefaultMainMenu(MainMenuTmplFn);
 Editor.MainMenu.reset();
 
-// init compiler
+// init modules
 Editor.Compiler = require('./compiler');
+Editor.Builder = require('./builder');
 
 // load scene utils
 require('./scene-utils');

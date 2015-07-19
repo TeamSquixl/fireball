@@ -253,20 +253,14 @@ Editor.JS.mixin(Editor.App, {
             query = {};
         }
         query.scriptUrl = scriptUrl;
-        var url = Url.format({
-            protocol: 'file',
-            pathname: Editor.url('app://canvas-studio/static/general-worker.html'),
-            slashes: true,
-            hash: encodeURIComponent(JSON.stringify(query))
-        });
-        var BrowserWindow = require('browser-window');
-        var workerWindow = new BrowserWindow({
+
+        var workerWindow = new Editor.Window('worker', {
             show: false,
         });
-        workerWindow.loadUrl(url);
+        workerWindow.load('app://canvas-studio/static/general-worker.html', query);
         if (onLoad) {
-            workerWindow.webContents.on('did-finish-load', function () {
-                onLoad(workerWindow);
+            workerWindow.nativeWin.webContents.on('did-finish-load', function () {
+                onLoad(workerWindow.nativeWin);
             });
         }
         return workerWindow;
@@ -286,5 +280,13 @@ Editor.JS.mixin(Editor.App, {
 
     'app:compile-worker-end': function () {
         Editor.Compiler._onWorkerEnd();
-    }
+    },
+
+    'app:build-project': function (platform, destDir, sceneList, options) {
+        Editor.Builder.build(platform, destDir, sceneList, options);
+    },
+
+    'app:build-worker-ready': function () {
+        Editor.Builder.build();
+    },
 });

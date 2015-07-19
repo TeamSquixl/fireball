@@ -1,5 +1,4 @@
 ﻿var Path = require('path');
-var Ipc = require('ipc');
 
 var WAIT_MS = 100;
 var RELOAD_WINDOW_SCRIPTS = 'scene:stash-and-reload';
@@ -59,7 +58,7 @@ var Compiler = {
                 }
             });
 
-            browser.webContents.send('app:compile-worker:start', options);
+            browser.webContents.send('app:compile-worker-start', options);
         });
     },
 
