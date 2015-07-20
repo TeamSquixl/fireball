@@ -296,7 +296,7 @@ gulp.task('update-runtime', function(cb) {
 });
 
 gulp.task('install-shared-packages', function(cb) {
-    var pkgs = pjson['shared-packages'];
+    var pkgs = pjson.sharedPackages;
     var count = pkgs.length;
     pkgs.forEach(function(pkg) {
         if (!Fs.existsSync(Path.join(pkg, '.git'))) {
@@ -320,7 +320,7 @@ gulp.task('install-shared-packages', function(cb) {
 });
 
 gulp.task('update-shared-packages', function(cb) {
-    var pkgs = pjson['shared-packages'];
+    var pkgs = pjson.sharedPackages;
     var count = pkgs.length;
     pkgs.forEach(function(pkg) {
         if (Fs.existsSync(Path.join(pkg, '.git'))) {

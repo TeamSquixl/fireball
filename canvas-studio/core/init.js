@@ -43,7 +43,6 @@ require('./scene-utils');
 // asset-db ipc
 require('./asset-db-ipc');
 
-
 // ====================
 // register events
 // ====================
