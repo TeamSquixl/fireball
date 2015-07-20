@@ -39,6 +39,20 @@ function _getDefaultMainMenu () {
                    }
                },
                { type: 'separator' },
+               {
+                   label: 'About Fireball',
+                   click: function () {
+                       var aboutWindow = new Editor.Window('about', {
+                           'title': 'About Fireball',
+                           'width': 400,
+                           'height': 180,
+                           'show': false,
+                           'resizable': false,
+                       });
+                       aboutWindow.show();
+                       aboutWindow.load( 'app://canvas-studio/page/app-about.html' );
+                   }
+               },
            ]
         },
 
