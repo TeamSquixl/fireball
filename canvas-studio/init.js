@@ -291,11 +291,7 @@ Editor.JS.mixin(Editor.App, {
         Editor.Compiler._onWorkerEnd();
     },
 
-    'app:build-project': function (platform, destDir, sceneList, options) {
-        Editor.Builder.build(platform, destDir, sceneList, options);
-    },
-
-    'app:build-worker-ready': function () {
-        Editor.Builder.build();
+    'app:build-project': function ( options ) {
+        Editor.Builder.build(options);
     },
 });

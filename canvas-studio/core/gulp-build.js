@@ -35,11 +35,11 @@ exports.startWithArgs = function (opts, callback) {
     console.log('Destination ' + dest);
 
     if (Path.normalize(dest) === Path.normalize(proj)) {
-        return callback('Can not export project at project folder.');
+        return callback( new Error('Can not export project at project folder.') );
     }
 
     if (Path.contains(Editor.appPath, dest)) {
-        return callback('Can not export project to fireball app folder.');
+        return callback( new Error('Can not export project to fireball app folder.') );
     }
 
     // configs
@@ -255,7 +255,7 @@ exports.startWithArgs = function (opts, callback) {
                 availables.push(key.substring(BUILD_.length));
             }
         }
-        callback(format('Not support %s platform, available platform currently: %s', platform, availables));
+        callback( new Error(format('Not support %s platform, available platform currently: %s', platform, availables) ));
     }
 
 };
