@@ -43,6 +43,7 @@ require('./scene-utils');
 // asset-db ipc
 require('./asset-db-ipc');
 
+startPreviewServer();
 
 // ====================
 // register events
@@ -55,3 +56,12 @@ Editor.events.on('focus', function () {
 Editor.events.on('blur', function () {
     Editor.assetdb.watchON();
 });
+
+// =======================
+// preview server
+// =======================
+
+function startPreviewServer() {
+    var server = require('./preview-server');
+    server.start();
+}
