@@ -101,16 +101,15 @@
     "engine-framework",
     "asset-db"
   ],
-  "native-modules": [
+  "nativeModules": [
     "chokidar",
     "git-utils",
     "lwip"
   ],
-  "shared-packages": [
+  "sharedPackages": [
     "package-examples",
     "benchmark"
   ],
-  "fire-shell-version": "0.27.3",
   "electronVersion": "0.30.0",
   "main": "app.js",
   "firedoc": {
