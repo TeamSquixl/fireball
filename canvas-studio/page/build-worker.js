@@ -25,8 +25,8 @@ Ipc.on('app:init-build-worker', function (callback) {
     //document.body.appendChild(link);
 
     var Async = require('async');
-    var runtimePath = Editor.runtimePath;
-    importPath = Editor.importPath;
+    var runtimePath = Editor.remote.runtimePath;
+    importPath = Editor.remote.importPath;
 
     var runtimePkg = require(Path.join(runtimePath, 'package.json'));
     var runtimeScripts = runtimePkg.build.scriptsDev;
@@ -98,7 +98,7 @@ Ipc.on('app:build-assets', function (callback, proj, dest, debug) {
     var gulp = new Gulp.Gulp();
     var rawFiles = [Path.join(importPath, '*/*/*'), '!' + Path.join(importPath, '*/*/*.js')];
     var assets = [Path.join(importPath, '*/*.json')];
-    
+
     // build assets
     var sharedTempInfo = new Fire._DeserializeInfo();   // use this obj to create asset refs
     var buildAssets = gulp.src(assets, { base: importPath })
