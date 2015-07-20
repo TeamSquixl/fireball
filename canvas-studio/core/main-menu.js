@@ -1,5 +1,6 @@
 var BrowserWindow = require('browser-window');
 var Fs = require('fire-fs');
+var Shell = require('shell');
 
 function _getDefaultMainMenu () {
     return [
@@ -8,6 +9,36 @@ function _getDefaultMainMenu () {
            label: 'Help',
            id: 'help',
            submenu: [
+               {
+                   label: 'Documentation',
+                   click: function () {
+                       Shell.openExternal('http://docs.fireball-x.com/');
+                       Shell.beep();
+                   }
+               },
+               {
+                   label: 'Discussion Group',
+                   click: function () {
+                       Shell.openExternal('http://fireball-x.com/chat');
+                       Shell.beep();
+                   }
+               },
+               { type: 'separator' },
+               {
+                   label: 'Report Issue',
+                   click: function () {
+                       Shell.openExternal('https://github.com/fireball-x/fireball/issues/');
+                       Shell.beep();
+                   }
+               },
+               {
+                   label: 'Subscribe',
+                   click: function () {
+                       Shell.openExternal('http://eepurl.com/bh5w3z');
+                       Shell.beep();
+                   }
+               },
+               { type: 'separator' },
            ]
         },
 
