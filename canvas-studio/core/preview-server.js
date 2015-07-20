@@ -8,18 +8,18 @@ var os = require('os');
 var Path = require('path');
 
 function start() {
-    var del = require('del');
+    var Del = require('del');
     var buildPath = Path.join(os.tmpdir(),'fireball-game-builds');
-    del(Path.join(buildPath + '**/*'), {force: true}, function() {
+    Del(Path.join(buildPath + '**/*'), {force: true}, function() {
         app.use(express.static(Path.join(os.tmpdir(), 'fireball-game-builds')));
 
         app.get('/', function (req, res) {
             res.send('Please build your game project first!');
         });
 
-// ============================
-// error handling
-// ============================
+        // ============================
+        // error handling
+        // ============================
 
         app.use(function (err, req, res, next) {
             console.error(err.stack);

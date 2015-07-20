@@ -189,10 +189,19 @@ Editor.JS.mixin(Editor.App, {
                                      next);
             },
 
+            // start assetdb
             function ( next ) {
                 Editor.assetdb.init( next );
             },
 
+            // start preview server
+            function ( next ) {
+                var server = require('./core/preview-server');
+                server.start();
+                next ();
+            },
+
+            // open canvas-studio main window
             function ( next ) {
                 // create main window
                 var win = new Editor.Window('main', {
