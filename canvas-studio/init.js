@@ -172,7 +172,7 @@ Editor.JS.mixin(Editor.App, {
         var Spawn = require('child_process').spawn;
         var App = require('app');
         var exePath = App.getPath('exe');
-        var child = Spawn(exePath, Editor.appPath, {
+        var child = Spawn(exePath, [Editor.appPath], {
             detached: true,
             stdio: 'ignore',
         });
@@ -189,10 +189,19 @@ Editor.JS.mixin(Editor.App, {
                                      next);
             },
 
+            // start assetdb
             function ( next ) {
                 Editor.assetdb.init( next );
             },
 
+            // start preview server
+            function ( next ) {
+                var server = require('./core/preview-server');
+                server.start();
+                next ();
+            },
+
+            // open canvas-studio main window
             function ( next ) {
                 // create main window
                 var win = new Editor.Window('main', {
@@ -245,19 +254,19 @@ Editor.JS.mixin(Editor.App, {
     },
 
     // @param {string} scriptUrl
-    // @param {object} [query]
+    // @param {object} [argv]
     // @param {function} [onLoad]
-    spawnWorker: function (scriptUrl, query, onLoad) {
-        if (typeof query === "function") {
-            onLoad = query;
-            query = {};
+    spawnWorker: function (scriptUrl, argv, onLoad) {
+        if (typeof argv === 'function') {
+            onLoad = argv;
+            argv = {};
         }
-        query.scriptUrl = scriptUrl;
+        argv.scriptUrl = scriptUrl;
 
         var workerWindow = new Editor.Window('worker', {
             show: false,
         });
-        workerWindow.load('app://canvas-studio/static/general-worker.html', query);
+        workerWindow.load('app://canvas-studio/static/general-worker.html', argv);
         if (onLoad) {
             workerWindow.nativeWin.webContents.on('did-finish-load', function () {
                 onLoad(workerWindow.nativeWin);
