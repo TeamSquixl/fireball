@@ -41,7 +41,9 @@ Ipc.on('app:init-build-worker', function (callback) {
                         scriptEL.onload = function (event) {
                             next();
                         };
-                        scriptEL.onerror = next;
+                        scriptEL.onerror = function (event) {
+                            next(new Error('Failed to load ' + scriptEL.src));
+                        };
                         scriptEL.src = Path.resolve(runtimePath, script);;
                         document.head.appendChild(scriptEL);
                     };

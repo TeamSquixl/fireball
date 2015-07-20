@@ -147,7 +147,7 @@ Ipc.on('app:compile-worker-start', function (options) {
     paths.tmpdir = Path.resolve(paths.proj, paths.tmpdir, 'scripts');
 
     if (paths.proj === process.cwd()) {
-        compileError('Compile error: Invalid project path: ' + options.project);
+        compileError(new Error('Compile error: Invalid project path: ' + options.project));
         return;
     }
     else {
@@ -379,12 +379,12 @@ Ipc.on('app:compile-worker-start', function (options) {
                 callback(null, file);
             }
             else {
-                var info = 'Can not get fs path of: ' + uuid;
+                var info = new Error('Can not get fs path of: ' + uuid);
                 if (gulp.isRunning) {
                     gulp.stop(info);
                 }
                 else {
-                    callback(new Error(info), null);
+                    callback(info, null);
                 }
             }
         });
@@ -465,8 +465,8 @@ Ipc.on('app:compile-worker-start', function (options) {
                 var moduleName = Path.basenameNoExt(file.path);
                 var exists = allModules[moduleName];
                 if (exists) {
-                    var error = Format('Filename conflict, the module "%s" both defined in "%s" and "%s"',
-                        moduleName, getModuleInfo(info, file), exists);
+                    var error = new Error(Format('Filename conflict, the module "%s" both defined in "%s" and "%s"',
+                        moduleName, getModuleInfo(info, file), exists));
                     if (gulp.isRunning) {
                         gulp.stop(error);
                     }
@@ -502,7 +502,7 @@ Ipc.on('app:compile-worker-start', function (options) {
         }
         var bundle = b.bundle()
             .on('error', function (error) {
-                error = nicifyError(error);
+                error = new Error(nicifyError(error));
                 if (gulp.isRunning) {
                     gulp.stop(error);
                 }
