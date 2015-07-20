@@ -68,7 +68,7 @@
     "gulp-watch": "4.2.4",
     "jshint-stylish": "2.0.0",
     "ncp": "2.0.0",
-    "plist": "^1.1.0",
+    "plist": "1.1.0",
     "vulcanize": "1.8.1"
   },
   "builtins": [
