@@ -75,14 +75,6 @@ function _getDefaultMainMenu () {
                     }
                 },
                 { type: 'separator' },
-                {
-                    label: 'Build',
-                    accelerator: 'CmdOrCtrl+B',
-                    click: function () {
-                        // TODO:
-                        Editor.log('TODO @jwu');
-                    }
-                },
             ]
         },
 

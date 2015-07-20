@@ -33,8 +33,9 @@ var MainMenuTmplFn = require('./main-menu');
 Editor.registerDefaultMainMenu(MainMenuTmplFn);
 Editor.MainMenu.reset();
 
-// init compiler
+// init modules
 Editor.Compiler = require('./compiler');
+Editor.Builder = require('./builder');
 
 // load scene utils
 require('./scene-utils');
@@ -42,6 +43,7 @@ require('./scene-utils');
 // asset-db ipc
 require('./asset-db-ipc');
 
+startPreviewServer();
 
 // ====================
 // register events
@@ -54,3 +56,12 @@ Editor.events.on('focus', function () {
 Editor.events.on('blur', function () {
     Editor.assetdb.watchON();
 });
+
+// =======================
+// preview server
+// =======================
+
+function startPreviewServer() {
+    var server = require('./preview-server');
+    server.start();
+}
