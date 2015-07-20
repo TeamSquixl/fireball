@@ -3,6 +3,7 @@ var Ipc = require('ipc');
 Editor.projectInfo = Editor.remote.projectInfo;
 Editor.libraryPath = Editor.remote.libraryPath;
 Editor.importPath = Editor.remote.importPath;
+Editor.runtimePath = Editor.remote.runtimePath;
 
 if ( !Editor.metas ) Editor.metas = {};
 if ( !Editor.inspectors ) Editor.inspectors = {};

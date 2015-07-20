@@ -25,8 +25,8 @@ Ipc.on('app:init-build-worker', function (callback) {
     //document.body.appendChild(link);
 
     var Async = require('async');
-    var runtimePath = Editor.remote.runtimePath;
-    importPath = Editor.remote.importPath;
+    var runtimePath = Editor.runtimePath;
+    importPath = Editor.importPath;
 
     var runtimePkg = require(Path.join(runtimePath, 'package.json'));
     var runtimeScripts = runtimePkg.build.scriptsDev;
