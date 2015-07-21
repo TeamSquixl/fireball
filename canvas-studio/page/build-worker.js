@@ -5,6 +5,11 @@ var Path, Gulp, es;
 
 var importPath;
 
+window.onerror = function (p1, p2, p3, p4, error) {
+    window.onerror = null;
+    Editor.sendToCore('app:build-project-abort', error.stack);
+};
+
 // 必须立刻监听 IPC，否则会漏接收消息
 Ipc.on('app:init-build-worker', function (callback) {
     Path = require('path');
@@ -41,7 +46,9 @@ Ipc.on('app:init-build-worker', function (callback) {
                         scriptEL.onload = function (event) {
                             next();
                         };
-                        scriptEL.onerror = next;
+                        scriptEL.onerror = function (event) {
+                            next(new Error('Failed to load ' + scriptEL.src));
+                        };
                         scriptEL.src = Path.resolve(runtimePath, script);;
                         document.head.appendChild(scriptEL);
                     };
@@ -96,7 +103,7 @@ Ipc.on('app:build-assets', function (callback, proj, dest, debug) {
     var gulp = new Gulp.Gulp();
     var rawFiles = [Path.join(importPath, '*/*/*'), '!' + Path.join(importPath, '*/*/*.js')];
     var assets = [Path.join(importPath, '*/*.json')];
-    
+
     // build assets
     var sharedTempInfo = new Fire._DeserializeInfo();   // use this obj to create asset refs
     var buildAssets = gulp.src(assets, { base: importPath })
@@ -109,6 +116,7 @@ Ipc.on('app:build-assets', function (callback, proj, dest, debug) {
             });
             if (obj instanceof Fire.Scene) {
                 Fire.engine._initScene(obj.scene, function () {
+                    console.log('packing ' + file.path);
                     file.contents = new Buffer(Editor.serialize(obj, {
                         exporting: true,
                         minify: !debug
@@ -117,6 +125,7 @@ Ipc.on('app:build-assets', function (callback, proj, dest, debug) {
                 });
             }
             else {
+                console.log('packing ' + file.path);
                 file.contents = new Buffer(Editor.serialize(obj, {
                     exporting: true,
                     minify: !debug
