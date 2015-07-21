@@ -18,7 +18,7 @@ require('./utils/download-shell');
 
 gulp.task('bootstrap', gulpSequence(['init-submodules', 'install-builtin', 'install-runtime', 'install-shared-packages'], 'update-electron'));
 
-gulp.task('update', gulpSequence('pull-fireball', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime'], 'remove-builtin-bin', 'update-electron', 'check-dependencies'));
+gulp.task('update', gulpSequence('pull-fireball', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime'], 'remove-builtin-bin', 'update-electron', 'build-engine', 'check-dependencies'));
 
 gulp.task('run', ['run-electron']);
 
@@ -48,24 +48,6 @@ gulp.task('run-electron', function(cb) {
         cb();
     });
 });
-
-// gulp.task('run-fireshell', function(cb) {
-//     var cmdStr = '';
-//     var optArr = [];
-//     if (process.platform === "win32") {
-//         cmdStr = 'bin\\fire-shell\\fireball.exe';
-//         optArr = ['.\\', '--debug=3030', '--dev', '--show-devtools'];
-//     } else {
-//         cmdStr = 'bin/fire-shell/Fireball.app/Contents/MacOS/Fireball';
-//         optArr = ['./', '--debug=3030', '--dev', '--show-devtools'];
-//     }
-//     var child = spawn(cmdStr, optArr, {
-//         stdio: 'inherit'
-//     });
-//     child.on('exit', function() {
-//         cb();
-//     });
-// });
 
 gulp.task('run-packagestudio', function(cb) {
     var Commander = require('commander');
@@ -122,6 +104,34 @@ gulp.task('run-canvasstudio', function(cb) {
     });
     child.on('exit', function() {
         cb();
+    });
+});
+
+// build 
+
+gulp.task('build-engine', function(cb) {
+    var buildPaths = ['engine-framework', 'runtime/runtime-cocos2d-js'];
+    var count = buildPaths.length;
+    var cmdStr = process.platform === 'win32' ? 'gulp.cmd' : 'gulp';  
+    function doBuild (cwd, done) {
+        console.log("Start building " + chalk.green(cwd));
+        var child = spawn(cmdStr, ['build'], {
+            cwd: cwd,
+            stdio: 'inherit'
+        });
+        child.on('exit', function() {
+            console.log("Finish building " + chalk.green(cwd));
+            return done();
+        });
+    }
+    
+    buildPaths.forEach(function(path) {
+        doBuild(path, function() {
+            if (--count<=0) {
+                console.log(chalk.green("Engine build complete!"));
+                cb();
+            }
+        });
     });
 });
 
