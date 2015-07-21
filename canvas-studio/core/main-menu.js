@@ -46,11 +46,11 @@ function _getDefaultMainMenu () {
                             'title': 'About Fireball',
                             'width': 400,
                             'height': 180,
+                            'always-on-top': true,
                             'show': false,
                             'resizable': false,
                         });
 
-                        aboutWindow.nativeWin.setAlwaysOnTop(true);
                         mainWindow = Editor.mainWindow;
                         var postion_ = mainWindow.nativeWin.getPosition();
                         var size_ = mainWindow.nativeWin.getSize();
