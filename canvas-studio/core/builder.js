@@ -1,8 +1,8 @@
-﻿var Path = require('fire-path');
+﻿var Emitter = require('events');
+var Path = require('fire-path');
 
 var buildTask = require('./gulp-build');
-
-var Builder = {
+var Builder = Editor.JS.mixin(new Emitter(), {
 
     /**
      * @param {object} [options={}]
@@ -40,7 +40,7 @@ var Builder = {
                 debug: options.debug,       // development build
                 //resUuid: options.resUuid,
             };
-            buildTask.startWithArgs(args, function (err) {
+            buildTask.startWithArgs(Builder, args, function (err) {
                 if (err) {
                     Editor.error( 'Build Failed: %s', err.stack );
                     Editor.sendToWindows('builder:state-changed', 'error', 1, err);
@@ -56,6 +56,6 @@ var Builder = {
             });
         //});
     }
-};
+});
 
 module.exports = Builder;

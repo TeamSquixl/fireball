@@ -268,7 +268,7 @@ Editor.JS.mixin(Editor.App, {
     // @param {string} scriptUrl
     // @param {object} [argv]
     // @param {function} [onLoad]
-    spawnWorker: function (scriptUrl, argv, onLoad) {
+    spawnWorker: function (scriptUrl, argv, onLoad, debug) {
         if (typeof argv === 'function') {
             onLoad = argv;
             argv = {};
@@ -276,8 +276,11 @@ Editor.JS.mixin(Editor.App, {
         argv.scriptUrl = scriptUrl;
 
         var workerWindow = new Editor.Window('worker', {
-            show: false,
+            show: !!debug,
         });
+        if (debug) {
+            workerWindow.openDevTools();
+        }
         workerWindow.load('app://canvas-studio/static/general-worker.html', argv);
         if (onLoad) {
             workerWindow.nativeWin.webContents.on('did-finish-load', function () {
@@ -305,5 +308,10 @@ Editor.JS.mixin(Editor.App, {
 
     'app:build-project': function ( options ) {
         Editor.Builder.build(options);
+    },
+
+    'app:build-project-abort': function (error) {
+        // forward ipc
+        Editor.Builder.emit('app:build-project-abort', error);
     },
 });

@@ -5,6 +5,11 @@ var Path, Gulp, es;
 
 var importPath;
 
+window.onerror = function (p1, p2, p3, p4, error) {
+    window.onerror = null;
+    Editor.sendToCore('app:build-project-abort', error.stack);
+};
+
 // 必须立刻监听 IPC，否则会漏接收消息
 Ipc.on('app:init-build-worker', function (callback) {
     Path = require('path');
@@ -111,6 +116,7 @@ Ipc.on('app:build-assets', function (callback, proj, dest, debug) {
             });
             if (obj instanceof Fire.Scene) {
                 Fire.engine._initScene(obj.scene, function () {
+                    console.log('packing ' + file.path);
                     file.contents = new Buffer(Editor.serialize(obj, {
                         exporting: true,
                         minify: !debug
@@ -119,6 +125,7 @@ Ipc.on('app:build-assets', function (callback, proj, dest, debug) {
                 });
             }
             else {
+                console.log('packing ' + file.path);
                 file.contents = new Buffer(Editor.serialize(obj, {
                     exporting: true,
                     minify: !debug
