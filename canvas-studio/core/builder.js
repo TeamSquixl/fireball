@@ -13,9 +13,8 @@ var Builder = Editor.JS.mixin(new Emitter(), {
         Editor.sendToWindows('builder:state-changed', 'start', 0);
 
         var scenes = options.scenes.map(function (uuid) {
-            var fsPath = Editor.assetdb.uuidToFspath(uuid);
             return {
-                name: Path.basenameNoExt(fsPath),
+                url: Editor.assetdb.uuidToUrl(uuid),
                 uuid: uuid
             };
         });

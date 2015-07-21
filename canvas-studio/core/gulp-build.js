@@ -165,17 +165,14 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
     gulp.task('build-settings', ['copy-scripts'/*, 'res-setting'*/],    // wait until dest folder created
         function (done) {
             var settings = {
-                scenes: {},
+                scenes: [],
                 launchScene: '',
                 resBundle: opts.resBundle
             };
             // scenes
             var scenes = opts.scenes;
-            settings.launchScene = scenes[0].name;
-            for (var i = 0; i < scenes.length; i++) {
-                var item = scenes[i];
-                settings.scenes[item.name] = item.uuid;
-            }
+            settings.launchScene = scenes[0].url;
+            settings.scenes = scenes;
 
             // write config
             var json = JSON.stringify(settings, null, debug ? 4 : 0);

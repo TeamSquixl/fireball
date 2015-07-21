@@ -18,7 +18,8 @@
         Fire.engine.init({
             width: width,
             height: height,
-            canvas: canvas
+            canvas: canvas,
+            scenes: settings.scenes
         },
         function () {
             //// makes the container's size equals to the frame's size
@@ -30,8 +31,7 @@
             Fire.AssetLibrary.init('resource');
 
             // load scene
-            var launchUuid = settings.scenes[settings.launchScene];
-            Fire.engine._loadSceneByUuid(launchUuid, null,
+            Fire.engine.loadScene(settings.launchScene, null,
                 function () {
                     // show canvas
                     canvas.style.visibility = '';
