@@ -1,6 +1,7 @@
 var BrowserWindow = require('browser-window');
 var Fs = require('fire-fs');
 var Shell = require('shell');
+var DevTools = require('./dev-tools');
 
 function _getDefaultMainMenu () {
     return [
@@ -313,7 +314,11 @@ function _getDefaultMainMenu () {
                 {
                     label: 'Developer Tools',
                     accelerator: 'CmdOrCtrl+Alt+I',
-                    click: function() { BrowserWindow.getFocusedWindow().openDevTools(); }
+                    click: function() {
+                        var win = BrowserWindow.getFocusedWindow();
+                        win.openDevTools();
+                        DevTools.highlightHeaderLater(win);
+                    }
                 },
                 {
                     label: 'Debug Core',
