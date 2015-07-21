@@ -194,6 +194,18 @@ Editor.JS.mixin(Editor.App, {
                 Editor.assetdb.init( next );
             },
 
+            // query the scene list from asset-db
+            function ( next ) {
+                Editor.sceneList = [];
+                Editor.assetdb.queryAssets('assets://**/*', 'scene', function ( err, results ) {
+                    Editor.sceneList = results.map( function ( result ) {
+                        return { url: result.url, uuid: result.uuid };
+                    });
+                });
+
+                next();
+            },
+
             // start preview server
             function ( next ) {
                 var server = require('./core/preview-server');
