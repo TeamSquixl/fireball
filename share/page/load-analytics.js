@@ -64,7 +64,7 @@
     //   script.async = true;
     //   script.src = ('https:' === document.location.protocol ? 'https://' : 'http://') + 'cdn.segment.com/analytics.js/v1/' + key + '/analytics.min.js';
       console.log("cwd: " + __dirname);
-      script.src = 'page/analytics.min.js';
+      script.src = 'app://share/page/analytics.min.js';
       //script.src = 'http://cdn.segment.com/analytics.js/v1/JMbDRl5fN9kEE9D9sDhs7Cyt59gjS2nT/analytics.min.js';
 
       // Insert our script next to the first script element.

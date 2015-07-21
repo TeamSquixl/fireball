@@ -1,4 +1,4 @@
-var startTime;
+var startTime = new Date();
 
 (function(document) {
     localStorage.cookies || (localStorage.cookies = '{}');
@@ -70,7 +70,7 @@ var Metrics = {
             analytics.track("Editor Open");
     },
     trackEditorClose: function() {
-        var duration = (new Date() - startTime)*1000/60; //calculate minutes
+        var duration = (new Date() - startTime)/1000/60; //calculate minutes
         if (analytics)
             analytics.track("Editor Close", {
                 "Duration In Minutes": duration

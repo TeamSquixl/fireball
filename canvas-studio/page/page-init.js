@@ -17,6 +17,4 @@
     // init runtime-assets
     Editor.require('app://runtime/runtime-' + Editor.projectInfo.runtime + '/init');
 
-    // TEST track editor open
-    Editor.Metrics.trackEditorOpen();
 })();
