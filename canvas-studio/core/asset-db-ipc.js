@@ -15,9 +15,23 @@ Ipc.on('asset-db:asset-changed', function ( result ) {
 });
 
 Ipc.on('asset-db:assets-moved', function ( results ) {
-    var needRecompile = results.some(function ( result ) {
+    var needRecompile = false;
+    results.forEach( function ( result ) {
         var info = Editor.assetdb.assetInfo(result.uuid);
-        return _needCompile(info['meta-type']);
+        var metaType = info['meta-type'];
+
+        if ( !needRecompile ) {
+            needRecompile = _needCompile(metaType);
+        }
+
+        if ( metaType === 'scene' ) {
+            for ( var i = 0; i < Editor.sceneList.length; ++i ) {
+                if ( result.uuid === Editor.sceneList[i].uuid ) {
+                    Editor.sceneList[i].url = Editor.assetdb.uuidToUrl(result.uuid);
+                    break;
+                }
+            }
+        }
     });
 
     if ( needRecompile ) {
@@ -26,9 +40,21 @@ Ipc.on('asset-db:assets-moved', function ( results ) {
 });
 
 Ipc.on('asset-db:assets-created', function ( results ) {
-    var needRecompile = results.some(function ( result ) {
+    var needRecompile = false;
+    results.forEach( function ( result ) {
         var info = Editor.assetdb.assetInfo(result.uuid);
-        return _needCompile(info['meta-type']);
+        var metaType = info['meta-type'];
+
+        if ( !needRecompile ) {
+            needRecompile = _needCompile(metaType);
+        }
+
+        if ( metaType === 'scene' ) {
+            Editor.sceneList.push({
+                url: result.url,
+                uuid: result.uuid,
+            });
+        }
     });
 
     if ( needRecompile ) {
@@ -37,9 +63,23 @@ Ipc.on('asset-db:assets-created', function ( results ) {
 });
 
 Ipc.on('asset-db:assets-deleted', function ( results ) {
-    var needRecompile = results.some(function ( result ) {
+    var needRecompile = false;
+    results.forEach( function ( result ) {
         var info = Editor.assetdb.assetInfoByPath(result.path);
-        return _needCompile(info['meta-type']);
+        var metaType = info['meta-type'];
+
+        if ( !needRecompile ) {
+            needRecompile = _needCompile(metaType);
+        }
+
+        if ( metaType === 'scene' ) {
+            for ( var i = 0; i < Editor.sceneList.length; ++i ) {
+                if ( Editor.sceneList[i].uuid === result.uuid ) {
+                    Editor.sceneList.splice( i, 1 );
+                    break;
+                }
+            }
+        }
     });
 
     if ( needRecompile ) {

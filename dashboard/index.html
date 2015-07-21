@@ -7,6 +7,9 @@
     <script type="text/javascript" src="editor-framework://page/page-init.js"></script>
     <link rel="import" href="editor-framework://page/ui/lite.html">
     <link type="text/css" rel="stylesheet" href="page/styles/dashboard.css">
+    
+    <script type="text/javascript" src="app://share/page/load-analytics.js"></script>
+    <script type="text/javascript" src="app://share/page/metrics.js"></script> 
 
     <script src="page/page-init.js"></script>
     <link rel="import" href="page/app-main.html">
@@ -22,6 +25,8 @@
         EditorUI.addLoadingMask({
             background: '#333',
         });
+        
+        Editor.Metrics.trackDashboardOpen();
     </script>
   </body>
 </html>

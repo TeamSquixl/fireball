@@ -34,6 +34,9 @@
 
     <script type="text/javascript" src="editor-framework://page/page-init.js"></script>
     <link rel="import" href="editor-framework://page/ui/ui.html">
+    
+    <script type="text/javascript" src="app://share/page/load-analytics.js"></script>
+    <script type="text/javascript" src="app://share/page/metrics.js"></script> 
 
     <script src="page/page-init.js"></script>
     <link rel="import" href="page/app-main.html">
@@ -58,6 +61,9 @@
             launchPage.remove();
             Editor.sendToAll('editor:ready');
         });
+        
+        // TEST track editor open
+        Editor.Metrics.trackEditorOpen();
     </script>
   </body>
 </html>

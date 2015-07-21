@@ -39,6 +39,31 @@ function _getDefaultMainMenu () {
                    }
                },
                { type: 'separator' },
+               {
+                   label: 'About Fireball',
+                   click: function () {
+                        var aboutWindow = new Editor.Window('about', {
+                            'title': 'About Fireball',
+                            'width': 400,
+                            'height': 180,
+                            'always-on-top': true,
+                            'show': false,
+                            'resizable': false,
+                        });
+
+                        mainWindow = Editor.mainWindow;
+                        var postion_ = mainWindow.nativeWin.getPosition();
+                        var size_ = mainWindow.nativeWin.getSize();
+                        aboutWindow.load( 'app://canvas-studio/page/app-about.html' );
+                        var x = (postion_[0] + size_[0]/2 - 200);
+                        var y = (postion_[1] + size_[1]/2 - 90);
+                        aboutWindow.nativeWin.setPosition(Math.floor(x),Math.floor(y));
+                        aboutWindow.show();
+                        aboutWindow.nativeWin.on('blur',function () {
+                            aboutWindow.close();
+                        });
+                   }
+               },
            ]
         },
 

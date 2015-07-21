@@ -16,4 +16,5 @@
 
     // init runtime-assets
     Editor.require('app://runtime/runtime-' + Editor.projectInfo.runtime + '/init');
+
 })();

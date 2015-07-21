@@ -14,7 +14,7 @@ var compiler = require('./compiler');
 // 有且只有平台所属的 task 以 build-platform_ 开头
 var BUILD_ = 'build-platform_';
 
-exports.startWithArgs = function (opts, callback) {
+exports.startWithArgs = function (ipcProxy, opts, callback) {
 
     /////////////////////////////////////////////////////////////////////////////
     // parse args
@@ -104,10 +104,29 @@ exports.startWithArgs = function (opts, callback) {
     // build assets
     gulp.task('build-assets', ['compile'], function (done) {
         Editor.sendToWindows('builder:state-changed', 'spawn-worker', 0.3);
-        var pageWorker = Editor.App.spawnWorker('app://canvas-studio/page/build-worker', function (browser) {
+
+        var pageWorker;
+        var ErrorEvent = 'app:build-project-abort';
+        function errorListener (err) {
+            if (pageWorker) {
+                var toDestroy = pageWorker;
+                pageWorker = null;  // marked as destroying
+                toDestroy.nativeWin.destroy();
+            }
+            if (gulp.isRunning) {
+                done(new Error(err));
+            }
+            else {
+                Editor.error(err);
+            }
+        }
+        ipcProxy.once(ErrorEvent, errorListener);
+
+        pageWorker = Editor.App.spawnWorker('app://canvas-studio/page/build-worker', function (browser) {
             var aborted;
             browser.once('closed', function () {
                 if (!aborted) {
+                    ipcProxy.removeListener(ErrorEvent, errorListener);
                     done();
                 }
             });
@@ -122,12 +141,20 @@ exports.startWithArgs = function (opts, callback) {
                         Editor.error(err);
                     }
                     aborted = true;
-                    pageWorker.close();
+                    var destroyingWorker = !pageWorker;
+                    if (!destroyingWorker) {
+                        pageWorker.close();
+                        pageWorker = null;
+                    }
                 }
                 else {
                     Editor.sendToWindows('builder:state-changed', 'build-assets', 0.8);
-                    pageWorker.sendRequestToPage('app:build-assets', proj, paths.res, debug, function () {
-                        pageWorker.close();
+                    pageWorker.sendRequestToPage('app:build-assets', proj, paths.res, debug, function (err) {
+                        var destroyingWorker = !pageWorker;
+                        if (!destroyingWorker) {
+                            pageWorker.close();
+                            pageWorker = null;
+                        }
                     });
                 }
             });
@@ -138,17 +165,14 @@ exports.startWithArgs = function (opts, callback) {
     gulp.task('build-settings', ['copy-scripts'/*, 'res-setting'*/],    // wait until dest folder created
         function (done) {
             var settings = {
-                scenes: {},
+                scenes: [],
                 launchScene: '',
                 resBundle: opts.resBundle
             };
             // scenes
             var scenes = opts.scenes;
-            settings.launchScene = scenes[0].name;
-            for (var i = 0; i < scenes.length; i++) {
-                var item = scenes[i];
-                settings.scenes[item.name] = item.uuid;
-            }
+            settings.launchScene = scenes[0].url;
+            settings.scenes = scenes;
 
             // write config
             var json = JSON.stringify(settings, null, debug ? 4 : 0);
