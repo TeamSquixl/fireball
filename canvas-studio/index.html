@@ -34,9 +34,6 @@
 
     <script type="text/javascript" src="editor-framework://page/page-init.js"></script>
     <link rel="import" href="editor-framework://page/ui/ui.html">
-    
-    <script type="text/javascript" src="app://share/page/load-analytics.js"></script>
-    <script type="text/javascript" src="app://share/page/metrics.js"></script> 
 
     <script src="page/page-init.js"></script>
     <link rel="import" href="page/app-main.html">
@@ -60,10 +57,16 @@
             var launchPage = document.getElementById('launch-page');
             launchPage.remove();
             Editor.sendToAll('editor:ready');
+
+            // NOTE: this will prevent metrics pending when we open fireball
+
+            // load metrics after editor launched
+            Editor.require('app://share/page/load-analytics.js');
+            Editor.require('app://share/page/metrics.js');
+
+            // track editor open
+            Editor.Metrics.trackEditorOpen();
         });
-        
-        // TEST track editor open
-        Editor.Metrics.trackEditorOpen();
     </script>
   </body>
 </html>
