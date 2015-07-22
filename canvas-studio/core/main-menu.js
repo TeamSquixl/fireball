@@ -235,8 +235,25 @@ function _getDefaultMainMenu () {
                         if ( Fs.existsSync(Editor._defaultLayout) ) {
                             try {
                                 layoutInfo = JSON.parse(Fs.readFileSync(Editor._defaultLayout));
+                            } catch (err) {
+                                Editor.error( 'Failed to load default layout: %s', err.message );
+                                layoutInfo = null;
                             }
-                            catch (err) {
+                        }
+                        if ( layoutInfo) {
+                            Editor.sendToMainWindow( 'editor:reset-layout', layoutInfo);
+                        }
+                    }
+                },
+                {
+                    label: 'Asset Database Management',
+                    click: function () {
+                        var path = Editor.url('app://canvas-studio/static/layout/assetdb.json');
+                        var layoutInfo;
+                        if ( Fs.existsSync(path) ) {
+                            try {
+                                layoutInfo = JSON.parse(Fs.readFileSync(path));
+                            } catch (err) {
                                 Editor.error( 'Failed to load default layout: %s', err.message );
                                 layoutInfo = null;
                             }
