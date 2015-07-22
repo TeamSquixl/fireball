@@ -89,7 +89,7 @@ module.exports = function ( options, cb ) {
             Editor.registerProfilePath( 'global', globalProfilePath );
 
             // register default layout
-            Editor.registerDefaultLayout( Editor.url('app://canvas-studio/static/layout.json') );
+            Editor.registerDefaultLayout( Editor.url('app://canvas-studio/static/layout/default.json') );
 
             // init core modules
             require('./core/init');
