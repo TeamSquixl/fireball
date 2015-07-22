@@ -3,6 +3,7 @@ var Path = require('fire-path');
 var Url = require('fire-url');
 var Async = require('async');
 var Shell = require('shell');
+var DevTools = require('./core/dev-tools');
 
 //
 Editor.versions['canvas-studio'] = '0.2.0';
@@ -242,6 +243,7 @@ Editor.JS.mixin(Editor.App, {
                         win.openDevTools({
                             detach: true
                         });
+                        DevTools.highlightHeaderLater(win.nativeWin);
                     });
                 }
                 win.focus();
