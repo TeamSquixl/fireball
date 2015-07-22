@@ -17,11 +17,24 @@
             ]
         },
         {
-            "active": 0,
-            "type": "panel",
+            "type": "dock",
             "width": "auto",
-            "panels": [
-                "asset-db-debugger.panel"
+            "docks": [
+                {
+                    "active": 0,
+                    "type": "panel",
+                    "panels": [
+                        "asset-db-debugger.panel"
+                    ]
+                },
+                {
+                    "active": 0,
+                    "type": "panel",
+                    "height": 200,
+                    "panels": [
+                        "console.panel"
+                    ]
+                }
             ]
         }
     ],

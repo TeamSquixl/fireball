@@ -246,7 +246,7 @@ function _getDefaultMainMenu () {
                     }
                 },
                 {
-                    label: 'Asset Database Management',
+                    label: 'Assets',
                     click: function () {
                         var path = Editor.url('app://canvas-studio/static/layout/assetdb.json');
                         var layoutInfo;
