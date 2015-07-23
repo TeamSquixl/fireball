@@ -10,7 +10,7 @@ module.exports = {
                 var d = i.contentDocument;
                 var s = d.querySelector('.inspector-view-tabbed-pane.tabbed-pane');
                 var h = s.shadowRoot.querySelector('.tabbed-pane-header');
-                h.style.cssText = "background-image: linear-gradient(rgb(150, 150, 150), rgb(238, 238, 238)) !important;";
+                h.style.cssText = 'background-image: linear-gradient(rgb(255, 255, 255), rgb(255, 180, 0)) !important;';
             }
             setTimeout(function () {
                 var dwc = browserWindow.devToolsWebContents;
