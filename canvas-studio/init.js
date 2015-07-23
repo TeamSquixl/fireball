@@ -187,6 +187,7 @@ Editor.JS.mixin(Editor.App, {
             function ( next ) {
                 Editor.assetdb.mount(Path.join(Editor.projectPath, 'assets'),
                                      'assets',
+                                     'asset',
                                      next);
             },
 
