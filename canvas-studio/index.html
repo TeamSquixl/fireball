@@ -53,19 +53,20 @@
     <app-main></app-main>
 
     <script>
-        Pace.once( 'hide', function () {
-            var launchPage = document.getElementById('launch-page');
-            launchPage.remove();
-            Editor.sendToAll('editor:ready');
-
-            // NOTE: this will prevent metrics pending when we open fireball
-
+// NOTE: put mectrics in ignore to prevent pending of them when network was bad
+        Pace.ignore( function () {
             // load metrics after editor launched
             Editor.require('app://share/page/load-analytics.js');
             Editor.require('app://share/page/metrics.js');
 
             // track editor open
             Editor.Metrics.trackEditorOpen();
+        });
+
+        Pace.once( 'hide', function () {
+            var launchPage = document.getElementById('launch-page');
+            launchPage.remove();
+            Editor.sendToAll('editor:ready');
         });
     </script>
   </body>

@@ -1,7 +1,9 @@
+var BrowserWindow = require('browser-window');
+
 module.exports = {
     highlightHeaderLater: function (browserWindow) {
         browserWindow.once('devtools-opened', function () {
-            //var dwc = win.devToolsWebContents;
+            //var dwc = browserWindow.devToolsWebContents;
             //dwc.once('dom-ready', function () {
             function changeHeaderColor () {
                 var i = document.getElementById('inspector-app-iframe');
@@ -11,7 +13,13 @@ module.exports = {
                 h.style.cssText = "background-image: linear-gradient(rgb(150, 150, 150), rgb(238, 238, 238)) !important;";
             }
             setTimeout(function () {
-                browserWindow.executeJavaScriptInDevTools('(' + changeHeaderColor + ')();');
+                var dwc = browserWindow.devToolsWebContents;
+                dwc.executeJavaScript('(' + changeHeaderColor + ')();');
+
+                // var css = '.inspector-view-tabbed-pane.tabbed-pane::shadow .tabbed-pane-header { background: #000 !important; }';
+                // dwc.insertCSS(css);
+
+                // HACK: browserWindow.executeJavaScriptInDevTools('(' + changeHeaderColor + ')();');
             }, 200);
             //});
         });
