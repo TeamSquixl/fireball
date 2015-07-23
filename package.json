@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "async": "1.2.1",
+    "babel": "5.8.3",
     "browserify": "10.2.3",
     "chai": "2.3.0",
     "chalk": "1.0.0",
