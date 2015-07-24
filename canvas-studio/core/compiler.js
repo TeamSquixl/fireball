@@ -64,7 +64,9 @@ var Compiler = {
 
     compileAndReload: function () {
         this.compileScripts(function (compiled) {
-            Editor.sendToWindows(RELOAD_WINDOW_SCRIPTS, compiled);
+            if (compiled) {
+                Editor.sendToWindows(RELOAD_WINDOW_SCRIPTS, compiled);
+            }
         });
     },
 

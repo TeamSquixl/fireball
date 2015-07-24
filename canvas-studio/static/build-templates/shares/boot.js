@@ -19,7 +19,8 @@
             width: width,
             height: height,
             canvas: canvas,
-            scenes: settings.scenes
+            scenes: settings.scenes,
+            rawUrl: settings.rawUrl
         },
         function () {
             //// makes the container's size equals to the frame's size
