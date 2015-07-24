@@ -11,7 +11,8 @@
     "linkNatives": true,
     "paths": [
         "utils/api/editor-framework",
-        "utils/api/engine-framework"
+        "utils/api/engine-framework",
+        "utils/api/asset-db"
     ],
     "tabtospace": 4
   }

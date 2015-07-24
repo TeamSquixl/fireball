@@ -107,12 +107,12 @@ gulp.task('run-canvasstudio', function(cb) {
     });
 });
 
-// build 
+// build
 
 gulp.task('build-engine', function(cb) {
     var buildPaths = ['engine-framework', 'runtime/runtime-cocos2d-js'];
     var count = buildPaths.length;
-    var cmdStr = process.platform === 'win32' ? 'gulp.cmd' : 'gulp';  
+    var cmdStr = process.platform === 'win32' ? 'gulp.cmd' : 'gulp';
     function doBuild (cwd, done) {
         console.log("Start building " + chalk.green(cwd));
         var child = spawn(cmdStr, ['build'], {
@@ -124,7 +124,7 @@ gulp.task('build-engine', function(cb) {
             return done();
         });
     }
-    
+
     buildPaths.forEach(function(path) {
         doBuild(path, function() {
             if (--count<=0) {
@@ -420,29 +420,39 @@ gulp.task('cp-apisrc', ['del-apidocs'], function() {
     var es = require('event-stream');
     var header = require('gulp-header');
     var cpEditor = gulp.src([
-            "./editor-framework/init.js",
-            "./editor-framework/core/*",
-            "./editor-framework/share/*",
-            "./editor-framework/page/*"
+            './editor-framework/init.js',
+            './editor-framework/core/*',
+            './editor-framework/share/*',
+            './editor-framework/page/*'
         ], {
-            base: "./editor-framework"
+            base: './editor-framework'
         })
-        .pipe(gulp.dest("utils/api/editor-framework"));
+        .pipe(gulp.dest('utils/api/editor-framework'));
 
 
-    var DefaultModuleHeader = "/**\n" +
-                              " * @module Fire\n" +
-                              " */\n";
+    var DefaultModuleHeader = '/**\n' +
+                              ' * @module Fire\n' +
+                              ' */\n';
 
     var cpEngine = gulp.src([
-            "src/**/*"
+            'src/**/*'
         ], {
-            cwd: "./engine-framework"
+            cwd: './engine-framework'
         })
         .pipe(header(DefaultModuleHeader))
-        .pipe(gulp.dest("utils/api/engine-framework"));
+        .pipe(gulp.dest('utils/api/engine-framework'));
 
-    return es.merge(cpEditor, cpEngine);
+    var cpAssetDB = gulp.src([
+            './asset-db/index.js',
+            './asset-db/core/**/*',
+            './asset-db/lib/**/*',
+            './asset-db/page/**/*',
+        ], {
+            base: './asset-db/'
+        })
+        .pipe(gulp.dest('utils/api/asset-db'));
+
+    return es.merge(cpEditor, cpEngine, cpAssetDB);
 });
 
 gulp.task('del-apidocs', function(cb) {
