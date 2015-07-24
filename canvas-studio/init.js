@@ -184,12 +184,21 @@ Editor.JS.mixin(Editor.App, {
 
     run: function () {
         Async.series([
+            // mount assets://
             function ( next ) {
                 Editor.assetdb.mount(Path.join(Editor.projectPath, 'assets'),
                                      'assets',
                                      'asset',
                                      next);
             },
+
+            // // mount raw://
+            // function ( next ) {
+            //     Editor.assetdb.mount(Path.join(Editor.projectPath, 'raw'),
+            //                          'raw',
+            //                          'raw',
+            //                          next);
+            // },
 
             // start assetdb
             function ( next ) {
