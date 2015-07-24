@@ -8,11 +8,17 @@ function _needCompile ( assetType ) {
 }
 
 Ipc.on('asset-db:asset-changed', function ( result ) {
-    // console.log(arguments);
     if ( _needCompile( result.type ) ) {
         Editor.Compiler.compileLater();
     }
 });
+
+Ipc.on('asset-db:asset-uuid-changed', function ( result ) {
+    if ( _needCompile( result.type ) ) {
+        Editor.Compiler.compileLater();
+    }
+});
+
 
 Ipc.on('asset-db:assets-moved', function ( results ) {
     var needRecompile = false;
