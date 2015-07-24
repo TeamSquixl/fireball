@@ -1,9 +1,9 @@
 var Ipc = require('ipc');
 
-function _needCompile ( metaType ) {
-    return metaType === 'javascript' ||
-        metaType === 'coffeescript' ||
-        metaType === 'typescript'
+function _needCompile ( assetType ) {
+    return assetType === 'javascript' ||
+        assetType === 'coffeescript' ||
+        assetType === 'typescript'
     ;
 }
 
@@ -18,13 +18,13 @@ Ipc.on('asset-db:assets-moved', function ( results ) {
     var needRecompile = false;
     results.forEach( function ( result ) {
         var info = Editor.assetdb.assetInfo(result.uuid);
-        var metaType = info['meta-type'];
+        var assetType = info['asset-type'];
 
         if ( !needRecompile ) {
-            needRecompile = _needCompile(metaType);
+            needRecompile = _needCompile(assetType);
         }
 
-        if ( metaType === 'scene' ) {
+        if ( assetType === 'scene' ) {
             for ( var i = 0; i < Editor.sceneList.length; ++i ) {
                 if ( result.uuid === Editor.sceneList[i].uuid ) {
                     Editor.sceneList[i].url = Editor.assetdb.uuidToUrl(result.uuid);
@@ -43,13 +43,13 @@ Ipc.on('asset-db:assets-created', function ( results ) {
     var needRecompile = false;
     results.forEach( function ( result ) {
         var info = Editor.assetdb.assetInfo(result.uuid);
-        var metaType = info['meta-type'];
+        var assetType = info['asset-type'];
 
         if ( !needRecompile ) {
-            needRecompile = _needCompile(metaType);
+            needRecompile = _needCompile(assetType);
         }
 
-        if ( metaType === 'scene' ) {
+        if ( assetType === 'scene' ) {
             Editor.sceneList.push({
                 url: result.url,
                 uuid: result.uuid,
@@ -66,13 +66,13 @@ Ipc.on('asset-db:assets-deleted', function ( results ) {
     var needRecompile = false;
     results.forEach( function ( result ) {
         var info = Editor.assetdb.assetInfoByPath(result.path);
-        var metaType = info['meta-type'];
+        var assetType = info.type;
 
         if ( !needRecompile ) {
-            needRecompile = _needCompile(metaType);
+            needRecompile = _needCompile(assetType);
         }
 
-        if ( metaType === 'scene' ) {
+        if ( assetType === 'scene' ) {
             for ( var i = 0; i < Editor.sceneList.length; ++i ) {
                 if ( Editor.sceneList[i].uuid === result.uuid ) {
                     Editor.sceneList.splice( i, 1 );
