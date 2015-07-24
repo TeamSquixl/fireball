@@ -8,17 +8,23 @@ function _needCompile ( assetType ) {
 }
 
 Ipc.on('asset-db:asset-changed', function ( result ) {
-    // console.log(arguments);
     if ( _needCompile( result.type ) ) {
         Editor.Compiler.compileLater();
     }
 });
 
+Ipc.on('asset-db:asset-uuid-changed', function ( result ) {
+    if ( _needCompile( result.type ) ) {
+        Editor.Compiler.compileLater();
+    }
+});
+
+
 Ipc.on('asset-db:assets-moved', function ( results ) {
     var needRecompile = false;
     results.forEach( function ( result ) {
         var info = Editor.assetdb.assetInfo(result.uuid);
-        var assetType = info['asset-type'];
+        var assetType = info.type;
 
         if ( !needRecompile ) {
             needRecompile = _needCompile(assetType);
@@ -43,7 +49,7 @@ Ipc.on('asset-db:assets-created', function ( results ) {
     var needRecompile = false;
     results.forEach( function ( result ) {
         var info = Editor.assetdb.assetInfo(result.uuid);
-        var assetType = info['asset-type'];
+        var assetType = info.type;
 
         if ( !needRecompile ) {
             needRecompile = _needCompile(assetType);
