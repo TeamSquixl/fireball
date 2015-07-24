@@ -1,20 +1,13 @@
 var Ipc = require('ipc');
 
-function _needCompile ( assetType ) {
-    return assetType === 'javascript' ||
-        assetType === 'coffeescript' ||
-        assetType === 'typescript'
-    ;
-}
-
 Ipc.on('asset-db:asset-changed', function ( result ) {
-    if ( _needCompile( result.type ) ) {
+    if ( Editor.Compiler.needCompile( result.type ) ) {
         Editor.Compiler.compileLater();
     }
 });
 
 Ipc.on('asset-db:asset-uuid-changed', function ( result ) {
-    if ( _needCompile( result.type ) ) {
+    if ( Editor.Compiler.needCompile( result.type ) ) {
         Editor.Compiler.compileLater();
     }
 });
@@ -27,7 +20,7 @@ Ipc.on('asset-db:assets-moved', function ( results ) {
         var assetType = info.type;
 
         if ( !needRecompile ) {
-            needRecompile = _needCompile(assetType);
+            needRecompile = Editor.Compiler.needCompile(assetType);
         }
 
         if ( assetType === 'scene' ) {
@@ -52,7 +45,7 @@ Ipc.on('asset-db:assets-created', function ( results ) {
         var assetType = info.type;
 
         if ( !needRecompile ) {
-            needRecompile = _needCompile(assetType);
+            needRecompile = Editor.Compiler.needCompile(assetType);
         }
 
         if ( assetType === 'scene' ) {
@@ -75,7 +68,7 @@ Ipc.on('asset-db:assets-deleted', function ( results ) {
         var assetType = info.type;
 
         if ( !needRecompile ) {
-            needRecompile = _needCompile(assetType);
+            needRecompile = Editor.Compiler.needCompile(assetType);
         }
 
         if ( assetType === 'scene' ) {

@@ -183,6 +183,8 @@ Editor.JS.mixin(Editor.App, {
     },
 
     run: function () {
+        var recompile = false;
+
         Async.series([
             // mount assets://
             function ( next ) {
@@ -202,7 +204,15 @@ Editor.JS.mixin(Editor.App, {
 
             // start assetdb
             function ( next ) {
-                Editor.assetdb.init( next );
+                Editor.assetdb.init( function ( err, imports ) {
+                    imports.forEach( function ( info ) {
+                        if ( !recompile ) {
+                            recompile = Editor.Compiler.needCompile(info.type);
+                        }
+                    });
+
+                    next ();
+                } );
             },
 
             // query the scene list from asset-db
@@ -246,6 +256,14 @@ Editor.JS.mixin(Editor.App, {
 
                 // page-level test case
                 win.load( 'app://canvas-studio/index.html' );
+
+                // FIXME: should we make sure load scene after compile finished???
+                win.nativeWin.webContents.once('did-finish-load', function () {
+                    if ( recompile ) {
+                        Editor.log( 'Compiling scripts...' );
+                        Editor.Compiler.compileScripts();
+                    }
+                });
 
                 // open dev tools if needed
                 if ( Editor.showDevtools ) {
