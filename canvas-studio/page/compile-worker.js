@@ -31,7 +31,7 @@ function compileEnd () {
 }
 
 function compileError (err) {
-    Editor.sendToCore('app:compile-worker-error', err);
+    Editor.sendToCore('app:compile-worker-error', err.stack);
 }
 
 function getScriptGlob(dir) {
