@@ -35,6 +35,8 @@
     "fire-path": "0.1.7",
     "fire-url": "0.1.6",
     "fire-watch": "0.1.8",
+    "firedoc-intellisense": "1.0.1",
+    "firedoc-api": "1.0.1",
     "git-utils": "3.0.0",
     "globby": "2.0.0",
     "gulp": "3.8.11",

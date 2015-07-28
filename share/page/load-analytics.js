@@ -61,7 +61,7 @@
       // Create an async script element based on your key.
       var script = document.createElement('script');
       script.type = 'text/javascript';
-    //   script.async = true;
+      script.async = true;
     //   script.src = ('https:' === document.location.protocol ? 'https://' : 'http://') + 'cdn.segment.com/analytics.js/v1/' + key + '/analytics.min.js';
       // console.log("cwd: " + __dirname);
       script.src = 'app://share/page/analytics.min.js';

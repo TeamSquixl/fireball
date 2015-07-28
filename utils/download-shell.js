@@ -152,7 +152,7 @@ gulp.task('electron-to-bin', function(cb) {
         if (err) return console.log('ncp Error: ' + err);
         else {
             console.log('Electron ' + Fs.readFileSync(Path.join(electronPath, 'version')) + ' has been download to bin/electron folder');
-            cb();
+            return cb();
         }
     });
 });

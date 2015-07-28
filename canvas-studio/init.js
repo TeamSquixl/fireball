@@ -300,6 +300,7 @@ Editor.JS.mixin(Editor.App, {
     // @param {function} [onLoad]
     spawnWorker: function (scriptUrl, argv, onLoad, debug) {
         if (typeof argv === 'function') {
+            debug = onLoad;
             onLoad = argv;
             argv = {};
         }

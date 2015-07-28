@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Fireball Editor</title>
-    <script src="app://bower_components/pace/pace.js"></script>
+    <script data-pace-options='{ "ajax": false, "restartOnPushState": false, "restartOnRequestAfter": false }' src="app://bower_components/pace/pace.js"></script>
     <link href="static/css/pace-theme-center-simple.css" rel="stylesheet">
     <style>
         #launch-page {
@@ -58,7 +58,6 @@
             // load metrics after editor launched
             Editor.require('app://share/page/load-analytics.js');
             Editor.require('app://share/page/metrics.js');
-
             // track editor open
             Editor.Metrics.trackEditorOpen();
         });
