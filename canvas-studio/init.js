@@ -184,13 +184,14 @@ Editor.JS.mixin(Editor.App, {
 
     run: function () {
         var recompile = false;
+        var AssetDB = require('../asset-db');
 
         Async.series([
             // mount assets://
             function ( next ) {
                 Editor.assetdb.mount(Path.join(Editor.projectPath, 'assets'),
                                      'assets',
-                                     'asset',
+                                     AssetDB.MountType.asset,
                                      next);
             },
 
