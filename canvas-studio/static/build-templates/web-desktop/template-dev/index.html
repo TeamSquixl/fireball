@@ -47,10 +47,8 @@
 <body>
     <p class="header"><%=project%></p>
 
-    <div style="position: relative; width: 800px; height: 600px">
-        <div id="GameDiv" style="position: relative; background: black; background: #000000 url(splash.png) no-repeat center;">
-            <canvas id="GameCanvas" width="32" height="32" oncontextmenu="event.preventDefault()" style="visibility: hidden" tabindex="0"></canvas>
-        </div>
+    <div id="GameDiv" style="display:inline-block;width:auto; margin: 0 auto; background: black; position:relative; border:5px solid black; border-radius: 10px; box-shadow: 0 5px 50px #333">
+        <canvas id="GameCanvas" width="640" height="480"></canvas>
     </div>
 
     <p class="footer">Created with <a href="http://fireball-x.com/" title="Go to fireball-x.com">Fireball-x</a></p>
