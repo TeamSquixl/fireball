@@ -32,12 +32,20 @@ gulp.task('make-dist-win', gulpSequence('rename-electron-win', 'copy-app-dist', 
 
 gulp.task('pre-install-npm', ['setup-mirror'], function(cb) {
     var mirror = JSON.parse(Fs.readFileSync('mirror-setting.json')).mirror;
-    npmconf.load(function (err, conf) {
+    npmconf.load(function(_, conf) {
         var registry = npmconf.defaults.registry;
         if (mirror === 'china') {
             registry = 'http://registry.npm.taobao.org/';
         }
         conf.set('registry', registry, 'user');
+        conf.save('user', cb);
+    });
+});
+
+gulp.task('post-install-npm', function(cb) {
+    // resume the default config when being installed
+    npmconf.load(function(_, conf) {
+        conf.set('registry', npmconf.defaults.registry, 'user');
         conf.save('user', cb);
     });
 });
