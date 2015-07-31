@@ -249,25 +249,28 @@ gulp.task('update-builtin', function(cb) {
     var setting = JSON.parse(Fs.readFileSync('local-setting.json'));
 
     if (Fs.isDirSync('builtin')) {
-        pjson.builtins.forEach(function(packageName) {
-            if (Fs.existsSync(Path.join('builtin', packageName, '.git'))) {
-                count++;
-                var branch = setting.branch.builtins[packageName];
-                git.runGitCmdInPath(['checkout', branch], Path.join('builtin', packageName), function() {
-                    git.runGitCmdInPath(['pull', 'https://github.com/fireball-packages/' + packageName, branch], Path.join('builtin', packageName), function() {
-                        git.runGitCmdInPath(['fetch', '--all'], Path.join('builtin', packageName), function() {
-                            console.log('Remote head updated!');
-                            if (--count <= 0) {
-                                console.log('Builtin packages update complete!');
-                                return cb();
-                            }
+        var tasks = pjson.builtins.map(function(packageName) {
+            return function(callback) {
+                if (Fs.existsSync(Path.join('builtin', packageName, '.git'))) {
+                    var branch = setting.branch.builtins[packageName];
+                    git.runGitCmdInPath(['checkout', branch], Path.join('builtin', packageName), function() {
+                        git.runGitCmdInPath(['pull', 'https://github.com/fireball-packages/' + packageName, branch], Path.join('builtin', packageName), function() {
+                            git.runGitCmdInPath(['fetch', '--all'], Path.join('builtin', packageName), function() {
+                                console.log('Remote head updated!');
+                                callback();
+                            });
                         });
                     });
-                });
-            } else {
-                console.error(chalk.red('Builtin package ' + packageName + ' not initialized, please run "gulp install-builtin" first!'));
-                process.exit(1);
-            }
+                } else {
+                    console.error(chalk.red('Builtin package ' + packageName + ' not initialized, please run "gulp install-builtin" first!'));
+                    process.exit(1);
+                }
+            };
+        });
+        var async = require('async');
+        async.parallelLimit(tasks, 5, function() {
+            console.log('Builtin packages update complete!');
+            return cb();
         });
     } else {
         console.error(chalk.red('Builtin folder not initialized, please run "gulp install-builtin" first!'));
@@ -316,7 +319,7 @@ gulp.task('update-runtime', function(cb) {
             if (Fs.existsSync(Path.join('runtime', runtimeName, '.git'))) {
                 count++;
                 var branch = setting.branch.runtimes[runtimeName];
-                git.runGitCmdInPath(['checkout', branch], Path.join('builtin', runtimeName), function() {
+                git.runGitCmdInPath(['checkout', branch], Path.join('runtime', runtimeName), function() {
                     git.runGitCmdInPath(['pull', 'https://github.com/fireball-x/' + runtimeName, branch], Path.join('runtime', runtimeName), function() {
                         git.runGitCmdInPath(['fetch', '--all'], Path.join('runtime', runtimeName), function() {
                             console.log('Remote head updated!');
