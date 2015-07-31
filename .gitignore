@@ -49,4 +49,4 @@ utils/api
 apidocs/
 dist/
 utils/rcedit
-mirror-setting.json
+local-setting.json

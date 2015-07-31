@@ -137,7 +137,7 @@ function installElectron (isChina, cb) {
 }
 
 gulp.task('install-electron', function(cb) {
-    var mirror = JSON.parse(Fs.readFileSync('mirror-setting.json')).mirror;
+    var mirror = JSON.parse(Fs.readFileSync('local-setting.json')).mirror;
     var isChina = mirror === 'china' ? true : false;
     installElectron(isChina, cb);
 });
@@ -158,38 +158,106 @@ gulp.task('electron-to-bin', function(cb) {
 });
 
 gulp.task('setup-mirror', function(cb) {
-    var needBuildSetting = false;
-    if ( Fs.existsSync('mirror-setting.json') ) {
+    var hasMirrorSetting = false;
+    var hasSettingFile = false;
+    if ( Fs.existsSync('local-setting.json') ) {
         try {
-            var jsonObj = JSON.parse(Fs.readFileSync('mirror-setting.json'));
+            var jsonObj = JSON.parse(Fs.readFileSync('local-setting.json'));
             if (jsonObj.mirror) {
                 return cb();
+            } else {
+                hasMirrorSetting = false;
+                hasSettingFile = true;
             }
         }
         catch (err) {
-            needBuildSetting = true;
+            hasMirrorSetting = false;
+            hasSettingFile = false;
         }
     } else {
-        needBuildSetting = true;
+        hasMirrorSetting = false;
+        hasSettingFile = false;
     }
 
-    if (needBuildSetting) {
+    if (hasMirrorSetting === false) {
         var readline = require('readline');
         var rl = readline.createInterface({
           input: process.stdin,
           output: process.stdout
         });
         rl.question("Do you want to use mirror in China to download Electron and other dependencies? (y/n) : ", function(answer) {
-            var obj = {mirror: ''};
-          if (answer === 'y') {
-              obj.mirror = 'china';
-          } else {
-              obj.mirror = 'global';
-          }
-          Fs.writeFileSync('mirror-setting.json', JSON.stringify(obj));
-          rl.close();
-          return cb();
+            var obj;
+            if (hasSettingFile) {
+                obj = JSON.parse(Fs.readFileSync('local-setting.json'));
+            } else {
+                obj = {mirror: ''};
+            }
+            if (answer === 'y') {
+                obj.mirror = 'china';
+            } else {
+                obj.mirror = 'global';
+            }
+            Fs.writeFileSync('local-setting.json', JSON.stringify(obj, null, '  '));
+            rl.close();
+            return cb();
         });
+    } else {
+        return cb();
+    }
+});
+
+gulp.task('setup-branch', function(cb) {
+    var hasSettingFile = false;
+    var hasBranchSetting = false;
+    if ( Fs.existsSync('local-setting.json') ) {
+        try {
+            var jsonObj = JSON.parse(Fs.readFileSync('local-setting.json'));
+            if (jsonObj.branch) {
+                return cb();
+            } else {
+                hasBranchSetting = false;
+                hasSettingFile = true;
+            }
+        }
+        catch (err) {
+            hasBranchSetting = false;
+            hasSettingFile = false;
+        }
+    } else {
+        hasBranchSetting = false;
+        hasSettingFile = false;
+    }
+
+    if (hasBranchSetting === false) {
+        var obj;
+        if (hasSettingFile) {
+            obj = JSON.parse(Fs.readFileSync('local-setting.json'));
+            obj.branch = {
+                submodules: {},
+                builtins: {},
+                runtimes: {}
+            };
+        } else {
+            obj = {
+                branch: {
+                    submodules:{},
+                    builtins: {},
+                    runtimes: {}
+                }
+            };
+        }
+        pjson.submodules.forEach(function(entry) {
+            obj.branch.submodules[entry] = "master";
+        });
+        pjson.builtins.forEach(function(entry) {
+            obj.branch.builtins[entry] = "master";
+        });
+        pjson.runtimes.forEach(function(entry) {
+            obj.branch.runtimes[entry] = "master";
+        });
+        Fs.writeFileSync('local-setting.json', JSON.stringify(obj, null, '  '));
+        console.log("Setup submodule branch local setting. You can change 'local-setting.json' to specify your branches.");
+        return cb();
     } else {
         return cb();
     }

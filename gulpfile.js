@@ -18,7 +18,7 @@ require('./utils/download-shell');
 
 gulp.task('bootstrap', gulpSequence(['init-submodules', 'install-builtin', 'install-runtime', 'install-shared-packages'], 'update-electron'));
 
-gulp.task('update', gulpSequence('pull-fireball', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime'], 'remove-builtin-bin', 'update-electron', 'build-engine', 'check-dependencies'));
+gulp.task('update', gulpSequence('setup-branch', 'pull-fireball', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime'], 'remove-builtin-bin', 'update-electron', 'build-engine', 'check-dependencies'));
 
 gulp.task('run', ['run-electron']);
 
@@ -166,7 +166,7 @@ gulp.task('pull-fireball', function(cb) {
     git.runGitCmdInPath(['pull', 'https://github.com/fireball-x/fireball.git', 'dev'], './', function() {
         console.log('Fireball update complete!');
         git.runGitCmdInPath(['fetch', '--all'], './', function() {
-            console.log('Remote head updated!');
+            //console.log('Remote head updated!');
             cb();
         });
     });
@@ -174,12 +174,14 @@ gulp.task('pull-fireball', function(cb) {
 
 gulp.task('checkout-submodules', function(cb) {
     var modules = pjson.submodules;
+    var setting = JSON.parse(Fs.readFileSync('local-setting.json'));
     var count = modules.length;
     modules.forEach(function(module) {
         if (Fs.existsSync(Path.join(module, '.git'))) {
-            git.runGitCmdInPath(['checkout', 'master'], module, function() {
+            var branch = setting.branch.submodules[module];
+            git.runGitCmdInPath(['checkout', branch], module, function() {
                 if (--count <= 0) {
-                    console.log('Git submodules checkout to master complete!');
+                    console.log('Git submodules checkout to ' + branch + ' complete!');
                     cb();
                 }
             });
@@ -193,9 +195,11 @@ gulp.task('checkout-submodules', function(cb) {
 gulp.task('pull-submodules', function(cb) {
     var modules = pjson.submodules;
     var count = modules.length;
+    var setting = JSON.parse(Fs.readFileSync('local-setting.json'));
     modules.map(function(module) {
         if (Fs.existsSync(Path.join(module, '.git'))) {
-            git.runGitCmdInPath(['pull', 'origin', 'master'], module, function() {
+            var branch = setting.branch.submodules[module];
+            git.runGitCmdInPath(['pull', 'origin', branch], module, function() {
                 if (--count <= 0) {
                     console.log('Git submodules pull complete!');
                     cb();
@@ -242,17 +246,22 @@ gulp.task('install-builtin', function(cb) {
 
 gulp.task('update-builtin', function(cb) {
     var count = 0;
+    var setting = JSON.parse(Fs.readFileSync('local-setting.json'));
+
     if (Fs.isDirSync('builtin')) {
         pjson.builtins.forEach(function(packageName) {
             if (Fs.existsSync(Path.join('builtin', packageName, '.git'))) {
                 count++;
-                git.runGitCmdInPath(['pull', 'https://github.com/fireball-packages/' + packageName, 'master'], Path.join('builtin', packageName), function() {
-                    git.runGitCmdInPath(['fetch', '--all'], Path.join('builtin', packageName), function() {
-                        console.log('Remote head updated!');
-                        if (--count <= 0) {
-                            console.log('Builtin packages update complete!');
-                            return cb();
-                        }
+                var branch = setting.branch.builtins[packageName];
+                git.runGitCmdInPath(['checkout', branch], Path.join('builtin', packageName), function() {
+                    git.runGitCmdInPath(['pull', 'https://github.com/fireball-packages/' + packageName, branch], Path.join('builtin', packageName), function() {
+                        git.runGitCmdInPath(['fetch', '--all'], Path.join('builtin', packageName), function() {
+                            console.log('Remote head updated!');
+                            if (--count <= 0) {
+                                console.log('Builtin packages update complete!');
+                                return cb();
+                            }
+                        });
                     });
                 });
             } else {
@@ -301,17 +310,21 @@ gulp.task('install-runtime', function(cb) {
 
 gulp.task('update-runtime', function(cb) {
     var count = 0;
+    var setting = JSON.parse(Fs.readFileSync('local-setting.json'));
     if (Fs.isDirSync('runtime')) {
         pjson.runtimes.map(function(runtimeName) {
             if (Fs.existsSync(Path.join('runtime', runtimeName, '.git'))) {
                 count++;
-                git.runGitCmdInPath(['pull', 'https://github.com/fireball-x/' + runtimeName, 'master'], Path.join('runtime', runtimeName), function() {
-                    git.runGitCmdInPath(['fetch', '--all'], Path.join('runtime', runtimeName), function() {
-                        console.log('Remote head updated!');
-                        if (--count <= 0) {
-                            console.log('Runtime engines update complete!');
-                            cb();
-                        }
+                var branch = setting.branch.runtimes[runtimeName];
+                git.runGitCmdInPath(['checkout', branch], Path.join('builtin', runtimeName), function() {
+                    git.runGitCmdInPath(['pull', 'https://github.com/fireball-x/' + runtimeName, branch], Path.join('runtime', runtimeName), function() {
+                        git.runGitCmdInPath(['fetch', '--all'], Path.join('runtime', runtimeName), function() {
+                            console.log('Remote head updated!');
+                            if (--count <= 0) {
+                                console.log('Runtime engines update complete!');
+                                cb();
+                            }
+                        });
                     });
                 });
             } else {
