@@ -9,7 +9,7 @@ var pjson = JSON.parse(Fs.readFileSync('./package.json'));
 var shell = require('gulp-shell');
 var spawn = require('child_process').spawn;
 var chalk = require('chalk');
-
+var npmconf = require('npmconf');
 
 // require tasks
 require('./utils/download-shell');
@@ -29,6 +29,26 @@ gulp.task('package-studio', ['run-packagestudio']);
 gulp.task('make-dist-mac', gulpSequence('rename-electron-mac', 'copy-app-dist', 'flatten-modules'));
 
 gulp.task('make-dist-win', gulpSequence('rename-electron-win', 'copy-app-dist', 'flatten-modules'));
+
+gulp.task('pre-install-npm', ['setup-mirror'], function(cb) {
+    var mirror = JSON.parse(Fs.readFileSync('mirror-setting.json')).mirror;
+    npmconf.load(function(_, conf) {
+        var registry = npmconf.defaults.registry;
+        if (mirror === 'china') {
+            registry = 'http://registry.npm.taobao.org/';
+        }
+        conf.set('registry', registry, 'user');
+        conf.save('user', cb);
+    });
+});
+
+gulp.task('post-install-npm', function(cb) {
+    // resume the default config when being installed
+    npmconf.load(function(_, conf) {
+        conf.set('registry', npmconf.defaults.registry, 'user');
+        conf.save('user', cb);
+    });
+});
 
 // run
 gulp.task('run-electron', function(cb) {
