@@ -32,6 +32,10 @@ if [ ! -d "ui-gizmos" ]; then
     git clone https://github.com/fireball-packages/ui-gizmos
 fi
 
+if [ ! -d "ui-grid" ]; then
+    git clone https://github.com/fireball-packages/ui-grid
+fi
+
 if [ ! -d "ui-kit" ]; then
     git clone https://github.com/fireball-packages/ui-kit
 fi
@@ -50,10 +54,6 @@ fi
 
 if [ ! -d "color-picker" ]; then
     git clone https://github.com/fireball-packages/color-picker
-fi
-
-if [ ! -d "pixi-grid" ]; then
-    git clone https://github.com/fireball-packages/pixi-grid
 fi
 
 # builtin panels

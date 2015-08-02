@@ -84,12 +84,14 @@
     "vulcanize": "1.8.1"
   },
   "builtins": [
-    "assets",
     "asset-db-debugger",
+    "assets",
     "builder",
     "canvas-assets",
-    "console",
     "code-editor",
+    "color-picker",
+    "console",
+    "fire-ui-kit",
     "hierarchy",
     "inspector",
     "ipc-debugger",
@@ -98,12 +100,10 @@
     "tester",
     "timeline",
     "ui-gizmos",
+    "ui-grid",
     "ui-kit",
     "ui-property",
-    "ui-tree",
-    "fire-ui-kit",
-    "color-picker",
-    "pixi-grid"
+    "ui-tree"
   ],
   "runtimes": [
     "runtime-cocos2d-js",
