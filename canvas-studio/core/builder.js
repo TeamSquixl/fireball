@@ -12,7 +12,20 @@ var Builder = Editor.JS.mixin(new Emitter(), {
         // Editor.sendToCore('app:build-project', 'web-mobile', '/Users/jareguo/Temp/Canvas Studio/mobile-Canvas Studio', [ '496ed832-b486-4427-8abe-d5b916de6022' ], { isDebug: true, projectName: 'Canvas Studio' });
         Editor.sendToWindows('builder:state-changed', 'start', 0);
 
-        var scenes = options.scenes.map(function (uuid) {
+        // move default scene to first
+        var sceneUuids = options.scenes;
+        var startSceneIndex = sceneUuids.indexOf(options.startScene);
+        if (startSceneIndex === -1) {
+            Editor.error('Failed to find start scene in scene list.');
+            return;
+        }
+        else if (startSceneIndex !== 0) {
+            var toSwap = sceneUuids[0];
+            sceneUuids[0] = sceneUuids[startSceneIndex];
+            sceneUuids[startSceneIndex] = toSwap;
+        }
+
+        var scenes = sceneUuids.map(function (uuid) {
             return {
                 url: Editor.assetdb.uuidToUrl(uuid),
                 uuid: uuid
