@@ -31,7 +31,7 @@ gulp.task('make-dist-mac', gulpSequence('rename-electron-mac', 'copy-app-dist', 
 gulp.task('make-dist-win', gulpSequence('rename-electron-win', 'copy-app-dist', 'flatten-modules'));
 
 gulp.task('pre-install-npm', ['setup-mirror'], function(cb) {
-    var mirror = JSON.parse(Fs.readFileSync('mirror-setting.json')).mirror;
+    var mirror = JSON.parse(Fs.readFileSync('local-setting.json')).mirror;
     npmconf.load(function(_, conf) {
         var registry = npmconf.defaults.registry;
         if (mirror === 'china') {
