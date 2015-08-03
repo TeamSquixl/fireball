@@ -96,6 +96,7 @@
     "inspector",
     "ipc-debugger",
     "package-manager",
+    "release-helper",
     "scene",
     "tester",
     "timeline",

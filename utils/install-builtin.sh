@@ -6,7 +6,12 @@ if [ ! -d "builtin" ]; then
 fi
 cd builtin
 
-# builtin debugger
+# builtin dev helper
+
+if [ ! -d "asset-db-debugger" ]; then
+    git clone https://github.com/fireball-packages/asset-db-debugger
+fi
+
 if [ ! -d "console" ]; then
     git clone https://github.com/fireball-packages/console
 fi
@@ -19,12 +24,12 @@ if [ ! -d "package-manager" ]; then
     git clone https://github.com/fireball-packages/package-manager
 fi
 
-if [ ! -d "tester" ]; then
-    git clone https://github.com/fireball-packages/tester
+if [ ! -d "release-helper" ]; then
+    git clone https://github.com/fireball-packages/release-helper
 fi
 
-if [ ! -d "asset-db-debugger" ]; then
-    git clone https://github.com/fireball-packages/asset-db-debugger
+if [ ! -d "tester" ]; then
+    git clone https://github.com/fireball-packages/tester
 fi
 
 # builtin widgets
