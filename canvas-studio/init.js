@@ -112,7 +112,6 @@ module.exports = function ( options, cb ) {
             Editor.assetdb = new AssetDB({
                 'cwd': Path.join( Editor.projectPath ),
                 'library': 'library',
-                'default-asset': Fire.Asset,
             });
             Editor.libraryPath = Editor.assetdb.library;
             Editor.importPath = Editor.assetdb._importPath;

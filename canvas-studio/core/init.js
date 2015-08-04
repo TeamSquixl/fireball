@@ -27,7 +27,6 @@ Ipc.on('editor:state-changed', function ( name, value ) {
     Editor.states['_'+name] = value;
 });
 
-
 // apply default main menu
 var MainMenuTmplFn = require('./main-menu');
 Editor.registerDefaultMainMenu(MainMenuTmplFn);
