@@ -178,7 +178,7 @@ gulp.task('checkout-submodules', function(cb) {
     var count = modules.length;
     modules.forEach(function(module) {
         if (Fs.existsSync(Path.join(module, '.git'))) {
-            var branch = setting.branch.submodules[module];
+            var branch = setting.branch.submodules[module] || "master";
             git.runGitCmdInPath(['checkout', branch], module, function() {
                 if (--count <= 0) {
                     console.log('Git submodules checkout to ' + branch + ' complete!');
@@ -252,7 +252,7 @@ gulp.task('update-builtin', function(cb) {
         var tasks = pjson.builtins.map(function(packageName) {
             return function(callback) {
                 if (Fs.existsSync(Path.join('builtin', packageName, '.git'))) {
-                    var branch = setting.branch.builtins[packageName];
+                    var branch = setting.branch.builtins[packageName] || "master";
                     git.runGitCmdInPath(['checkout', branch], Path.join('builtin', packageName), function() {
                         git.runGitCmdInPath(['pull', 'https://github.com/fireball-packages/' + packageName, branch], Path.join('builtin', packageName), function() {
                             git.runGitCmdInPath(['fetch', '--all'], Path.join('builtin', packageName), function() {
@@ -318,7 +318,7 @@ gulp.task('update-runtime', function(cb) {
         pjson.runtimes.map(function(runtimeName) {
             if (Fs.existsSync(Path.join('runtime', runtimeName, '.git'))) {
                 count++;
-                var branch = setting.branch.runtimes[runtimeName];
+                var branch = setting.branch.runtimes[runtimeName] || "master";
                 git.runGitCmdInPath(['checkout', branch], Path.join('runtime', runtimeName), function() {
                     git.runGitCmdInPath(['pull', 'https://github.com/fireball-x/' + runtimeName, branch], Path.join('runtime', runtimeName), function() {
                         git.runGitCmdInPath(['fetch', '--all'], Path.join('runtime', runtimeName), function() {
