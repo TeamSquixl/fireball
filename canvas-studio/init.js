@@ -18,6 +18,7 @@ module.exports = function ( options, cb ) {
     Editor.requireLogin = !Editor.isDev || options.requireLogin;
     Editor.projectInfo = null;
 
+    if ( !Editor.assets ) Editor.assets = {};
     if ( !Editor.metas ) Editor.metas = {};
     if ( !Editor.inspectors ) Editor.inspectors = {};
     if ( !Editor.properties ) Editor.properties = {};

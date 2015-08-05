@@ -15,7 +15,7 @@ var buffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 
-var Utils = Editor.require('app://engine-framework/src/editor/utils');
+var UuidUtils = Editor.require('app://engine-framework/src/editor/uuid-utils');
 
 Editor.require('app://asset-db');
 
@@ -338,7 +338,7 @@ Ipc.on('app:compile-worker-start', function (options) {
     //// read uuid and script's name from library
     //function getUuidAndScriptName (path, callback) {
     //    var uuid = getUuidFromPath(path);
-    //    if (Utils.isUuid(uuid)) {
+    //    if (UuidUtils.isUuid(uuid)) {
     //        var assetPath = Path.join(Path.dirname(path), uuid);
     //        Fs.readFile(assetPath, function (err, data) {
     //            if (err) {
@@ -409,7 +409,7 @@ Ipc.on('app:compile-worker-start', function (options) {
                 var contents = file.contents.toString();
                 var header;
                 if (uuid) {
-                    uuid = Utils.compressUuid(uuid);
+                    uuid = UuidUtils.compressUuid(uuid);
                     header = Format("Fire._RFpush(module, '%s', '%s');\n// %s\n\n", uuid, name, file.relative);
                 }
                 else {
