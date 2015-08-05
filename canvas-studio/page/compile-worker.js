@@ -330,8 +330,8 @@ Ipc.on('app:compile-worker-start', function (options) {
     }
 
     function getUuidFromPath (path) {
-        var dirname = Path.dirname(path);
-        var uuid = Path.basename(dirname);
+        // var dirname = Path.dirname(path);
+        var uuid = Path.basenameNoExt(path);
         return uuid;
     }
 
