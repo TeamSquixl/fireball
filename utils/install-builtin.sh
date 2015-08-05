@@ -53,10 +53,6 @@ if [ ! -d "ui-tree" ]; then
     git clone https://github.com/fireball-packages/ui-tree
 fi
 
-if [ ! -d "fire-ui-kit" ]; then
-    git clone https://github.com/fireball-packages/fire-ui-kit
-fi
-
 if [ ! -d "color-picker" ]; then
     git clone https://github.com/fireball-packages/color-picker
 fi
@@ -90,10 +86,14 @@ if [ ! -d "code-editor" ]; then
     git clone https://github.com/fireball-packages/code-editor
 fi
 
-# builtin assets
+# builtin fireball packages
 
-if [ ! -d "canvas-assets" ]; then
-    git clone https://github.com/fireball-packages/canvas-assets
+if [ ! -d "fire-ui-kit" ]; then
+    git clone https://github.com/fireball-packages/fire-ui-kit
+fi
+
+if [ ! -d "fire-assets" ]; then
+    git clone https://github.com/fireball-packages/fire-assets
 fi
 
 cd ${ORIGINAL_PATH}

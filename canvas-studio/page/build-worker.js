@@ -17,7 +17,7 @@ Ipc.on('app:init-build-worker', function (callback) {
     es = require('event-stream');
 
     Editor.require('app://engine-framework');
-    Editor.require('packages://canvas-assets/asset');
+    Editor.require('packages://fire-assets/asset');
 
     //var runtimeUrl = 'app://runtime/runtime-' + Editor.remote.projectInfo.runtime + '/index.html';
     //var link = document.createElement('link');

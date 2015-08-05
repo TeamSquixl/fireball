@@ -8,8 +8,8 @@
     // init asset-db
     Editor.require('app://asset-db');
 
-    // init canvas-assets
-    Editor.require('packages://canvas-assets/init');
+    // init fire-assets
+    Editor.require('packages://fire-assets/init');
 
     // init ui-property
     Editor.require('packages://ui-property/init');
