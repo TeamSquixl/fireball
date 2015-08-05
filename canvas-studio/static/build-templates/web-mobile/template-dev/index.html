@@ -54,14 +54,15 @@
     <script src="project.dev.js" charset="utf-8"></script>
     <script src="boot.js" charset="utf-8"></script>
     <script>
-        window.addEventListener('load', function () {
+        function resize () {
             var div = document.getElementById('GameDiv');
-            var canvas = document.getElementById('GameCanvas');
             var width = document.documentElement.clientWidth;
             var height = document.documentElement.clientHeight;
             div.style.width = width + "px";
             div.style.height = height + "px";
-        });
+        }
+        window.addEventListener('load', resize);
+        window.addEventListener('resize', resize);
     </script>
 </head>
 <body style="padding: 0px; border: 0px; margin: 0px;">
