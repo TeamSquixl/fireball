@@ -33,10 +33,6 @@ if [ ! -d "tester" ]; then
 fi
 
 # builtin widgets
-if [ ! -d "ui-gizmos" ]; then
-    git clone https://github.com/fireball-packages/ui-gizmos
-fi
-
 if [ ! -d "ui-grid" ]; then
     git clone https://github.com/fireball-packages/ui-grid
 fi
@@ -95,5 +91,10 @@ fi
 if [ ! -d "fire-assets" ]; then
     git clone https://github.com/fireball-packages/fire-assets
 fi
+
+if [ ! -d "fire-gizmos" ]; then
+    git clone https://github.com/fireball-packages/fire-gizmos
+fi
+
 
 cd ${ORIGINAL_PATH}
