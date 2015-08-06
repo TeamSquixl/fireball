@@ -24,7 +24,7 @@ Fireball use mixin to combine all scripts attached to a single node together. Th
 
 Compare to other entity-component system, Fireball don't have 'component' instance and 'entity' instance. There is only the node instance, with all properties and method available from scripts attached to the node.
 
-To learn more about how script mixin works in Fireball, see [here]().
+To learn more about how script mixin works in Fireball, see [Mixin Mechanics](mixin-mechanic.md).
 
 ## Basic Structure of an Attachable Script
 
@@ -32,17 +32,22 @@ Create a script file that follow this pattern:
 
 ```js
 var MyClass = Fire.Class({ // use Fire.Class to define your class
+    extends: Fire.Behavior, // must have, every FireClass inherit from Fire.Behavior
     properties: {
         // properties that you want to serialize and exposed in Inspector
+    },
+    statics: {
+        // you can export variables and functions declared outside of FireClass prototype object in this script
+    },
+    onLoad: {
+        // initialization code
     }
 });
-// you must export the class as a module since we use require to load these FireClass
-module.exports = MyClass;
 ```
 
 The name `MyClass` in the script is not relevant, only the **filename of the script** is used for identifying this FireClass. Thus it's not allowed to create scripts with the same name in a single project.
 
-As long as your script conform to this basic structure, it can be dragged and attached onto a node. Let's keep going to see how to add property and function to your script.
+As long as your script contains a FireClass definition, it can be dragged and attached onto a node. Let's keep going to see how to add property and function to your script.
 
 ## Add Properties
 
@@ -50,15 +55,15 @@ To allow values/variables in your script to be edited from the Inspector, you mu
 
 ```js
 var MyClass = Fire.Class({ // use Fire.Class to define your class
+    extends: Fire.Behavior,
     properties: {
         myNumber: 0,
         myNode: {
             default: null,
-            type: Fire.Node
+            wrapper: cc.Node
         }
     }
 });
-module.exports = MyClass;
 ```
 
 In the above example, we defined two properties with different format.
@@ -76,6 +81,7 @@ To add a function:
 
 ```js
 var MyClass = Fire.Class({ // use Fire.Class to define your class
+    extends: Fire.Behavior,
     properties: {
         // some properties
     },
@@ -83,25 +89,24 @@ var MyClass = Fire.Class({ // use Fire.Class to define your class
         Fire.log('hellow world!');
     }
 });
-module.exports = MyClass;
 ```
 
 Similar to properties, call a function in script with `this.myFunction()`.
 
-## Constructor
+## Initialization
 
-If you want to declare variables that not exposed to Inspector, or run any initialization code when the class is created, put your code in `constructor` function:
+If you want to declare variables that not exposed to Inspector, or run any initialization code when the class is created, put your code in `onLoad` function:
 
 ```js
 var MyClass = Fire.Class({ // use Fire.Class to define your class
-    constructor: function() {
+    extends: Fire.Behavior,
+    onLoad: function() {
         this.myVariable = 1;
     }
 });
-module.exports = MyClass;
 ```
 
-Event if `this.myVariable` is not shown in Inspector. It's still accessible via other scripts. Again, more details can be found at [Access Scripts]().
+Event if `this.myVariable` is not shown in Inspector. It's still accessible via other scripts. Again, more details can be found at [Access Scripts](access-script.md).
 
 ## Update
 
@@ -109,6 +114,7 @@ Event if `this.myVariable` is not shown in Inspector. It's still accessible via 
 
 ```js
 var MyClass = Fire.Class({ // use Fire.Class to define your class
+    extends: Fire.Behavior,
     properties: {
         myCounter: 0
     }
@@ -117,7 +123,6 @@ var MyClass = Fire.Class({ // use Fire.Class to define your class
         Fire.log(this.myCounter);
     }
 });
-module.exports = MyClass;
 ```
 
 `update` function will be called every frame by game engine. For different game engine the exact timing of `update` in program lifecycle may differ. Usually it's before rendering happens for each frame.
@@ -131,6 +136,7 @@ In your FireClass script, you can use any game engine API, including creating a 
 Let's take Cocos2d-js engine API for example. If we'd like to set position for the current node. We have to rely on Cocos2d-js API:
 ```js
 var MyClass = Fire.Class({
+    extends: Fire.Behavior,
     properties: {
         targetPosX: 0,
         targetPosY: 0
@@ -140,7 +146,6 @@ var MyClass = Fire.Class({
         this.setPosition(this.targetPosX, this.targetPosY);
     }
 });
-module.exports = MyClass;
 ```
 
 Don't worry if you're not Cocos2d-js user, the only thing that matters is you can use your favorite engine's API in FireClass.
