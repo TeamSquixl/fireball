@@ -1,5 +1,4 @@
 var Fs = require('fs');
-var mirror = JSON.parse(Fs.readFileSync('local-setting.json')).mirror;
 var npmconf = require('npmconf');
 
 function setupMirror(cb) {
@@ -52,6 +51,7 @@ function setupMirror(cb) {
 }
 
 setupMirror(function() {
+    var mirror = JSON.parse(Fs.readFileSync('local-setting.json')).mirror;
     npmconf.load(function(_, conf) {
         var registry = npmconf.defaults.registry;
         if (mirror === 'china') {
