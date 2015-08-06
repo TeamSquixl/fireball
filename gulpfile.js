@@ -156,16 +156,16 @@ gulp.task('build-engine', function(cb) {
 });
 
 gulp.task('init-submodules', function(cb) {
-    git.runGitCmdInPath(['submodule', 'update', '--init'], './', function() {
+    git.exec(['submodule', 'update', '--init'], './', function() {
         console.log('Git submodules inited!');
         cb();
     });
 });
 
 gulp.task('pull-fireball', function(cb) {
-    git.runGitCmdInPath(['pull', 'https://github.com/fireball-x/fireball.git', 'dev'], './', function() {
+    git.exec(['pull', 'https://github.com/fireball-x/fireball.git', 'dev'], './', function() {
         console.log('Fireball update complete!');
-        git.runGitCmdInPath(['fetch', '--all'], './', function() {
+        git.exec(['fetch', '--all'], './', function() {
             //console.log('Remote head updated!');
             cb();
         });
@@ -179,7 +179,7 @@ gulp.task('checkout-submodules', function(cb) {
     modules.forEach(function(module) {
         if (Fs.existsSync(Path.join(module, '.git'))) {
             var branch = setting.branch.submodules[module] || "master";
-            git.runGitCmdInPath(['checkout', branch], module, function() {
+            git.exec(['checkout', branch], module, function() {
                 if (--count <= 0) {
                     console.log('Git submodules checkout to ' + branch + ' complete!');
                     cb();
@@ -199,7 +199,7 @@ gulp.task('pull-submodules', function(cb) {
     modules.map(function(module) {
         if (Fs.existsSync(Path.join(module, '.git'))) {
             var branch = setting.branch.submodules[module];
-            git.runGitCmdInPath(['pull', 'origin', branch], module, function() {
+            git.exec(['pull', 'origin', branch], module, function() {
                 if (--count <= 0) {
                     console.log('Git submodules pull complete!');
                     cb();
@@ -213,132 +213,95 @@ gulp.task('pull-submodules', function(cb) {
 });
 
 gulp.task('install-builtin', function(cb) {
-    var count = pjson.builtins.length;
-    if (Fs.isDirSync('builtin')) {
-        pjson.builtins.map(function(packageName) {
-            if (!Fs.existsSync(Path.join('builtin', packageName, '.git'))) {
-                git.runGitCmdInPath(['clone', 'https://github.com/fireball-packages/' + packageName], 'builtin', function() {
-                    if (--count <= 0) {
-                        console.log('Builtin packages installation complete!');
-                        cb();
-                    }
-                });
-            } else {
-                console.log(packageName + ' has already installed in builtin/' + packageName + ' folder!');
-                if (--count <= 0) {
-                    cb();
-                }
-            }
-        });
-    } else {
-        mkdirp('builtin');
-        pjson.builtins.map(function(packageName) {
-            count++;
-            git.runGitCmdInPath(['clone', 'https://github.com/fireball-packages/' + packageName], 'builtin', function() {
-                if (--count <= 0) {
-                    console.log('Builtin packages installation complete!');
-                    cb();
-                }
-            });
-        });
-    }
+    Fs.ensureDirSync('builtin');
+
+    var Async = require('async');
+    Async.eachLimit( pjson.builtins, 5, function ( name, done ) {
+        git.clone('https://github.com/fireball-packages/' + name,
+                  Path.join('builtin', name),
+                  done);
+    }, function ( err ) {
+        console.log('Builtin packages installation complete!');
+        cb();
+    });
 });
 
 gulp.task('update-builtin', function(cb) {
-    var count = 0;
     var setting = JSON.parse(Fs.readFileSync('local-setting.json'));
 
-    if (Fs.isDirSync('builtin')) {
-        var tasks = pjson.builtins.map(function(packageName) {
-            return function(callback) {
-                if (Fs.existsSync(Path.join('builtin', packageName, '.git'))) {
-                    var branch = setting.branch.builtins[packageName] || "master";
-                    git.runGitCmdInPath(['checkout', branch], Path.join('builtin', packageName), function() {
-                        git.runGitCmdInPath(['pull', 'https://github.com/fireball-packages/' + packageName, branch], Path.join('builtin', packageName), function() {
-                            git.runGitCmdInPath(['fetch', '--all'], Path.join('builtin', packageName), function() {
-                                console.log('Remote head updated!');
-                                callback();
-                            });
-                        });
-                    });
-                } else {
-                    console.error(chalk.red('Builtin package ' + packageName + ' not initialized, please run "gulp install-builtin" first!'));
-                    process.exit(1);
-                }
-            };
-        });
-        var async = require('async');
-        async.parallelLimit(tasks, 5, function() {
-            console.log('Builtin packages update complete!');
-            return cb();
-        });
-    } else {
+    if ( !Fs.isDirSync('builtin') ) {
         console.error(chalk.red('Builtin folder not initialized, please run "gulp install-builtin" first!'));
         return cb();
     }
+
+    var Async = require('async');
+    Async.eachLimit( pjson.builtins, 5, function ( name, done ) {
+        if ( !Fs.existsSync(Path.join('builtin', name, '.git')) ) {
+            console.error(chalk.red('Builtin package ' + name + ' not initialized, please run "gulp install-builtin" first!'));
+            process.exit(1);
+            return;
+        }
+
+        var branch = setting.branch.builtins[name] || "master";
+        git.pull(Path.join('builtin', name),
+                 'https://github.com/fireball-packages/' + name,
+                 branch,
+                 done);
+    }, function ( err ) {
+        if ( err ) {
+            process.exit(1);
+            return;
+        }
+
+        console.log('Builtin packages update complete!');
+        return cb();
+    });
 });
 
 gulp.task('install-runtime', function(cb) {
-    var count = pjson.runtimes.length;
-    if (Fs.isDirSync('runtime')) {
-        pjson.runtimes.map(function(runtimeName) {
-            if (!Fs.existsSync(Path.join('runtime', runtimeName, '.git'))) {
-                git.runGitCmdInPath(['clone', 'https://github.com/fireball-x/' + runtimeName], 'runtime', function() {
-                    if (--count <= 0) {
-                        console.log('Runtime engines installation complete!');
-                        cb();
-                    }
-                });
-            } else {
-                console.log(runtimeName + ' has already installed in runtime/' + runtimeName + ' folder!');
-                if (--count <= 0) {
-                    console.log(count);
-                    cb();
-                }
-            }
-        });
-    } else {
-        mkdirp('runtime');
-        pjson.runtimes.map(function(runtimeName) {
-            count++;
-            git.runGitCmdInPath(['clone', 'https://github.com/fireball-x/' + runtimeName], 'runtime', function() {
-                if (--count <= 0) {
-                    console.log('Runtime engines installation complete!');
-                    cb();
-                }
-            });
-        });
-    }
+    Fs.ensureDirSync('runtime');
+
+    var Async = require('async');
+    Async.eachLimit( pjson.runtimes, 5, function ( name, done ) {
+        git.clone('https://github.com/fireball-x/' + name,
+                  Path.join('runtime', name),
+                  done);
+    }, function ( err ) {
+        console.log('Runtime engines installation complete!');
+        cb();
+    });
 });
 
 gulp.task('update-runtime', function(cb) {
-    var count = 0;
     var setting = JSON.parse(Fs.readFileSync('local-setting.json'));
-    if (Fs.isDirSync('runtime')) {
-        pjson.runtimes.map(function(runtimeName) {
-            if (Fs.existsSync(Path.join('runtime', runtimeName, '.git'))) {
-                count++;
-                var branch = setting.branch.runtimes[runtimeName] || "master";
-                git.runGitCmdInPath(['checkout', branch], Path.join('runtime', runtimeName), function() {
-                    git.runGitCmdInPath(['pull', 'https://github.com/fireball-x/' + runtimeName, branch], Path.join('runtime', runtimeName), function() {
-                        git.runGitCmdInPath(['fetch', '--all'], Path.join('runtime', runtimeName), function() {
-                            console.log('Remote head updated!');
-                            if (--count <= 0) {
-                                console.log('Runtime engines update complete!');
-                                cb();
-                            }
-                        });
-                    });
-                });
-            } else {
-                console.error(chalk.red('Runtime engine ' + runtimeName + ' not initialized, please run "gulp install-runtime" first!'));
-                process.exit(1);
-            }
-        });
-    } else {
+
+    if ( !Fs.isDirSync('runtime') ) {
         console.error(chalk.red('Runtime folder not initialized, please run "gulp install-runtime" first!'));
         return cb();
     }
+
+    var Async = require('async');
+    Async.eachLimit( pjson.runtimes, 5, function ( name, done ) {
+        if ( !Fs.existsSync(Path.join('runtime', name, '.git')) ) {
+            console.error(chalk.red('Runtime engine ' + name + ' not initialized, please run "gulp install-runtime" first!'));
+            process.exit(1);
+            return;
+        }
+
+        var branch = setting.branch.runtimes[name] || "master";
+        git.pull(Path.join('runtime', name),
+                 'https://github.com/fireball-x/' + name,
+                 branch,
+                 done);
+    }, function ( err ) {
+        if ( err ) {
+            process.exit(1);
+            return;
+        }
+
+        console.log('Runtime engines update complete!');
+        return cb();
+    });
 });
 
 gulp.task('install-shared-packages', function(cb) {
@@ -346,8 +309,8 @@ gulp.task('install-shared-packages', function(cb) {
     var count = pkgs.length;
     pkgs.forEach(function(pkg) {
         if (!Fs.existsSync(Path.join(pkg, '.git'))) {
-            git.runGitCmdInPath(['clone', 'https://github.com/fireball-packages/' + pkg], './', function() {
-                git.runGitCmdInPath(['fetch', '--all'], pkg, function() {
+            git.exec(['clone', 'https://github.com/fireball-packages/' + pkg], './', function() {
+                git.exec(['fetch', '--all'], pkg, function() {
                     console.log('Remote head updated!');
                     if (--count <= 0) {
                         console.log('Shared packages installation complete!');
@@ -370,8 +333,8 @@ gulp.task('update-shared-packages', function(cb) {
     var count = pkgs.length;
     pkgs.forEach(function(pkg) {
         if (Fs.existsSync(Path.join(pkg, '.git'))) {
-            git.runGitCmdInPath(['pull', 'https://github.com/fireball-packages/' + pkg, 'master'], pkg, function() {
-                git.runGitCmdInPath(['fetch', '--all'], pkg, function() {
+            git.exec(['pull', 'https://github.com/fireball-packages/' + pkg, 'master'], pkg, function() {
+                git.exec(['fetch', '--all'], pkg, function() {
                     console.log('Remote head updated!');
                     if (--count <= 0) {
                         console.log('Shared packages update complete!');

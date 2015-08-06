@@ -1,6 +1,8 @@
 var spawn = require('child_process').spawn;
+var Path = require('path');
+var Fs = require('fire-fs');
 
-function runGitCmdInPath(cmdArgs, path, callback) {
+function exec(cmdArgs, path, cb) {
     console.log("git " + cmdArgs.join(' ') + ' in ' + path);
     var child = spawn('git', cmdArgs, {
         cwd: path
@@ -20,10 +22,48 @@ function runGitCmdInPath(cmdArgs, path, callback) {
         console.error(data.toString());
     });
     child.on('exit', function () {
-        return callback();
+        if ( cb ) cb ();
+    });
+}
+
+function clone( remote, path, cb ) {
+    if ( Fs.existsSync(Path.join(path, '.git')) ) {
+        console.log(path + ' has already cloned!');
+        if ( cb ) cb ();
+        return;
+    }
+
+    exec(['clone', remote, path], '', cb);
+}
+
+function pull( repo, remote, branch, cb ) {
+    var Async = require('async');
+    Async.series([
+        function ( next ) {
+            exec(['checkout', branch], repo, next );
+        },
+
+        function ( next ) {
+            exec(['pull', remote, branch], repo, next );
+        },
+
+        function ( next ) {
+            exec(['fetch', '--all'], repo, next );
+        },
+    ], function ( err ) {
+        if ( err ) {
+            console.error(chalk.red('Failed to update ' + repo + '. Message: ' + err.message ));
+            if (cb) cb (err);
+            return;
+        }
+
+        console.log( repo + ' remote head updated!');
+        if (cb) cb ();
     });
 }
 
 module.exports = {
-  runGitCmdInPath: runGitCmdInPath
+  exec: exec,
+  clone: clone,
+  pull: pull,
 };
