@@ -541,3 +541,25 @@ gulp.task('remove-builtin-bin', function(cb) {
         cb();
     });
 });
+
+gulp.task('prune-builtin', function(cb) {
+    var results = Fs.readdirSync('builtin').filter(function ( name ) {
+        return pjson.builtins.indexOf(name) === -1;
+    });
+
+    results = results.map(function ( name ) {
+        return Path.join( 'builtin', name );
+    });
+
+    Del( results, function ( err ) {
+        if (err) {
+            throw err;
+        }
+
+        results.forEach( function (name) {
+            console.log( 'Prune builtin package ' + name );
+        });
+
+        cb();
+    });
+});
