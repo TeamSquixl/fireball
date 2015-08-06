@@ -1,16 +1,16 @@
 var Path = require('path');
 var Fs = require('fire-fs');
-var semver = require('semver');
-var chalk = require('chalk');
-var chalkProp = chalk.blue;
-var chalkModule = chalk.cyan;
-var chalkVersion = chalk.red;
+var Semver = require('semver');
+var Chalk = require('chalk');
 
-function checkAllSubmoduleDeps(submodules) {
+var chalkProp = Chalk.blue;
+var chalkModule = Chalk.cyan;
+var chalkVersion = Chalk.red;
+
+function checkAll(moduleList) {
 	var npmPjson = JSON.parse(Fs.readFileSync('package.json'));
 	var bowerPjson = JSON.parse(Fs.readFileSync('bower.json'));
-	var moduleList = npmPjson.submodules;
-	moduleList.map(function(submodule) {
+	moduleList.forEach(function(submodule) {
 		checkDeps(submodule, npmPjson, 'dependencies', 'package.json');
 		checkDeps(submodule, npmPjson, 'devDependencies', 'package.json');
 		checkDeps(submodule, bowerPjson, 'dependencies', 'bower.json');
@@ -27,7 +27,7 @@ function checkDeps(submodule, mainJson, depkey, filename) {
 		return;
 	}
 
-	//deps
+	// deps
 	var subDeps = submodulePjson[depkey];
 	var mainDeps = mainJson.dependencies;
 	for (var propName in mainJson.devDependencies) {
@@ -41,21 +41,19 @@ function checkDeps(submodule, mainJson, depkey, filename) {
 				if (subDeps[prop] === mainDeps[prop]) {
 					continue;
 				} else {
-					if (semver.valid(subDeps[prop])) {
+					if (Semver.valid(subDeps[prop])) {
 						console.log(depkey + ' ' + chalkProp(prop) + ' in ' + chalkModule(submodule + '/' + filename) + ' has a version ' + chalkVersion(subDeps[prop]) + '. Main repo version ' + chalkVersion(mainDeps[prop]));
-					}	else if (subDeps[prop].split('/').length === 2) {
+					} else if (subDeps[prop].split('/').length === 2) {
 						console.log(depkey + ' ' + chalkProp(prop) + ' in ' + chalkModule(submodule + '/' + filename) + ' has a github url ' + chalkVersion(subDeps[prop]) + '.Main repo version ' + chalkVersion(mainDeps[prop]));
 					} else {
 						console.log(depkey + ' ' + chalkProp(prop) + ' in ' + chalkModule(submodule + '/' + filename) + ' has an invalid version value ' + chalkVersion(subDeps[prop]));
 					}
 				}
 			} else {
-				console.log(depkey + ' ' + chalkProp(prop) + ' in ' + chalkModule(submodule + '/' + filename) + ' is missing a fixed semver.');
+				console.log(depkey + ' ' + chalkProp(prop) + ' in ' + chalkModule(submodule + '/' + filename) + ' is missing a fixed Semver.');
 			}
 		}
 	}
 }
 
-module.exports = {
-	checkSubmoduleDeps: checkAllSubmoduleDeps
-};
+module.exports = checkAll;

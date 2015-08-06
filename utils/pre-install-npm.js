@@ -1,59 +1,12 @@
 var Fs = require('fs');
-var npmconf = require('npmconf');
+var Npmconf = require('npmconf');
 
-function setupMirror(cb) {
-    var hasMirrorSetting = false;
-    var hasSettingFile = false;
-    if ( Fs.existsSync('local-setting.json') ) {
-        try {
-            var jsonObj = JSON.parse(Fs.readFileSync('local-setting.json'));
-            if (jsonObj.mirror) {
-                return cb();
-            } else {
-                hasMirrorSetting = false;
-                hasSettingFile = true;
-            }
-        }
-        catch (err) {
-            hasMirrorSetting = false;
-            hasSettingFile = false;
-        }
-    } else {
-        hasMirrorSetting = false;
-        hasSettingFile = false;
-    }
-
-    if (hasMirrorSetting === false) {
-        var readline = require('readline');
-        var rl = readline.createInterface({
-          input: process.stdin,
-          output: process.stdout
-        });
-        rl.question("Do you want to use mirror in China to download Electron and other dependencies? (y/n) : ", function(answer) {
-            var obj;
-            if (hasSettingFile) {
-                obj = JSON.parse(Fs.readFileSync('local-setting.json'));
-            } else {
-                obj = {mirror: ''};
-            }
-            if (answer === 'y') {
-                obj.mirror = 'china';
-            } else {
-                obj.mirror = 'global';
-            }
-            Fs.writeFileSync('local-setting.json', JSON.stringify(obj, null, '  '));
-            rl.close();
-            return cb();
-        });
-    } else {
-        return cb();
-    }
-}
+var setupMirror = require('./libs/setup-mirror');
 
 setupMirror(function() {
     var mirror = JSON.parse(Fs.readFileSync('local-setting.json')).mirror;
-    npmconf.load(function(_, conf) {
-        var registry = npmconf.defaults.registry;
+    Npmconf.load(function(_, conf) {
+        var registry = Npmconf.defaults.registry;
         if (mirror === 'china') {
             registry = 'http://registry.npm.taobao.org/';
         }
