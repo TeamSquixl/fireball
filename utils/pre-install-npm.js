@@ -1,3 +1,4 @@
+var Fs = require('fs');
 var mirror = JSON.parse(Fs.readFileSync('local-setting.json')).mirror;
 var npmconf = require('npmconf');
 
@@ -57,6 +58,9 @@ setupMirror(function() {
             registry = 'http://registry.npm.taobao.org/';
         }
         conf.set('registry', registry, 'user');
-        conf.save('user', cb);
+        conf.save('user', function (err) {
+            // foo = bar is now saved to ~/.npmrc or wherever
+            if (err) throw err;
+        });
     });
 });
