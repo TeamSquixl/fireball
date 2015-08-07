@@ -175,7 +175,7 @@ gulp.task('update-fireball', function(cb) {
 
     Async.series([
         function ( next ) {
-            git.exec(['pull', 'https://github.com/fireball-x/fireball.git', 'master'], './', next);
+            git.exec(['pull', 'https://github.com/fireball-x/fireball.git', 'dev'], './', next);
         },
 
         function ( next ) {
