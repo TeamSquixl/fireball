@@ -281,6 +281,39 @@ gulp.task('update-builtin', function(cb) {
     });
 });
 
+gulp.task('push-builtin', function(cb) {
+    var setting = JSON.parse(Fs.readFileSync('local-setting.json'));
+
+    if ( !Fs.isDirSync('builtin') ) {
+        console.error(Chalk.red('Builtin folder not initialized, please run "gulp install-builtin" first!'));
+        return cb();
+    }
+
+    var Async = require('async');
+    Async.eachLimit( pjson.builtins, 5, function ( name, done ) {
+        if ( !Fs.existsSync(Path.join('builtin', name, '.git')) ) {
+            console.error(Chalk.red('Builtin package ' + name + ' not initialized, please run "gulp install-builtin" first!'));
+            process.exit(1);
+            return;
+        }
+
+        var branch = setting.branch.builtins[name] || "master";
+        git.push(Path.join('builtin', name),
+                 'https://github.com/fireball-packages/' + name,
+                 branch,
+                 done);
+    }, function ( err ) {
+        if ( err ) {
+            process.exit(1);
+            return;
+        }
+
+        console.log('Builtin packages update complete!');
+        return cb();
+    });
+});
+
+
 gulp.task('install-runtime', function(cb) {
     Fs.ensureDirSync('runtime');
 

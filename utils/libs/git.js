@@ -37,6 +37,10 @@ function clone( remote, path, cb ) {
     exec(['clone', remote, path], '', cb);
 }
 
+function commit( repo, message, cb ) {
+    exec(['commit', '-m', message], repo, cb);
+}
+
 function pull( repo, remote, branch, cb ) {
     var Async = require('async');
     Async.series([
@@ -57,8 +61,26 @@ function pull( repo, remote, branch, cb ) {
             if (cb) cb (err);
             return;
         }
+        if (cb) cb ();
+    });
+}
 
-        console.log( repo + ' remote head updated!');
+function push( repo, remote, branch, cb ) {
+    var Async = require('async');
+    Async.series([
+        function ( next ) {
+            exec(['push', remote, branch], repo, next );
+        },
+
+        function ( next ) {
+            exec(['push', remote, '--tags'], repo, next );
+        },
+    ], function ( err ) {
+        if ( err ) {
+            console.error(chalk.red('Failed to push ' + repo + '. Message: ' + err.message ));
+            if (cb) cb (err);
+            return;
+        }
         if (cb) cb ();
     });
 }
@@ -67,4 +89,5 @@ module.exports = {
   exec: exec,
   clone: clone,
   pull: pull,
+  push: push
 };
