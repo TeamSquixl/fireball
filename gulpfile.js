@@ -19,7 +19,7 @@ require('./utils/gulp-tasks/setup-tasks');
 
 gulp.task('bootstrap', gulpSequence(['init-submodules', 'install-builtin', 'install-runtime', 'install-shared-packages'], 'update-electron'));
 
-gulp.task('update', gulpSequence('setup-branch', 'pull-fireball', 'read-pjson', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime'], 'remove-builtin-bin', 'update-electron', 'build-engine', 'check-dependencies'));
+gulp.task('update', gulpSequence('setup-branch', 'update-fireball', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime'], 'remove-builtin-bin', 'update-electron', 'build-engine', 'check-dependencies'));
 
 gulp.task('run', ['run-electron']);
 
@@ -170,13 +170,28 @@ gulp.task('init-submodules', function(cb) {
     });
 });
 
-gulp.task('pull-fireball', function(cb) {
-    git.exec(['pull', 'https://github.com/fireball-x/fireball.git', 'dev'], './', function() {
-        console.log('Fireball update complete!');
-        git.exec(['fetch', '--all'], './', function() {
-            //console.log('Remote head updated!');
-            cb();
-        });
+gulp.task('update-fireball', function(cb) {
+    var Async = require('async');
+
+    Async.series([
+        function ( next ) {
+            git.exec(['pull', 'https://github.com/fireball-x/fireball.git', 'master'], './', next);
+        },
+
+        function ( next ) {
+            console.log('Fireball update complete!');
+            git.exec(['fetch', '--all'], './', next);
+        },
+
+        function ( next ) {
+            // NOTE: when we update the main project, we should reload its package.json
+            pjson = JSON.parse(Fs.readFileSync('./package.json'));
+            next();
+        },
+
+    ], function ( err ) {
+        if ( err ) throw err;
+        cb ();
     });
 });
 
