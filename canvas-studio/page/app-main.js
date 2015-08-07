@@ -32,5 +32,9 @@ Polymer({
         Ipc.on( 'compiler:state-changed', function ( state ) {
             this.set( 'compilerState', state );
         }.bind(this) );
+        
+        window.addEventListener('beforeunload', function ( event ) {
+          Editor.Metrics.trackEditorClose();
+        });
     },
 });

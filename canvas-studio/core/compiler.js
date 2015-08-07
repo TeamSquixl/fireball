@@ -1,11 +1,8 @@
 ﻿var Path = require('path');
-var Ipc = require('ipc');
 
 var WAIT_MS = 100;
 var RELOAD_WINDOW_SCRIPTS = 'scene:stash-and-reload';
 //var COMPILE_AND_RELOAD = 'app:compile-and-reload';
-
-var needRecompile = false;
 
 var compilingWorker = null;
 var firstError = null;
@@ -21,9 +18,18 @@ function stopWorker () {
 }
 
 var Compiler = {
+    state: 'idle',
+
+    needCompile: function ( assetType ) {
+        return assetType === 'javascript' ||
+            assetType === 'coffeescript' ||
+            assetType === 'typescript'
+        ;
+    },
 
     compileScripts: function (callback) {
-        Editor.sendToWindows('compiler:state-changed', 'compiling');
+        this.state = 'compiling';
+        Editor.sendToWindows('compiler:state-changed', this.state);
 
         var options = {
             project: Editor.projectPath,
@@ -37,8 +43,9 @@ var Compiler = {
                 if (callback) {
                     callback(!error);
                 }
-                Editor.sendToWindows('compiler:state-changed', error ? 'failed' : 'idle');
-            }
+                this.state = error ? 'failed' : 'idle';
+                Editor.sendToWindows('compiler:state-changed', this.state);
+            }.bind(this)
         );
     },
 
@@ -59,13 +66,15 @@ var Compiler = {
                 }
             });
 
-            browser.webContents.send('app:compile-worker:start', options);
+            browser.webContents.send('app:compile-worker-start', options);
         });
     },
 
     compileAndReload: function () {
         this.compileScripts(function (compiled) {
-            Editor.sendToWindows(RELOAD_WINDOW_SCRIPTS, compiled);
+            if (compiled) {
+                Editor.sendToWindows(RELOAD_WINDOW_SCRIPTS, compiled);
+            }
         });
     },
 

@@ -27,21 +27,20 @@ Ipc.on('editor:state-changed', function ( name, value ) {
     Editor.states['_'+name] = value;
 });
 
-
 // apply default main menu
 var MainMenuTmplFn = require('./main-menu');
 Editor.registerDefaultMainMenu(MainMenuTmplFn);
 Editor.MainMenu.reset();
 
-// init compiler
+// init modules
 Editor.Compiler = require('./compiler');
+Editor.Builder = require('./builder');
 
 // load scene utils
 require('./scene-utils');
 
 // asset-db ipc
 require('./asset-db-ipc');
-
 
 // ====================
 // register events

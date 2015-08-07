@@ -1,5 +1,5 @@
 var Path = require('fire-path');
-var Fs = require('fs');
+var Fs = require('fire-fs');
 //var Readable = require('stream').Readable;
 var Format = require('util').format;
 
@@ -15,10 +15,10 @@ var buffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 
-var Utils = Editor.require('app://engine-framework/src/editor/utils');
+var UuidUtils = Editor.require('app://engine-framework/src/editor/uuid-utils');
 
 Editor.require('app://asset-db');
-    
+
 
 var SCRIPT_SRC = 'library/imports';
 var SCRIPT_DEST = 'library/bundle.js';
@@ -31,7 +31,7 @@ function compileEnd () {
 }
 
 function compileError (err) {
-    Editor.sendToCore('app:compile-worker-error', err);
+    Editor.sendToCore('app:compile-worker-error', err.stack);
 }
 
 function getScriptGlob(dir) {
@@ -88,16 +88,16 @@ function nicifyError (error) {
     }
 }
 
-Ipc.on('app:compile-worker:start', function (options) {
+Ipc.on('app:compile-worker-start', function (options) {
 
     var bundleInfos = {
-        //// the all-in-one bundle for distributing
-        //"all_in_one": {
-        //    suffix: '',
-        //    subDir: '',
-        //    scriptGlobs: [],
-        //    scripts: []
-        //},
+        // the all-in-one bundle for distributing
+        "all_in_one": {
+            suffix: '',
+            subDir: '',
+            scriptGlobs: [],
+            scripts: []
+        },
         //// builtin plugin runtime
         //"builtin": {
         //    suffix: '.builtin',     // 编辑器下，插件编译出来的脚本会带上相应的后缀
@@ -147,7 +147,7 @@ Ipc.on('app:compile-worker:start', function (options) {
     paths.tmpdir = Path.resolve(paths.proj, paths.tmpdir, 'scripts');
 
     if (paths.proj === process.cwd()) {
-        compileError('Compile error: Invalid project path: ' + options.project);
+        compileError(new Error('Compile error: Invalid project path: ' + options.project));
         return;
     }
     else {
@@ -164,27 +164,45 @@ Ipc.on('app:compile-worker:start', function (options) {
     /////////////////////////////////////////////////////////////////////////////
 
     // clean
-    gulp.task('clean', function (done) {
-        var patternToDel = paths.tmpdir + '/**/*'; // IMPORTANT
-        // delete temp files
-        del(patternToDel, { force: true }, function (err) {
-            if (err) {
-                done(err);
-                return;
-            }
-            // delete dest files
-            var destFilePrefix = Path.join(Path.dirname(paths.dest), Path.basenameNoExt(paths.dest));
-            var destFileExt = Path.extname(paths.dest);
-            for (var taskname in bundleInfos) {
-                var info = bundleInfos[taskname];
-                var destFile = destFilePrefix + info.suffix + destFileExt;
-                del(destFile, { force: true });
-            }
-            done();
-        });
+    gulp.task('do-clean', function (done) {
+        //Fs.exists(paths.tmpdir, function (exists) {
+        //    if (exists) {
+                var patternToDel = paths.tmpdir + '/**/*'; // IMPORTANT
+                // delete temp files
+                del(patternToDel, { force: true }, function (err) {
+                    if (err) {
+                        return done(err);
+                    }
+                    // delete dest files
+                    var destFilePrefix = Path.join(Path.dirname(paths.dest), Path.basenameNoExt(paths.dest));
+                    var destFileExt = Path.extname(paths.dest);
+                    for (var taskname in bundleInfos) {
+                        var info = bundleInfos[taskname];
+                        var destFile = destFilePrefix + info.suffix + destFileExt;
+                        //if (Fs.existsSync(destFile)) {
+                            //try {
+                                del(destFile, { force: true });
+                            //}
+                            //catch (e) {
+                            //    console.log('fuck ' + e);
+                            //}
+                        //}
+                    }
+                    return done();
+                });
+        //    }
+        //    else {
+        //        return done();
+        //    }
+        //});
     });
 
-    //// exclude package scripts disabled in settings
+    gulp.task('clean', ['do-clean'], function (done) {
+        // 延时会抛异常
+        setTimeout(done, 100);
+    });
+
+        //// exclude package scripts disabled in settings
     //gulp.task('parseProjectPlugins', function () {
     //    bundleInfos.project.scriptGlobs = [];
     //    return gulp.src('assets/**/package.json.meta', { cwd: paths.proj })
@@ -278,6 +296,7 @@ Ipc.on('app:compile-worker:start', function (options) {
 
     gulp.task('getScriptGlobs', function () {
         bundleInfos.project.scriptGlobs = paths.src;
+        bundleInfos.all_in_one.scriptGlobs = paths.src;
     });
 
     // read uuid and script's name from db
@@ -311,15 +330,15 @@ Ipc.on('app:compile-worker:start', function (options) {
     }
 
     function getUuidFromPath (path) {
-        var dirname = Path.dirname(path);
-        var uuid = Path.basename(dirname);
+        // var dirname = Path.dirname(path);
+        var uuid = Path.basenameNoExt(path);
         return uuid;
     }
 
     //// read uuid and script's name from library
     //function getUuidAndScriptName (path, callback) {
     //    var uuid = getUuidFromPath(path);
-    //    if (Utils.isUuid(uuid)) {
+    //    if (UuidUtils.isUuid(uuid)) {
     //        var assetPath = Path.join(Path.dirname(path), uuid);
     //        Fs.readFile(assetPath, function (err, data) {
     //            if (err) {
@@ -360,12 +379,12 @@ Ipc.on('app:compile-worker:start', function (options) {
                 callback(null, file);
             }
             else {
-                var info = 'Can not get fs path of: ' + uuid;
+                var info = new Error('Can not get fs path of: ' + uuid);
                 if (gulp.isRunning) {
                     gulp.stop(info);
                 }
                 else {
-                    callback(new Error(info), null);
+                    callback(info, null);
                 }
             }
         });
@@ -390,7 +409,7 @@ Ipc.on('app:compile-worker:start', function (options) {
                 var contents = file.contents.toString();
                 var header;
                 if (uuid) {
-                    uuid = Utils.compressUuid(uuid);
+                    uuid = UuidUtils.compressUuid(uuid);
                     header = Format("Fire._RFpush(module, '%s', '%s');\n// %s\n\n", uuid, name, file.relative);
                 }
                 else {
@@ -446,8 +465,8 @@ Ipc.on('app:compile-worker:start', function (options) {
                 var moduleName = Path.basenameNoExt(file.path);
                 var exists = allModules[moduleName];
                 if (exists) {
-                    var error = Format('Filename conflict, the module "%s" both defined in "%s" and "%s"',
-                        moduleName, getModuleInfo(info, file), exists);
+                    var error = new Error(Format('Filename conflict, the module "%s" both defined in "%s" and "%s"',
+                        moduleName, getModuleInfo(info, file), exists));
                     if (gulp.isRunning) {
                         gulp.stop(error);
                     }
@@ -483,7 +502,7 @@ Ipc.on('app:compile-worker:start', function (options) {
         }
         var bundle = b.bundle()
             .on('error', function (error) {
-                error = nicifyError(error);
+                error = new Error(nicifyError(error));
                 if (gulp.isRunning) {
                     gulp.stop(error);
                 }
@@ -523,19 +542,18 @@ Ipc.on('app:compile-worker:start', function (options) {
         createTask(taskname, info);
     }
 
-    //if (isEditor) {
-    //    if ( options.compileGlobalPlugin ) {
-    //        gulp.task('compile', ['browserify-builtin', 'browserify-global', 'browserify-project']);
-    //    }
-    //    else {
-    //        gulp.task('compile', ['browserify-builtin', 'browserify-project']);
-    //    }
-    //}
-    //else {
-    //    gulp.task('compile', ['browserify-all_in_one']);
-    //}
-
-    gulp.task('compile', ['browserify-project']);
+    if (isEditor) {
+        //if ( options.compileGlobalPlugin ) {
+        //    gulp.task('compile', ['browserify-builtin', 'browserify-global', 'browserify-project']);
+        //}
+        //else {
+        //    gulp.task('compile', ['browserify-builtin', 'browserify-project']);
+        //}
+        gulp.task('compile', ['browserify-project']);
+    }
+    else {
+        gulp.task('compile', ['browserify-all_in_one']);
+    }
 
     /////////////////////////////////////////////////////////////////////////////
     // start

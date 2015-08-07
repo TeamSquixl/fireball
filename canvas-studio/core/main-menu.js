@@ -1,5 +1,7 @@
 var BrowserWindow = require('browser-window');
 var Fs = require('fire-fs');
+var Shell = require('shell');
+var DevTools = require('./dev-tools');
 
 function _getDefaultMainMenu () {
     return [
@@ -8,6 +10,61 @@ function _getDefaultMainMenu () {
            label: 'Help',
            id: 'help',
            submenu: [
+               {
+                   label: 'Documentation',
+                   click: function () {
+                       Shell.openExternal('http://docs.fireball-x.com/');
+                       Shell.beep();
+                   }
+               },
+               {
+                   label: 'Discussion Group',
+                   click: function () {
+                       Shell.openExternal('http://fireball-x.com/chat');
+                       Shell.beep();
+                   }
+               },
+               { type: 'separator' },
+               {
+                   label: 'Report Issue',
+                   click: function () {
+                       Shell.openExternal('https://github.com/fireball-x/fireball/issues/');
+                       Shell.beep();
+                   }
+               },
+               {
+                   label: 'Subscribe',
+                   click: function () {
+                       Shell.openExternal('http://eepurl.com/bh5w3z');
+                       Shell.beep();
+                   }
+               },
+               { type: 'separator' },
+               {
+                   label: 'About Fireball',
+                   click: function () {
+                        var aboutWindow = new Editor.Window('about', {
+                            'title': 'About Fireball',
+                            'width': 400,
+                            'height': 180,
+                            'always-on-top': true,
+                            'show': false,
+                            'resizable': false,
+                        });
+
+                        mainWindow = Editor.mainWindow;
+                        var postion_ = mainWindow.nativeWin.getPosition();
+                        var size_ = mainWindow.nativeWin.getSize();
+                        aboutWindow.load( 'app://canvas-studio/page/app-about.html' );
+                        var x = (postion_[0] + size_[0]/2 - 200);
+                        var y = (postion_[1] + size_[1]/2 - 90);
+                        aboutWindow.nativeWin.setPosition(Math.floor(x),Math.floor(y));
+                        aboutWindow.show();
+                        aboutWindow.nativeWin.on('blur',function () {
+                            aboutWindow.close();
+                        });
+                   }
+               },
            ]
         },
 
@@ -19,7 +76,7 @@ function _getDefaultMainMenu () {
                 {
                     label: 'About Fireball',
                     click: function () {
-                        Editor.info('Fireball v0.5 alpha2 20150717');
+                        Editor.info('Fireball v0.5 alpha4 20150807');
                     }
                 },
                 { type: 'separator' },
@@ -75,14 +132,6 @@ function _getDefaultMainMenu () {
                     }
                 },
                 { type: 'separator' },
-                {
-                    label: 'Build',
-                    accelerator: 'CmdOrCtrl+B',
-                    click: function () {
-                        // TODO:
-                        Editor.log('TODO @jwu');
-                    }
-                },
             ]
         },
 
@@ -186,8 +235,25 @@ function _getDefaultMainMenu () {
                         if ( Fs.existsSync(Editor._defaultLayout) ) {
                             try {
                                 layoutInfo = JSON.parse(Fs.readFileSync(Editor._defaultLayout));
+                            } catch (err) {
+                                Editor.error( 'Failed to load default layout: %s', err.message );
+                                layoutInfo = null;
                             }
-                            catch (err) {
+                        }
+                        if ( layoutInfo) {
+                            Editor.sendToMainWindow( 'editor:reset-layout', layoutInfo);
+                        }
+                    }
+                },
+                {
+                    label: 'Assets',
+                    click: function () {
+                        var path = Editor.url('app://canvas-studio/static/layout/assetdb.json');
+                        var layoutInfo;
+                        if ( Fs.existsSync(path) ) {
+                            try {
+                                layoutInfo = JSON.parse(Fs.readFileSync(path));
+                            } catch (err) {
                                 Editor.error( 'Failed to load default layout: %s', err.message );
                                 layoutInfo = null;
                             }
@@ -265,7 +331,11 @@ function _getDefaultMainMenu () {
                 {
                     label: 'Developer Tools',
                     accelerator: 'CmdOrCtrl+Alt+I',
-                    click: function() { BrowserWindow.getFocusedWindow().openDevTools(); }
+                    click: function() {
+                        var win = BrowserWindow.getFocusedWindow();
+                        win.openDevTools();
+                        DevTools.highlightHeaderLater(win);
+                    }
                 },
                 {
                     label: 'Debug Core',

@@ -1,23 +1,17 @@
-/**
- * Tasks downloading electron
- * Created by nantas on 15/2/28.
- */
+var Path = require('path');
+var Fs = require('fire-fs');
 
 var gulp = require('gulp');
-var shell = require('gulp-shell');
 var gulpSequence = require('gulp-sequence');
 
-var Path = require('path');
-var Fs = require('fs');
-
-var pjson = JSON.parse(Fs.readFileSync('./package.json'));
-var electronVer = pjson['electron-version'];
 var spawn = require('child_process').spawn;
+var pjson = require('../../package.json');
 
 /////////////////////////////////////////////////////
 // inits
 /////////////////////////////////////////////////////
 
+var electronVer = pjson.electronVersion;
 if ( electronVer === null || electronVer === undefined ) {
     console.error( 'Can not read electron-version from package.json' );
     return;
@@ -35,20 +29,19 @@ function checkElectronInstalled () {
         if (version === 'v' + electronVer) {
             console.log('Electron version ' + version + ' already installed in bin/electron.');
             return true;
-        } else {
-            return false;
         }
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 gulp.task('update-electron', function(cb) {
     if ( checkElectronInstalled() ) {
         cb();
-    } else {
-        gulpSequence('setup-mirror', 'install-electron','electron-to-bin', cb);
+        return;
     }
+
+    gulpSequence('setup-mirror', 'install-electron','electron-to-bin', cb);
 });
 
 gulp.task('copy-electron-mac', function(cb) {
@@ -56,12 +49,14 @@ gulp.task('copy-electron-mac', function(cb) {
     var mkdirp = require('mkdirp');
     mkdirp.sync('dist');
     ncp('bin/electron/Electron.app', 'dist/Fireball.app', function(err) {
-        if (err) return console.log('ncp Error: ' + err);
-        else {
-            ncp('utils/res/atom.icns', 'dist/Fireball.app/Contents/Resources/atom.icns', {clobber: true}, function(err) {
-                cb();
-            });
+        if (err) {
+            console.log('ncp Error: ' + err);
+            return;
         }
+
+        ncp('utils/res/atom.icns', 'dist/Fireball.app/Contents/Resources/atom.icns', {clobber: true}, function(err) {
+            cb();
+        });
     });
 });
 
@@ -70,12 +65,14 @@ gulp.task('copy-electron-win', function(cb) {
     var mkdirp = require('mkdirp');
     mkdirp.sync('dist');
     ncp('bin/electron', 'dist', function(err){
-        if (err) return console.log('ncp Error: ' + err);
-        else {
-            var spawnSync = require('child_process').spawnSync;
-            spawnSync('mv', ['dist/electron.exe', 'dist/fireball.exe']);
-            cb();
+        if (err) {
+            console.log('ncp Error: ' + err);
+            return;
         }
+
+        var spawnSync = require('child_process').spawnSync;
+        spawnSync('mv', ['dist/electron.exe', 'dist/fireball.exe']);
+        cb();
     });
 });
 
@@ -85,8 +82,12 @@ gulp.task('rename-electron-win', ['copy-electron-win'], function(cb) {
        "product-version": pjson.version,
        "icon": "utils/res/atom.ico"
    }, function(err) {
-       if (err) console.log(err);
-       else cb();
+       if (err) {
+           console.log(err);
+           return;
+       }
+
+       cb();
    });
 });
 
@@ -127,7 +128,7 @@ function installElectron (isChina, cb) {
     if(isChina) {
         tmpenv.ELECTRON_MIRROR = 'http://npm.taobao.org/mirrors/electron/';
     }
-    var child = spawn(cmdstr, ['install', 'electron-prebuilt'+ '@' + electronVer], {
+    var child = spawn(cmdstr, ['install', 'nantas/electron-prebuilt'], {
         stdio: 'inherit',
         env: tmpenv
     });
@@ -137,7 +138,7 @@ function installElectron (isChina, cb) {
 }
 
 gulp.task('install-electron', function(cb) {
-    var mirror = JSON.parse(Fs.readFileSync('mirror-setting.json')).mirror;
+    var mirror = JSON.parse(Fs.readFileSync('local-setting.json')).mirror;
     var isChina = mirror === 'china' ? true : false;
     installElectron(isChina, cb);
 });
@@ -149,48 +150,12 @@ gulp.task('electron-to-bin', function(cb) {
     var mkdirp = require('mkdirp');
     mkdirp.sync('bin/electron');
     ncp(electronPath, 'bin/electron', {clobber: true}, function(err){
-        if (err) return console.log('ncp Error: ' + err);
-        else {
-            console.log('Electron ' + Fs.readFileSync(Path.join(electronPath, 'version')) + ' has been download to bin/electron folder');
-            cb();
+        if (err) {
+            console.log('ncp Error: ' + err);
+            return;
         }
+
+        console.log('Electron ' + Fs.readFileSync(Path.join(electronPath, 'version')) + ' has been download to bin/electron folder');
+        cb();
     });
-});
-
-gulp.task('setup-mirror', function(cb) {
-    var needBuildSetting = false;
-    if ( Fs.existsSync('mirror-setting.json') ) {
-        try {
-            var jsonObj = JSON.parse(Fs.readFileSync('mirror-setting.json'));
-            if (jsonObj.mirror) {
-                return cb();
-            }
-        }
-        catch (err) {
-            needBuildSetting = true;
-        }
-    } else {
-        needBuildSetting = true;
-    }
-
-    if (needBuildSetting) {
-        var readline = require('readline');
-        var rl = readline.createInterface({
-          input: process.stdin,
-          output: process.stdout
-        });
-        rl.question("Do you want to use mirror in China to download Electron and other dependencies? (y/n) : ", function(answer) {
-            var obj = {mirror: ''};
-          if (answer === 'y') {
-              obj.mirror = 'china';
-          } else {
-              obj.mirror = 'global';
-          }
-          Fs.writeFileSync('mirror-setting.json', JSON.stringify(obj));
-          rl.close();
-          return cb();
-        });
-    } else {
-        return cb();
-    }
 });

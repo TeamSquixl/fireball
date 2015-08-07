@@ -3,7 +3,9 @@ var Ipc = require('ipc');
 Editor.projectInfo = Editor.remote.projectInfo;
 Editor.libraryPath = Editor.remote.libraryPath;
 Editor.importPath = Editor.remote.importPath;
+Editor.runtimePath = Editor.remote.runtimePath;
 
+if ( !Editor.assets ) Editor.assets = {};
 if ( !Editor.metas ) Editor.metas = {};
 if ( !Editor.inspectors ) Editor.inspectors = {};
 if ( !Editor.properties ) Editor.properties = {};
@@ -29,9 +31,4 @@ for ( var name in Editor.remote.states ) {
 }
 Ipc.on('editor:state-changed', function ( name, value ) {
     Editor.states['_'+name] = value;
-});
-
-window.addEventListener('beforeunload', function ( event ) {
-    Editor.Selection.clear('node');
-    // TODO: event.returnValue =
 });

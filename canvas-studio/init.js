@@ -3,6 +3,7 @@ var Path = require('fire-path');
 var Url = require('fire-url');
 var Async = require('async');
 var Shell = require('shell');
+var DevTools = require('./core/dev-tools');
 
 //
 Editor.versions['canvas-studio'] = '0.2.0';
@@ -17,6 +18,7 @@ module.exports = function ( options, cb ) {
     Editor.requireLogin = !Editor.isDev || options.requireLogin;
     Editor.projectInfo = null;
 
+    if ( !Editor.assets ) Editor.assets = {};
     if ( !Editor.metas ) Editor.metas = {};
     if ( !Editor.inspectors ) Editor.inspectors = {};
     if ( !Editor.properties ) Editor.properties = {};
@@ -88,7 +90,7 @@ module.exports = function ( options, cb ) {
             Editor.registerProfilePath( 'global', globalProfilePath );
 
             // register default layout
-            Editor.registerDefaultLayout( Editor.url('app://canvas-studio/static/layout.json') );
+            Editor.registerDefaultLayout( Editor.url('app://canvas-studio/static/layout/default.json') );
 
             // init core modules
             require('./core/init');
@@ -111,34 +113,9 @@ module.exports = function ( options, cb ) {
             Editor.assetdb = new AssetDB({
                 'cwd': Path.join( Editor.projectPath ),
                 'library': 'library',
-                'default-asset': Fire.Asset,
             });
             Editor.libraryPath = Editor.assetdb.library;
             Editor.importPath = Editor.assetdb._importPath;
-
-            // register uuid:// protocol
-            function _url2path (urlInfo) {
-                var root;
-                var uuid = urlInfo.hostname;
-
-                if ( urlInfo.query === 'thumbnail' ) {
-                    root = Editor.assetdb._thumbnailPath;
-                    return Path.join( root, uuid.substring(0,2), uuid + '.png' );
-                }
-
-                //
-                root = Editor.assetdb._importPath;
-                return Path.join( root, uuid.substring(0,2), uuid );
-            }
-
-            var Protocol = require('protocol');
-            Protocol.registerProtocol('uuid', function(request) {
-                var url = decodeURIComponent(request.url);
-                var data = Url.parse(url);
-                var file = _url2path(data);
-                return new Protocol.RequestFileJob(file);
-            });
-            Editor.registerProtocol('uuid', _url2path );
 
             next ();
         },
@@ -196,7 +173,7 @@ Editor.JS.mixin(Editor.App, {
         var Spawn = require('child_process').spawn;
         var App = require('app');
         var exePath = App.getPath('exe');
-        var child = Spawn(exePath, Editor.appPath, {
+        var child = Spawn(exePath, [Editor.appPath], {
             detached: true,
             stdio: 'ignore',
         });
@@ -206,17 +183,59 @@ Editor.JS.mixin(Editor.App, {
     },
 
     run: function () {
+        var recompile = false;
+        var AssetDB = require('../asset-db');
+
         Async.series([
+            // mount assets://
             function ( next ) {
                 Editor.assetdb.mount(Path.join(Editor.projectPath, 'assets'),
                                      'assets',
+                                     AssetDB.MountType.asset,
                                      next);
             },
 
+            // // mount raw://
+            // function ( next ) {
+            //     Editor.assetdb.mount(Path.join(Editor.projectPath, 'raw'),
+            //                          'raw',
+            //                          'raw',
+            //                          next);
+            // },
+
+            // start assetdb
             function ( next ) {
-                Editor.assetdb.init( next );
+                Editor.assetdb.init( function ( err, imports ) {
+                    imports.forEach( function ( info ) {
+                        if ( !recompile ) {
+                            recompile = Editor.Compiler.needCompile(info.type);
+                        }
+                    });
+
+                    next ();
+                } );
             },
 
+            // query the scene list from asset-db
+            function ( next ) {
+                Editor.sceneList = [];
+                Editor.assetdb.queryAssets('assets://**/*', 'scene', function ( err, results ) {
+                    Editor.sceneList = results.map( function ( result ) {
+                        return { url: result.url, uuid: result.uuid };
+                    });
+                });
+
+                next();
+            },
+
+            // start preview server
+            function ( next ) {
+                var server = require('./core/preview-server');
+                server.start();
+                next ();
+            },
+
+            // open canvas-studio main window
             function ( next ) {
                 // create main window
                 var win = new Editor.Window('main', {
@@ -239,12 +258,21 @@ Editor.JS.mixin(Editor.App, {
                 // page-level test case
                 win.load( 'app://canvas-studio/index.html' );
 
+                // FIXME: should we make sure load scene after compile finished???
+                win.nativeWin.webContents.once('did-finish-load', function () {
+                    if ( recompile ) {
+                        Editor.log( 'Compiling scripts...' );
+                        Editor.Compiler.compileScripts();
+                    }
+                });
+
                 // open dev tools if needed
                 if ( Editor.showDevtools ) {
                     win.nativeWin.webContents.once('did-finish-load', function () {
                         win.openDevTools({
                             detach: true
                         });
+                        DevTools.highlightHeaderLater(win.nativeWin);
                     });
                 }
                 win.focus();
@@ -269,28 +297,26 @@ Editor.JS.mixin(Editor.App, {
     },
 
     // @param {string} scriptUrl
-    // @param {object} [query]
+    // @param {object} [argv]
     // @param {function} [onLoad]
-    spawnWorker: function (scriptUrl, query, onLoad) {
-        if (typeof query === "function") {
-            onLoad = query;
-            query = {};
+    spawnWorker: function (scriptUrl, argv, onLoad, debug) {
+        if (typeof argv === 'function') {
+            debug = onLoad;
+            onLoad = argv;
+            argv = {};
         }
-        query.scriptUrl = scriptUrl;
-        var url = Url.format({
-            protocol: 'file',
-            pathname: Editor.url('app://canvas-studio/static/general-worker.html'),
-            slashes: true,
-            hash: encodeURIComponent(JSON.stringify(query))
+        argv.scriptUrl = scriptUrl;
+
+        var workerWindow = new Editor.Window('worker', {
+            show: !!debug,
         });
-        var BrowserWindow = require('browser-window');
-        var workerWindow = new BrowserWindow({
-            show: false,
-        });
-        workerWindow.loadUrl(url);
+        if (debug) {
+            workerWindow.openDevTools();
+        }
+        workerWindow.load('app://canvas-studio/static/general-worker.html', argv);
         if (onLoad) {
-            workerWindow.webContents.on('did-finish-load', function () {
-                onLoad(workerWindow);
+            workerWindow.nativeWin.webContents.on('did-finish-load', function () {
+                onLoad(workerWindow.nativeWin);
             });
         }
         return workerWindow;
@@ -310,5 +336,14 @@ Editor.JS.mixin(Editor.App, {
 
     'app:compile-worker-end': function () {
         Editor.Compiler._onWorkerEnd();
-    }
+    },
+
+    'app:build-project': function ( options ) {
+        Editor.Builder.build(options);
+    },
+
+    'app:build-project-abort': function (error) {
+        // forward ipc
+        Editor.Builder.emit('app:build-project-abort', error);
+    },
 });

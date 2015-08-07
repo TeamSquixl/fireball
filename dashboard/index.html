@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Fireball Dashboard</title>
-    <script src="app://bower_components/pace/pace.js"></script>
+    <script data-pace-options='{ "ajax": false, "restartOnPushState": false, "restartOnRequestAfter": false }' src="app://bower_components/pace/pace.js"></script>
     <link href="app://bower_components/pace/themes/red/pace-theme-center-simple.css" rel="stylesheet">
 
     <script type="text/javascript" src="editor-framework://page/page-init.js"></script>
@@ -15,6 +15,15 @@
   <body class="layout vertical">
     <app-main></app-main>
     <script>
+        // NOTE: put mectrics in ignore to prevent pending of them when network was bad
+        Pace.ignore( function () {
+            // load metrics after editor launched
+            Editor.require('app://share/page/load-analytics.js');
+            Editor.require('app://share/page/metrics.js');
+            // track editor open
+            Editor.Metrics.trackEditorOpen();
+        });
+
         Pace.once( 'hide', function () {
             EditorUI.removeLoadingMask();
         });

@@ -22,22 +22,25 @@ If two FireClass are attached to the same node, the communication between these 
 ```js
 //ClassA.js
 var ClassA = Fire.Class({
+    extends: Fire.Behavior,
     properties: {
         propA: 'hello world!'
     }
 });
-module.exports = ClassA;
 
 //ClassB.js
 var ClassB = Fire.Class({
+    extends: Fire.Behavior,
+    // ...
     whatASay: function() {
         Fire.log(this.propA);
     }
 });
-module.exports = ClassB;
 ```
 
 This example shows as long as you have two scripts attached to the same node, they share the same class instance (thanks to mixin). Thus you can use `this.propA` to access ClassA's member from ClassB's script.
+
+>**IMPORTANT NOTE** Although it looks easy to access another class on the same node via `this`, we strongly recommend to use this pattern with caution. Since it's easy to get bloated member list and it's hard to differentiate which class a member belong to on the same node. For more specific strategy and recommended patterns, read [Best Scripting Practice]().
 
 ### Access Class Member on Another Node
 
@@ -46,35 +49,40 @@ If two FireClass attached to two different nodes, all you need to do is to acces
 ```js
 //ClassA.js attached to NodeA
 var ClassA = Fire.Class({
+    extends: Fire.Behavior,
     properties: {
         propA: 'hello world!'
     }
 });
-module.exports = ClassA;
 
 //ClassB.js attached to NodeB
 var ClassB = Fire.Class({
+    extends: Fire.Behavior,
     properties: {
         classAInstance: { // drag NodeA to this property field of NodeB Inspector
             default: null,
-            type: ClassA
+            wrapper: cc.Node
         }
     }
     whatClassASay: function() {
         Fire.log(classAInstance.propA);
     }
 });
-module.exports = ClassB;
 ```
 
-## Access Engine Script (not attached to node)
+## Access Non-FireClass Script (not attached to node)
 
-In JavaScript there's no private member, so every engine script in your project that not wrapped in an object can be accessed from anywhere, including from FireClass.
+You can write any kind of JavaScript in your project, and your FireClass script or other non-FireClass script will be able to access them. Basically there are two ways:
 
-Let's see a generic JavaScript file in your project:
+### Global Variable
+
+If you create a variable in your JavaScript without using `var` or `function` keyword, your variable will be accessible from any script in your project.
+
+Let's see an example:
 
 ```js
-var global_res = {
+//Resource.js, this file can have any name
+global_res = {
     imageA : "res/imageA.png",
     imageB : "res/imageB.png"
 };
@@ -85,20 +93,46 @@ In your FireClass, you can access imageA like this:
 ```js
 //MyClass.js
 var MyClass = Fire.Class({
+    extends: Fire.Behavior,
+    // ...
     loadImage: function () {
         // let's assume there's a load function in this class that takes
         // a file path and load the image file and return the resource
         var image = this.load(global_res.imageA);
     }
 });
-module.exports = MyClass;
+```
+
+### JS Modules
+
+If you're not a fan of global variables, you can write your JS file as a module and use it with  [CommonJS](https://en.wikipedia.org/wiki/CommonJS) standard. Let's see an example:
+
+```js
+//MyModule.js, now the filename matters
+function myMethod() {
+    //Do something
+};
+module.exports = {
+    myMethod: myMethod
+};
+
+//MyFireClass.js
+var MyModule = require('MyModule');
+var MyFireClass = Fire.Class({
+    extends: Fire.Behavior,
+    // ...
+    useModule: function () {
+        // this feels more safe since you know where the method comes from
+        MyModule.myMethod();
+    }
+});
 ```
 
 ### Access FireClass From Engine Script
 
-Access FireClass is the same deal with access a node instance with engine API. For example:
+Access FireClass during runtime is the same deal with access a node instance with engine API. For example:
 
 - In Cocos2d-js, you can find a node with [cc.Node.getChildByName](http://www.cocos2d-x.org/reference/html5-js/V3.6/symbols/cc.Node.html#getChildByName)
 - In Pixi.js, you can find a node with [PIXI.Container.getChildAt](http://pixijs.github.io/docs/PIXI.Container.html#getChildAt)
 
-Once you have the node, you can access all FireClass properties, functions and variable defined in constructor.
+Once you have the node, you can access all FireClass properties, functions and members. Of course, you need to attach your FireClass onto that node first.
