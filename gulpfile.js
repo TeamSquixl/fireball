@@ -19,7 +19,7 @@ require('./utils/gulp-tasks/setup-tasks');
 
 gulp.task('bootstrap', gulpSequence(['init-submodules', 'install-builtin', 'install-runtime', 'install-shared-packages'], 'update-electron'));
 
-gulp.task('update', gulpSequence('setup-branch', 'pull-fireball', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime'], 'remove-builtin-bin', 'update-electron', 'build-engine', 'check-dependencies'));
+gulp.task('update', gulpSequence('setup-branch', 'pull-fireball', 'read-pjson', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime'], 'remove-builtin-bin', 'update-electron', 'build-engine', 'check-dependencies'));
 
 gulp.task('run', ['run-electron']);
 
@@ -49,6 +49,13 @@ gulp.task('post-install-npm', function(cb) {
         conf.set('registry', Npmconf.defaults.registry, 'user');
         conf.save('user', cb);
     });
+});
+
+// read package.json
+
+gulp.task('read-pjson', function(cb) {
+    pjson = JSON.parse(Fs.readFileSync('./package.json'));
+    return cb();
 });
 
 // run
