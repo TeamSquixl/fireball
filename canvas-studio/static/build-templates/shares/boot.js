@@ -6,6 +6,20 @@
                 Fire.error(error);
             }
             else {
+                // retrieve minified raw assets
+                var rawAssets = json.rawAssets;
+                for (var uuid in rawAssets) {
+                    var info = rawAssets[uuid];
+                    if (typeof info === 'object') {
+                        if (Array.isArray(info)) {
+                            rawAssets[uuid] = { url: info[0], raw: false };
+                        }
+                    }
+                    else {
+                        rawAssets[uuid] = { url: info, raw: true };
+                    }
+                }
+                //
                 callback(json);
             }
         });
@@ -15,21 +29,19 @@
         var canvas = document.getElementById('GameCanvas');
         var width = document.documentElement.clientWidth;
         var height = document.documentElement.clientHeight;
-        Fire.engine.init({
+        var option = {
             width: width,
             height: height,
             canvas: canvas,
             scenes: settings.scenes,
-            rawUrl: settings.rawUrl
-        },
-        function () {
+            //rawUrl: settings.rawUrl
+        };
+        Fire.engine.init(option, function () {
             //// makes the container's size equals to the frame's size
             //Fire.Screen.ContainerStrategy.EqualToFrame.apply();
 
             // init assets
-            //var urlSuffix = settings.resUuid ? '/' + settings.resUuid : '';
-            //Fire.AssetLibrary.init('resource' + urlSuffix + '/library');
-            Fire.AssetLibrary.init('resource');
+            Fire.AssetLibrary.init('resource/import', 'resource/raw', settings.rawAssets);
 
             // load scene
             Fire.engine.loadScene(settings.launchScene, null,
@@ -45,6 +57,5 @@
                 }
             );
         });
-
     });
 };

@@ -1,9 +1,12 @@
 // page-level worker
 
+var ImportsDestDir = 'import';
+var RawAssetDestDir = 'raw';
+
 var Ipc = require('ipc');
 var Path, Gulp, es;
 
-var importPath;
+var importsSrc;
 
 window.onerror = function (p1, p2, p3, p4, error) {
     window.onerror = null;
@@ -16,6 +19,7 @@ Ipc.on('app:init-build-worker', function (callback) {
     Gulp = require('gulp');
     es = require('event-stream');
 
+    Editor.isRuntime = true;
     Editor.require('app://engine-framework');
     Editor.require('packages://fire-assets/asset');
 
@@ -31,7 +35,7 @@ Ipc.on('app:init-build-worker', function (callback) {
 
     var Async = require('async');
     var runtimePath = Editor.remote.runtimePath;
-    importPath = Editor.remote.importPath;
+    importsSrc = Editor.remote.importPath;
 
     var runtimePkg = require(Path.join(runtimePath, 'package.json'));
     var runtimeScripts = runtimePkg.build.scriptsDev;
@@ -58,7 +62,7 @@ Ipc.on('app:init-build-worker', function (callback) {
         },
         // init engine
         function (next) {
-            Fire.AssetLibrary.init(importPath);
+            Fire.AssetLibrary.init(importsSrc);
             var canvas = document.createElement('canvas');
             document.body.appendChild(canvas);
             Fire.engine.init({
@@ -99,45 +103,62 @@ Ipc.on('app:init-build-worker', function (callback) {
 
 });
 
-Ipc.on('app:build-assets', function (callback, proj, dest, debug) {
-    var gulp = new Gulp.Gulp();
-    var rawFiles = [Path.join(importPath, '*/*/*'), '!' + Path.join(importPath, '*/*/*.js')];
-    var assets = [Path.join(importPath, '*/*.json')];
+Ipc.on('app:build-assets', function (callback, proj, dest, rawAssets, debug) {
 
-    // build assets
+    var gulp = new Gulp.Gulp();
     var sharedTempInfo = new Fire._DeserializeInfo();   // use this obj to create asset refs
-    var buildAssets = gulp.src(assets, { base: importPath })
-        .pipe(es.map(function (file, callback) {
-            // 去掉带有 editor only 标记的对象和属性，同时压缩 json 文件到最小
-            sharedTempInfo.reset();
-            var obj = Fire.deserialize(file.contents, null, {
-                isEditor: false,
-                createAssetRefs: true
-            });
-            if (obj instanceof Fire.Scene) {
-                Fire.engine._initScene(obj.scene, function () {
-                    console.log('packing ' + file.path);
-                    file.contents = new Buffer(Editor.serialize(obj, {
-                        exporting: true,
-                        minify: !debug
-                    }));
-                    return callback(null, file);
-                });
-            }
-            else {
+
+    function minifyAsset (file, callback) {
+        // 去掉带有 editor only 标记的对象和属性，同时压缩 json 文件到最小
+        sharedTempInfo.reset();
+        var obj = Fire.deserialize(file.contents, null, {
+            isEditor: false,
+            createAssetRefs: true
+        });
+        if (obj instanceof Fire.Scene) {
+            Fire.engine._initScene(obj.scene, function () {
                 console.log('packing ' + file.path);
                 file.contents = new Buffer(Editor.serialize(obj, {
                     exporting: true,
                     minify: !debug
                 }));
                 return callback(null, file);
-            }
-        }))
-        .pipe(gulp.dest(dest));
+            });
+        }
+        else {
+            console.log('packing ' + file.path);
+            file.contents = new Buffer(Editor.serialize(obj, {
+                exporting: true,
+                minify: !debug
+            }));
+            return callback(null, file);
+        }
+    }
 
-    // copy raw files
-    var copyRawFiles = gulp.src(rawFiles, { base: importPath })
-        .pipe(gulp.dest(dest));
+    // Imported Assets
 
-    es.merge(buildAssets, copyRawFiles).on('end', callback);
+    //var importedRawFiles = [Path.join(importsSrc, '*/*/*'), '!' + Path.join(importsSrc, '*/*/*.js')];
+    var importedRawFiles = [Path.join(importsSrc, '*/*'), '!' + Path.join(importsSrc, '*/*.js')];
+    var importedAssets = [Path.join(importsSrc, '*/*.json')];
+
+    // build imported assets
+    var buildAssets = gulp.src(importedAssets, { base: importsSrc, nodir:true })
+        .pipe(es.map(minifyAsset))
+        .pipe(gulp.dest(Path.join(dest, ImportsDestDir)));
+
+    // copy imported raw files
+    var copyRawFiles = gulp.src(importedRawFiles, { base: importsSrc, nodir:true })
+        .pipe(gulp.dest(Path.join(dest, ImportsDestDir)));
+
+    // Raw Assets
+
+    var assetsSrc = Path.join(proj, 'assets');
+    var rawAssets = [Path.join(assetsSrc, '**/*'), '!' + Path.join(assetsSrc, '**/*.meta')];
+
+    // copy raw assets
+    var copyRawAssets = gulp.src(rawAssets, { base: assetsSrc, nodir:true })
+        .pipe(gulp.dest(Path.join(dest, RawAssetDestDir)));
+
+    //
+    es.merge(buildAssets, copyRawFiles, copyRawAssets).on('end', callback);
 });

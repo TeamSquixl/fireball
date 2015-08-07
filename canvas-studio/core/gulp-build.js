@@ -147,9 +147,9 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
                         pageWorker = null;
                     }
                 }
-                else {
+                else if (pageWorker) {
                     Editor.sendToWindows('builder:state-changed', 'build-assets', 0.8);
-                    pageWorker.sendRequestToPage('app:build-assets', proj, paths.res, debug, function (err) {
+                    pageWorker.sendRequestToPage('app:build-assets', proj, paths.res, opts.rawAssets, debug, function (err) {
                         var destroyingWorker = !pageWorker;
                         if (!destroyingWorker) {
                             pageWorker.close();
@@ -167,12 +167,41 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
             var settings = {
                 scenes: [],
                 launchScene: '',
+                rawAssets: {},
                 resBundle: opts.resBundle
             };
             // scenes
             var scenes = opts.scenes;
             settings.launchScene = scenes[0].url;
             settings.scenes = scenes;
+
+            // rawAssets
+            var unImportedAssets = opts.unImportedAssets;
+            var base = Path.join(Editor.projectPath, 'assets');
+            var uuidToUrl = {};
+            for (var uuid in unImportedAssets) {
+                var isRaw = unImportedAssets[uuid];
+                var path = Editor.assetdb.uuidToFspath(uuid);
+                if (path) {
+                    path = Path.relative(base, path);
+                    var url = path.replace(/\\/g, '/');
+                    if (debug) {
+                        uuidToUrl[uuid] = {
+                            url: url,
+                            raw: isRaw
+                        };
+                    }
+                    else {
+                        if (isRaw) {
+                            uuidToUrl[uuid] = url;
+                        }
+                        else {
+                            uuidToUrl[uuid] = [url];
+                        }
+                    }
+                }
+            }
+            settings.rawAssets = uuidToUrl;
 
             // write config
             var json = JSON.stringify(settings, null, debug ? 4 : 0);

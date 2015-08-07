@@ -9,7 +9,6 @@ var Builder = Editor.JS.mixin(new Emitter(), {
      * @param {function} [callback]
      */
     build: function (options, callback) {
-        // Editor.sendToCore('app:build-project', 'web-mobile', '/Users/jareguo/Temp/Canvas Studio/mobile-Canvas Studio', [ '496ed832-b486-4427-8abe-d5b916de6022' ], { isDebug: true, projectName: 'Canvas Studio' });
         Editor.sendToWindows('builder:state-changed', 'start', 0);
 
         // move default scene to first
@@ -24,7 +23,7 @@ var Builder = Editor.JS.mixin(new Emitter(), {
             sceneUuids[0] = sceneUuids[startSceneIndex];
             sceneUuids[startSceneIndex] = toSwap;
         }
-
+        // create scene config
         var scenes = sceneUuids.map(function (uuid) {
             return {
                 url: Editor.assetdb.uuidToUrl(uuid),
@@ -33,6 +32,28 @@ var Builder = Editor.JS.mixin(new Emitter(), {
         });
 
         //Editor.sendToCore('asset-db:query-resources', function ( results ) {
+
+        // query all simple assets
+        Editor.assetdb.queryMetas('assets://**/*', '', function (err, results) {
+            if (err) {
+                return callback(err);
+            }
+            var Asset = Fire.Asset;
+            var unImportedAssets = {};
+            for (var i = 0, len = results.length; i < len; i++) {
+                var meta = results[i];
+                if (meta && meta.useRawfile()) {
+                    var type = meta.constructor['asset-type'];
+                    if (type === 'folder') {
+                        continue;
+                    }
+                    var ctor = Editor.assets[type];
+                    var isRawAsset = ctor && !Fire.isChildClassOf(ctor, Asset);
+                    unImportedAssets[meta.uuid] = isRawAsset;
+                }
+            }
+            results = null;
+
             // create resBundle
             var resBundle = {};
             //for ( var i = 0; i < results.length; ++i ) {
@@ -49,6 +70,7 @@ var Builder = Editor.JS.mixin(new Emitter(), {
                 platform: options.platform, // the target platform to build
                 scenes: scenes,             // the list of scene\'s uuid to build
                 resBundle: resBundle,       // the table of resource paths to uuid
+                unImportedAssets: unImportedAssets,
                 debug: options.debug,       // development build
                 //resUuid: options.resUuid,
             };
@@ -66,7 +88,7 @@ var Builder = Editor.JS.mixin(new Emitter(), {
                     callback(err);
                 }
             });
-        //});
+        });
     }
 });
 
