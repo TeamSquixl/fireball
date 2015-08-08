@@ -18,6 +18,7 @@ gulp.task('setup-branch', function(cb) {
                 jsonObj.branch.hosts &&
                 jsonObj.branch.submodules &&
                 jsonObj.branch.builtins &&
+                jsonObj.branch.runtimes &&
                 jsonObj.branch.sharedPackages) {
                 return cb();
             } else {
@@ -43,6 +44,7 @@ gulp.task('setup-branch', function(cb) {
             hosts: {},
             submodules: {},
             builtins: {},
+            runtimes: {},
             sharedPackages: {}
         };
 
@@ -54,6 +56,9 @@ gulp.task('setup-branch', function(cb) {
         });
         (pjson.builtins || []).forEach(function(entry) {
             obj.branch.builtins[entry] = 'master';
+        });
+        (pjson.runtimes || []).forEach(function(entry) {
+            obj.branch.runtimes[entry] = 'master';
         });
         (pjson.sharedPackages || []).forEach(function(entry) {
             obj.branch.sharedPackages[entry] = 'master';
