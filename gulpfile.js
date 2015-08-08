@@ -70,7 +70,7 @@ gulp.task('post-install-npm', function(cb) {
 gulp.task('run', function(cb) {
     var cmdStr = '';
     var optArr = [];
-    if (process.platform === "win32") {
+    if (process.platform === 'win32') {
         cmdStr = 'bin\\electron\\electron.exe';
         optArr = ['.\\', '--debug=3030', '--dev', '--show-devtools'];
     } else {
@@ -99,7 +99,7 @@ gulp.task('package-studio', function(cb) {
 
     var cmdStr = '';
     var optArr = [];
-    if (process.platform === "win32") {
+    if (process.platform === 'win32') {
         cmdStr = 'bin\\electron\\electron.exe';
         optArr = ['.\\', '--debug=3030', '--dev', '--dev-mode=packages', '--show-devtools', packagePath];
     } else {
@@ -127,7 +127,7 @@ gulp.task('fireball', function(cb) {
 
     var cmdStr = '';
     var optArr = [];
-    if (process.platform === "win32") {
+    if (process.platform === 'win32') {
         cmdStr = 'bin\\electron\\electron.exe';
         optArr = ['.\\', '--debug=3030', '--dev', '--show-devtools', projectPath];
     } else {
@@ -187,7 +187,11 @@ gulp.task('checkout-submodules', function(cb) {
     var count = modules.length;
     modules.forEach(function(module) {
         if (Fs.existsSync(Path.join(module, '.git'))) {
-            var branch = setting.branch.submodules[module] || "master";
+            var branch = 'master';
+            if ( setting.branch.submodules ) {
+                branch = setting.branch.submodules.name || 'master';
+            }
+
             git.exec(['checkout', branch], module, function() {
                 if (--count <= 0) {
                     console.log('Git submodules checkout to ' + branch + ' complete!');
@@ -254,7 +258,11 @@ gulp.task('update-builtin', function(cb) {
             return;
         }
 
-        var branch = setting.branch.builtins[name] || "master";
+        var branch = 'master';
+        if ( setting.branch.builtins ) {
+            branch = setting.branch.builtins.name || 'master';
+        }
+
         git.pull(Path.join('builtin', name),
                  'https://github.com/fireball-packages/' + name,
                  branch,
@@ -286,7 +294,11 @@ gulp.task('push-builtin', function(cb) {
             return;
         }
 
-        var branch = setting.branch.builtins[name] || "master";
+        var branch = 'master';
+        if ( setting.branch.builtins ) {
+            branch = setting.branch.builtins.name || 'master';
+        }
+
         git.push(Path.join('builtin', name),
                  'https://github.com/fireball-packages/' + name,
                  branch,
@@ -376,7 +388,11 @@ gulp.task('update-runtime', function(cb) {
             return;
         }
 
-        var branch = setting.branch.runtimes[name] || "master";
+        var branch = 'master';
+        if ( setting.branch.runtimes ) {
+            branch = setting.branch.runtimes.name || 'master';
+        }
+
         git.pull(Path.join('runtime', name),
                  'https://github.com/fireball-x/' + name,
                  branch,
@@ -418,7 +434,11 @@ gulp.task('update-shared-packages', function(cb) {
             return;
         }
 
-        var branch = setting.branch.sharedPackages[name] || "master";
+        var branch = 'master';
+        if ( setting.branch.sharedPackages ) {
+            branch = setting.branch.sharedPackages.name || 'master';
+        }
+
         git.pull(name,
                  'https://github.com/fireball-packages/' + name,
                  branch,
@@ -442,13 +462,13 @@ gulp.task('build-engine', function(cb) {
     var count = buildPaths.length;
     var cmdStr = process.platform === 'win32' ? 'gulp.cmd' : 'gulp';
     function doBuild (cwd, done) {
-        console.log("Start building " + Chalk.green(cwd));
+        console.log('Start building ' + Chalk.green(cwd));
         var child = spawn(cmdStr, ['build'], {
             cwd: cwd,
             stdio: 'inherit'
         });
         child.on('exit', function() {
-            console.log("Finish building " + Chalk.green(cwd));
+            console.log('Finish building ' + Chalk.green(cwd));
             return done();
         });
     }
@@ -456,7 +476,7 @@ gulp.task('build-engine', function(cb) {
     buildPaths.forEach(function(path) {
         doBuild(path, function() {
             if (--count<=0) {
-                console.log(Chalk.green("Engine build complete!"));
+                console.log(Chalk.green('Engine build complete!'));
                 cb();
             }
         });
@@ -631,7 +651,7 @@ gulp.task('copy-app-dist', function(cb) {
 });
 
 gulp.task('flatten-modules', function(cb) {
-    var appLoc = process.platform === "win32" ? 'dist/resources/app' : 'dist/Fireball.app/Contents/Resources/app';
+    var appLoc = process.platform === 'win32' ? 'dist/resources/app' : 'dist/Fireball.app/Contents/Resources/app';
     var flatten = require('flatten-packages');
     flatten(appLoc, {}, function (err, res) {
       if (err) console.error(err);
