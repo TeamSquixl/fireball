@@ -80,7 +80,7 @@ Download Electron can take time, especially when you're on the wrong side of wal
 The first time you run this task (this task is included in `npm install` process), you'll be asked if you want to use China mirror for Electron downloading. A json file `mirror-setting.json` will be created to record your choice, like this:
 
 ```js
-//mirror-setting.json
+// local-setting.json
 {
     "mirror": "china" // this value can be 'china' or 'global'
                       // depending on your answer
