@@ -15,6 +15,7 @@ gulp.task('setup-branch', function(cb) {
         try {
             var jsonObj = JSON.parse(Fs.readFileSync('local-setting.json'));
             if (jsonObj.branch &&
+                jsonObj.branch.hosts &&
                 jsonObj.branch.submodules &&
                 jsonObj.branch.builtins &&
                 jsonObj.branch.sharedPackages) {
