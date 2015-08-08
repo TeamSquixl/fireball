@@ -78,7 +78,6 @@
     "gulp-shell": "0.4.1",
     "gulp-watch": "4.2.4",
     "jshint-stylish": "2.0.0",
-    "ncp": "2.0.0",
     "npmconf": "2.1.2",
     "require-dir": "0.3.0",
     "vulcanize": "1.8.1"

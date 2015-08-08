@@ -45,34 +45,28 @@ gulp.task('update-electron', function(cb) {
 });
 
 gulp.task('copy-electron-mac', function(cb) {
-    var ncp = require('ncp');
-    var mkdirp = require('mkdirp');
-    mkdirp.sync('dist');
-    ncp('bin/electron/Electron.app', 'dist/Fireball.app', function(err) {
+    Fs.ensureDirSync('dist');
+    Fs.copy('bin/electron/Electron.app', 'dist/Fireball.app', function(err) {
         if (err) {
-            console.log('ncp Error: ' + err);
+            console.log('Fs.copy Error: ' + err);
             return;
         }
 
-        ncp('utils/res/atom.icns', 'dist/Fireball.app/Contents/Resources/atom.icns', {clobber: true}, function(err) {
+        Fs.copy('utils/res/atom.icns', 'dist/Fireball.app/Contents/Resources/atom.icns', {clobber: true}, function(err) {
             cb();
         });
     });
 });
 
 gulp.task('copy-electron-win', function(cb) {
-    var ncp = require('ncp');
-    var mkdirp = require('mkdirp');
-    mkdirp.sync('dist');
-    ncp('bin/electron', 'dist', function(err){
+    Fs.ensureDirSync('dist');
+    Fs.copy('bin/electron', 'dist', function (err) {
         if (err) {
-            console.log('ncp Error: ' + err);
+            console.log('Fs.copy Error: ' + err);
             return;
         }
 
-        var spawnSync = require('child_process').spawnSync;
-        spawnSync('mv', ['dist/electron.exe', 'dist/fireball.exe']);
-        cb();
+        Fs.move('dist/electron.exe', 'dist/fireball.exe', cb);
     });
 });
 
@@ -93,7 +87,6 @@ gulp.task('rename-electron-win', ['copy-electron-win'], function(cb) {
 
 gulp.task('rename-electron-mac', ['copy-electron-mac'], function (cb) {
     var plist = require('plist');
-    var spawnSync = require('child_process').spawnSync;
     var plistSrc = ['dist/Fireball.app/Contents/Info.plist', 'dist/Fireball.app/Contents/Frameworks/Electron Helper.app/Contents/Info.plist'];
     plistSrc.forEach(function(file) {
         var obj = plist.parse(Fs.readFileSync(file, 'utf8'));
@@ -115,7 +108,7 @@ gulp.task('rename-electron-mac', ['copy-electron-mac'], function (cb) {
     ];
 
     renameSrc.forEach(function(file) {
-        spawnSync('mv', [file, file.replace(/Electron/, 'Fireball')]);
+        Fs.moveSync(file, file.replace(/Electron/, 'Fireball'));
     });
 
     cb();
@@ -144,14 +137,13 @@ gulp.task('install-electron', function(cb) {
 });
 
 gulp.task('electron-to-bin', function(cb) {
-    var ncp = require('ncp');
     var electronPath = Path.join('node_modules', 'electron-prebuilt', 'dist');
     console.log("copying electron from: " + electronPath);
-    var mkdirp = require('mkdirp');
-    mkdirp.sync('bin/electron');
-    ncp(electronPath, 'bin/electron', {clobber: true}, function(err){
+
+    Fs.ensureDirSync('bin/electron');
+    Fs.copy(electronPath, 'bin/electron', {clobber: true}, function(err){
         if (err) {
-            console.log('ncp Error: ' + err);
+            console.log('Fs.copy Error: ' + err);
             return;
         }
 
