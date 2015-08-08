@@ -40,6 +40,7 @@ gulp.task('setup-branch', function(cb) {
         }
         obj.branch = {
             hosts: {},
+            submodules: {},
             builtins: {},
             sharedPackages: {}
         };
@@ -47,12 +48,15 @@ gulp.task('setup-branch', function(cb) {
         (pjson.hosts || []).forEach(function(entry) {
             obj.branch.hosts[entry] = "master";
         });
+        (pjson.submodules || []).forEach(function(entry) {
+            obj.branch.submodules[entry] = "master";
+        });
         (pjson.builtins || []).forEach(function(entry) {
             obj.branch.builtins[entry] = "master";
         });
         (pjson.sharedPackages || []).forEach(function(entry) {
             obj.branch.sharedPackages[entry] = "master";
-        })
+        });
         Fs.writeFileSync('local-setting.json', JSON.stringify(obj, null, '  '));
         console.log("Setup submodule branch local setting. You can change 'local-setting.json' to specify your branches.");
         cb();
