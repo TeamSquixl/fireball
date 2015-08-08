@@ -30,7 +30,7 @@
     "fireball": ""
   },
   "runtime": {
-    "runtime-cocos2d-js": "0.1.0",
+    "runtime-cocos2d-js": "0.1.1",
     "runtime-pixi": ""
   }
 }
