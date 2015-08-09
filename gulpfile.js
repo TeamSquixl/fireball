@@ -15,21 +15,34 @@ var spawn = require('child_process').spawn;
 require('./utils/gulp-tasks/electron-tasks');
 require('./utils/gulp-tasks/setup-tasks');
 
-// public tasks
+// init and update
+// =====================================
 
-gulp.task('bootstrap', gulpSequence(['init-submodules', 'install-builtin', 'install-runtime', 'install-shared-packages'], 'update-electron'));
+gulp.task('bootstrap',
+    gulpSequence([
+        'init-submodules',
+        'install-builtin',
+        'install-runtime',
+        'install-shared-packages'
+    ], 'update-electron')
+);
 
-gulp.task('update', gulpSequence('setup-branch', 'update-fireball', 'checkout-submodules', 'pull-submodules', ['update-builtin', 'update-shared-packages', 'update-runtime'], 'remove-builtin-bin', 'update-electron', 'build-engine', 'check-dependencies'));
-
-gulp.task('run', ['run-electron']);
-
-gulp.task('fireball', ['run-canvasstudio']);
-
-gulp.task('package-studio', ['run-packagestudio']);
-
-gulp.task('make-dist-mac', gulpSequence('rename-electron-mac', 'copy-app-dist', 'flatten-modules'));
-
-gulp.task('make-dist-win', gulpSequence('rename-electron-win', 'copy-app-dist', 'flatten-modules'));
+gulp.task('update',
+    gulpSequence(
+        'setup-branch',
+        'update-fireball',
+        'checkout-submodules',
+        'pull-submodules', [
+            'update-builtin',
+            'update-shared-packages',
+            'update-runtime'
+        ],
+        'remove-builtin-bin',
+        'update-electron',
+        'build-engine',
+        'check-dependencies'
+    )
+);
 
 gulp.task('pre-install-npm', ['setup-mirror'], function(cb) {
     var mirror = JSON.parse(Fs.readFileSync('local-setting.json')).mirror;
@@ -51,18 +64,13 @@ gulp.task('post-install-npm', function(cb) {
     });
 });
 
-// read package.json
-
-gulp.task('read-pjson', function(cb) {
-    pjson = JSON.parse(Fs.readFileSync('./package.json'));
-    return cb();
-});
-
 // run
-gulp.task('run-electron', function(cb) {
+// =====================================
+
+gulp.task('run', function(cb) {
     var cmdStr = '';
     var optArr = [];
-    if (process.platform === "win32") {
+    if (process.platform === 'win32') {
         cmdStr = 'bin\\electron\\electron.exe';
         optArr = ['.\\', '--debug=3030', '--dev', '--show-devtools'];
     } else {
@@ -77,7 +85,7 @@ gulp.task('run-electron', function(cb) {
     });
 });
 
-gulp.task('run-packagestudio', function(cb) {
+gulp.task('package-studio', function(cb) {
     var Commander = require('commander');
     Commander.option('--path <path>', 'Run packages in path')
         .parse(process.argv);
@@ -91,7 +99,7 @@ gulp.task('run-packagestudio', function(cb) {
 
     var cmdStr = '';
     var optArr = [];
-    if (process.platform === "win32") {
+    if (process.platform === 'win32') {
         cmdStr = 'bin\\electron\\electron.exe';
         optArr = ['.\\', '--debug=3030', '--dev', '--dev-mode=packages', '--show-devtools', packagePath];
     } else {
@@ -107,7 +115,7 @@ gulp.task('run-packagestudio', function(cb) {
     });
 });
 
-gulp.task('run-canvasstudio', function(cb) {
+gulp.task('fireball', function(cb) {
     var Commander = require('commander');
     Commander.option('--path <path>', 'Run open fireball project in path')
         .parse(process.argv);
@@ -119,7 +127,7 @@ gulp.task('run-canvasstudio', function(cb) {
 
     var cmdStr = '';
     var optArr = [];
-    if (process.platform === "win32") {
+    if (process.platform === 'win32') {
         cmdStr = 'bin\\electron\\electron.exe';
         optArr = ['.\\', '--debug=3030', '--dev', '--show-devtools', projectPath];
     } else {
@@ -135,40 +143,8 @@ gulp.task('run-canvasstudio', function(cb) {
     });
 });
 
-// build
-
-gulp.task('build-engine', function(cb) {
-    var buildPaths = ['engine-framework', 'runtime/runtime-cocos2d-js'];
-    var count = buildPaths.length;
-    var cmdStr = process.platform === 'win32' ? 'gulp.cmd' : 'gulp';
-    function doBuild (cwd, done) {
-        console.log("Start building " + Chalk.green(cwd));
-        var child = spawn(cmdStr, ['build'], {
-            cwd: cwd,
-            stdio: 'inherit'
-        });
-        child.on('exit', function() {
-            console.log("Finish building " + Chalk.green(cwd));
-            return done();
-        });
-    }
-
-    buildPaths.forEach(function(path) {
-        doBuild(path, function() {
-            if (--count<=0) {
-                console.log(Chalk.green("Engine build complete!"));
-                cb();
-            }
-        });
-    });
-});
-
-gulp.task('init-submodules', function(cb) {
-    git.exec(['submodule', 'update', '--init'], './', function() {
-        console.log('Git submodules inited!');
-        cb();
-    });
-});
+// self
+// =====================================
 
 gulp.task('update-fireball', function(cb) {
     var Async = require('async');
@@ -195,13 +171,27 @@ gulp.task('update-fireball', function(cb) {
     });
 });
 
+// submodules
+// =====================================
+
+gulp.task('init-submodules', function(cb) {
+    git.exec(['submodule', 'update', '--init'], './', function() {
+        console.log('Git submodules inited!');
+        cb();
+    });
+});
+
 gulp.task('checkout-submodules', function(cb) {
     var modules = pjson.submodules;
     var setting = JSON.parse(Fs.readFileSync('local-setting.json'));
     var count = modules.length;
     modules.forEach(function(module) {
         if (Fs.existsSync(Path.join(module, '.git'))) {
-            var branch = setting.branch.submodules[module] || "master";
+            var branch = 'master';
+            if ( setting.branch.submodules ) {
+                branch = setting.branch.submodules.name || 'master';
+            }
+
             git.exec(['checkout', branch], module, function() {
                 if (--count <= 0) {
                     console.log('Git submodules checkout to ' + branch + ' complete!');
@@ -235,6 +225,9 @@ gulp.task('pull-submodules', function(cb) {
     });
 });
 
+// builtin
+// =====================================
+
 gulp.task('install-builtin', function(cb) {
     Fs.ensureDirSync('builtin');
 
@@ -265,7 +258,11 @@ gulp.task('update-builtin', function(cb) {
             return;
         }
 
-        var branch = setting.branch.builtins[name] || "master";
+        var branch = 'master';
+        if ( setting.branch.builtins ) {
+            branch = setting.branch.builtins.name || 'master';
+        }
+
         git.pull(Path.join('builtin', name),
                  'https://github.com/fireball-packages/' + name,
                  branch,
@@ -297,7 +294,11 @@ gulp.task('push-builtin', function(cb) {
             return;
         }
 
-        var branch = setting.branch.builtins[name] || "master";
+        var branch = 'master';
+        if ( setting.branch.builtins ) {
+            branch = setting.branch.builtins.name || 'master';
+        }
+
         git.push(Path.join('builtin', name),
                  'https://github.com/fireball-packages/' + name,
                  branch,
@@ -313,6 +314,49 @@ gulp.task('push-builtin', function(cb) {
     });
 });
 
+gulp.task('remove-builtin-bin', function(cb) {
+    var bins = pjson.builtins.filter(function(name) {
+        var json = JSON.parse(Fs.readFileSync(Path.join('builtin', name, 'package.json')));
+        return json.build;
+    }).map(function (name) {
+        return Path.join('builtin', name, 'bin');
+    });
+
+    console.log('Clean built files for ' + bins);
+    Del(bins, function(err) {
+        if (err) {
+            throw err;
+        }
+
+        console.log('Builtin Packages Cleaned! Will be rebuilt when Icebolt launches.');
+        cb();
+    });
+});
+
+gulp.task('prune-builtin', function(cb) {
+    var results = Fs.readdirSync('builtin').filter(function ( name ) {
+        return pjson.builtins.indexOf(name) === -1;
+    });
+
+    results = results.map(function ( name ) {
+        return Path.join( 'builtin', name );
+    });
+
+    Del( results, function ( err ) {
+        if (err) {
+            throw err;
+        }
+
+        results.forEach( function (name) {
+            console.log( 'Prune builtin package ' + name );
+        });
+
+        cb();
+    });
+});
+
+// runtime
+// =====================================
 
 gulp.task('install-runtime', function(cb) {
     Fs.ensureDirSync('runtime');
@@ -344,7 +388,11 @@ gulp.task('update-runtime', function(cb) {
             return;
         }
 
-        var branch = setting.branch.runtimes[name] || "master";
+        var branch = 'master';
+        if ( setting.branch.runtimes ) {
+            branch = setting.branch.runtimes.name || 'master';
+        }
+
         git.pull(Path.join('runtime', name),
                  'https://github.com/fireball-x/' + name,
                  branch,
@@ -360,50 +408,78 @@ gulp.task('update-runtime', function(cb) {
     });
 });
 
+// shared-packages
+// =====================================
+
 gulp.task('install-shared-packages', function(cb) {
-    var pkgs = pjson.sharedPackages;
-    var count = pkgs.length;
-    pkgs.forEach(function(pkg) {
-        if (!Fs.existsSync(Path.join(pkg, '.git'))) {
-            git.exec(['clone', 'https://github.com/fireball-packages/' + pkg], './', function() {
-                git.exec(['fetch', '--all'], pkg, function() {
-                    console.log('Remote head updated!');
-                    if (--count <= 0) {
-                        console.log('Shared packages installation complete!');
-                        cb();
-                    }
-                });
-            });
-        } else {
-            console.log(pkg + ' has already installed in ./' + pkg + ' folder!');
-            if (--count <= 0) {
-                console.log('Shared packages installation complete!');
-                cb();
-            }
-        }
+    var Async = require('async');
+    Async.eachLimit( pjson.sharedPackages, 5, function ( name, done ) {
+        git.clone('https://github.com/fireball-packages/' + name,
+                  name,
+                  done);
+    }, function ( err ) {
+        console.log('Shared packages installation complete!');
+        cb();
     });
 });
 
 gulp.task('update-shared-packages', function(cb) {
-    var pkgs = pjson.sharedPackages;
-    var count = pkgs.length;
-    pkgs.forEach(function(pkg) {
-        if (Fs.existsSync(Path.join(pkg, '.git'))) {
-            git.exec(['pull', 'https://github.com/fireball-packages/' + pkg, 'master'], pkg, function() {
-                git.exec(['fetch', '--all'], pkg, function() {
-                    console.log('Remote head updated!');
-                    if (--count <= 0) {
-                        console.log('Shared packages update complete!');
-                        cb();
-                    }
-                });
-            });
-        } else {
-            console.warn(Chalk.red('Shared package ' + pkg + ' not initialized, please run "gulp install-shared-packages" first!'));
-            if (--count <= 0) {
+    var setting = JSON.parse(Fs.readFileSync('local-setting.json'));
+
+    var Async = require('async');
+    Async.eachLimit( pjson.sharedPackages, 5, function ( name, done ) {
+        if ( !Fs.existsSync(Path.join(name, '.git')) ) {
+            console.error(Chalk.red('Shared package ' + name + ' not initialized, please run "gulp install-shared-packages" first!'));
+            process.exit(1);
+            return;
+        }
+
+        var branch = 'master';
+        if ( setting.branch.sharedPackages ) {
+            branch = setting.branch.sharedPackages.name || 'master';
+        }
+
+        git.pull(name,
+                 'https://github.com/fireball-packages/' + name,
+                 branch,
+                 done);
+    }, function ( err ) {
+        if ( err ) {
+            process.exit(1);
+            return;
+        }
+
+        console.log('Shared packages update complete!');
+        return cb();
+    });
+});
+
+// build
+// =====================================
+
+gulp.task('build-engine', function(cb) {
+    var buildPaths = ['engine-framework', 'runtime/runtime-cocos2d-js'];
+    var count = buildPaths.length;
+    var cmdStr = process.platform === 'win32' ? 'gulp.cmd' : 'gulp';
+    function doBuild (cwd, done) {
+        console.log('Start building ' + Chalk.green(cwd));
+        var child = spawn(cmdStr, ['build'], {
+            cwd: cwd,
+            stdio: 'inherit'
+        });
+        child.on('exit', function() {
+            console.log('Finish building ' + Chalk.green(cwd));
+            return done();
+        });
+    }
+
+    buildPaths.forEach(function(path) {
+        doBuild(path, function() {
+            if (--count<=0) {
+                console.log(Chalk.green('Engine build complete!'));
                 cb();
             }
-        }
+        });
     });
 });
 
@@ -466,10 +542,8 @@ gulp.task('npm-rebuild', function(cb) {
     });
 });
 
-gulp.task('check-hosts-deps', function(cb) {
-    var checkDeps = require('./utils/libs/check-deps');
-    checkDeps.checkSubmoduleDeps(pjson.submodules);
-});
+// api
+// =====================================
 
 gulp.task('cp-apisrc', ['del-apidocs'], function() {
     var es = require('event-stream');
@@ -514,6 +588,13 @@ gulp.task('del-apidocs', function(cb) {
     Del(['./apidocs', './utils/api'],cb);
 });
 
+// deps
+// =====================================
+
+gulp.task('check-hosts-deps', function(cb) {
+    var checkDeps = require('./utils/libs/check-deps');
+    checkDeps.checkSubmoduleDeps(pjson.submodules);
+});
 
 gulp.task('check-dependencies', function(cb) {
     var checkdeps = require('check-dependencies');
@@ -570,7 +651,7 @@ gulp.task('copy-app-dist', function(cb) {
 });
 
 gulp.task('flatten-modules', function(cb) {
-    var appLoc = process.platform === "win32" ? 'dist/resources/app' : 'dist/Fireball.app/Contents/Resources/app';
+    var appLoc = process.platform === 'win32' ? 'dist/resources/app' : 'dist/Fireball.app/Contents/Resources/app';
     var flatten = require('flatten-packages');
     flatten(appLoc, {}, function (err, res) {
       if (err) console.error(err);
@@ -578,43 +659,6 @@ gulp.task('flatten-modules', function(cb) {
     });
 });
 
-gulp.task('remove-builtin-bin', function(cb) {
-    var bins = pjson.builtins.filter(function(name) {
-        var json = JSON.parse(Fs.readFileSync(Path.join('builtin', name, 'package.json')));
-        return json.build;
-    }).map(function (name) {
-        return Path.join('builtin', name, 'bin');
-    });
+gulp.task('make-dist-mac', gulpSequence('rename-electron-mac', 'copy-app-dist', 'flatten-modules'));
 
-    console.log('Clean built files for ' + bins);
-    Del(bins, function(err) {
-        if (err) {
-            throw err;
-        }
-
-        console.log('Builtin Packages Cleaned! Will be rebuilt when Icebolt launches.');
-        cb();
-    });
-});
-
-gulp.task('prune-builtin', function(cb) {
-    var results = Fs.readdirSync('builtin').filter(function ( name ) {
-        return pjson.builtins.indexOf(name) === -1;
-    });
-
-    results = results.map(function ( name ) {
-        return Path.join( 'builtin', name );
-    });
-
-    Del( results, function ( err ) {
-        if (err) {
-            throw err;
-        }
-
-        results.forEach( function (name) {
-            console.log( 'Prune builtin package ' + name );
-        });
-
-        cb();
-    });
-});
+gulp.task('make-dist-win', gulpSequence('rename-electron-win', 'copy-app-dist', 'flatten-modules'));
