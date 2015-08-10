@@ -18,6 +18,8 @@ Once the script is attached to a node, the class name will be used for identifyi
 
 The whole process is similar to how you write component script for an entity-component system but behind the scene they are quite different.
 
+For details, please refer to the [FireClass](/manual/scripting/class).
+
 ### Shared Instance of Attached Scripts
 
 Fireball use mixin to combine all scripts attached to a single node together. Thus for all of the scripts that attached to the same node, their instance (`this`) point to the same node.
