@@ -65,7 +65,7 @@ var ClassB = Fire.Class({
         }
     }
     whatClassASay: function() {
-        Fire.log(classAInstance.propA);
+        Fire.log(classAInstance.targetN.propA);
     }
 });
 ```
@@ -127,6 +127,8 @@ var MyFireClass = Fire.Class({
     }
 });
 ```
+
+For details, please refer to the [Module](/manual/scripting/module).
 
 ### Access FireClass From Engine Script
 
