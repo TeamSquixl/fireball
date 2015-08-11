@@ -86,6 +86,7 @@ gulp.task('rename-electron-win', ['copy-electron-win'], function(cb) {
 });
 
 gulp.task('rename-electron-mac', ['copy-electron-mac'], function (cb) {
+    var spawnSync = require('child_process').spawnSync;
     var plist = require('plist');
     var plistSrc = ['dist/Fireball.app/Contents/Info.plist', 'dist/Fireball.app/Contents/Frameworks/Electron Helper.app/Contents/Info.plist'];
     plistSrc.forEach(function(file) {
@@ -107,12 +108,18 @@ gulp.task('rename-electron-mac', ['copy-electron-mac'], function (cb) {
         'dist/Fireball.app/Contents/Frameworks/Fireball Helper NP.app/Contents/MacOS/Electron Helper NP'
     ];
 
-    Async.each( renameSrc, function ( file, done ) {
-        Fs.move(file, file.replace(/Electron/, 'Fireball'), done);
-    }, function ( err ) {
-        if ( err ) throw err;
-        cb ();
+    renameSrc.forEach(function(file) {
+        spawnSync('mv', [file, file.replace(/Electron/, 'Fireball')]);
     });
+
+    cb();
+
+    // Async.eachSeries( renameSrc, function ( file, done ) {
+    //     Fs.move(file, file.replace(/Electron/, 'Fireball'), done);
+    // }, function ( err ) {
+    //     if ( err ) throw err;
+    //     cb ();
+    // });
 });
 
 
