@@ -107,8 +107,11 @@ gulp.task('rename-electron-mac', ['copy-electron-mac'], function (cb) {
         'dist/Fireball.app/Contents/Frameworks/Fireball Helper NP.app/Contents/MacOS/Electron Helper NP'
     ];
 
-    renameSrc.forEach(function(file) {
-        Fs.moveSync(file, file.replace(/Electron/, 'Fireball'));
+    Async.each( renameSrc, function ( file, done ) {
+        Fs.move(file, file.replace(/Electron/, 'Fireball'), done);
+    }, function ( err ) {
+        if ( err ) throw err;
+        cb ();
     });
 
     cb();
