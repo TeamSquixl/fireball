@@ -113,8 +113,6 @@ gulp.task('rename-electron-mac', ['copy-electron-mac'], function (cb) {
         if ( err ) throw err;
         cb ();
     });
-
-    cb();
 });
 
 
