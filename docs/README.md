@@ -12,18 +12,18 @@ This is the user manual of Fireball Editor. It introduces Fireball Editor and sh
 
 ## Scripting
 
-* [JavaScript Primer](en/fireball/manual/scripting/javascript-primer.md)
-* [Nodes In Scene](en/fireball/manual/scripting/nodes-in-scene.md)
-* [Behavior (Attachable Script)](en/fireball/manual/scripting/attachable-script.md)
-* [Access Script](en/fireball/manual/scripting/access-script.md)
-* [Mixin Mechanic](en/fireball/manual/scripting/mixin-mechanic.md)
-* [Advanced FireClass](en/fireball/manual/scripting/class.md)
-* [Attributes](en/fireball/manual/scripting/attributes.md)
-* [Module](en/fireball/manual/scripting/module.md)
+* [JavaScript Primer](en/fireball/scripting/javascript-primer.md)
+* [Nodes In Scene](en/fireball/scripting/nodes-in-scene.md)
+* [Behavior (Attachable Script)](en/fireball/scripting/attachable-script.md)
+* [Access Script](en/fireball/scripting/access-script.md)
+* [Mixin Mechanic](en/fireball/scripting/mixin-mechanic.md)
+* [Advanced FireClass](en/fireball/scripting/class.md)
+* [Attributes](en/fireball/scripting/attributes.md)
+* [Module](en/fireball/scripting/module.md)
 
 ### Engine Specific Scripting Guide
 
-* [Cocos2d-js](en/fireball/manual/scripting/runtimes/cocos2d-js.md)
+* [Cocos2d-js](en/fireball/scripting/runtimes/cocos2d-js.md)
 
 
 # 中文
@@ -38,15 +38,15 @@ This is the user manual of Fireball Editor. It introduces Fireball Editor and sh
 
 ## 脚本编程
 
-* [JavaScript Primer](zh/fireball/manual/scripting/javascript-primer.md)
-* [Nodes In Scene](zh/fireball/manual/scripting/nodes-in-scene.md)
-* [Behavior (Attachable Script)](zh/fireball/manual/scripting/attachable-script.md)
-* [Access Script](zh/fireball/manual/scripting/access-script.md)
-* [Mixin Mechanic](zh/fireball/manual/scripting/mixin-mechanic.md)
-* [Advanced FireClass](zh/fireball/manual/scripting/class.md)
-* [Attributes](zh/fireball/manual/scripting/attributes.md)
-* [Module](zh/fireball/manual/scripting/module.md)
+* [JavaScript Primer](zh/fireball/scripting/javascript-primer.md)
+* [Nodes In Scene](zh/fireball/scripting/nodes-in-scene.md)
+* [Behavior (Attachable Script)](zh/fireball/scripting/attachable-script.md)
+* [Access Script](zh/fireball/scripting/access-script.md)
+* [Mixin Mechanic](zh/fireball/scripting/mixin-mechanic.md)
+* [Advanced FireClass](zh/fireball/scripting/class.md)
+* [Attributes](zh/fireball/scripting/attributes.md)
+* [Module](zh/fireball/scripting/module.md)
 
-### 引擎指引 
+### 引擎指引
 
-* [Cocos2d-js](zh/fireball/manual/scripting/runtimes/cocos2d-js.md)
+* [Cocos2d-js](zh/fireball/scripting/runtimes/cocos2d-js.md)
