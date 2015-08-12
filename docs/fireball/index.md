@@ -19,6 +19,9 @@ This is the user manual of Fireball Editor. It introduces Fireball Editor and sh
 * [Attachable Script(FireClass)](/manual/scripting/attachable-script)
 * [Access Script](/manual/scripting/access-script)
 * [Mixin Mechanic](/manual/scripting/mixin-mechanic)
+* [FireClass](/manual/scripting/class)
+* [Attributes](/manual/scripting/attributes)
+* [Module](/manual/scripting/module)
 
 ### Engine Specific Scripting Guide
 
