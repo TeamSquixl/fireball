@@ -1,6 +1,7 @@
 [Documentation](http://docs.fireball-x.com/) |
 [Community](https://fireball.slack.com) |
-[Contributing](https://github.com/fireball-x/fireball/blob/master/CONTRIBUTING.md)
+[Contributing](https://github.com/fireball-x/fireball/blob/master/CONTRIBUTING.md) |
+[Examples](docs/fireball/examples.md)
 
 ![Fireball Game Engine](https://cloud.githubusercontent.com/assets/344547/6882303/a8b7a740-d5ba-11e4-9518-e6494b1c94fa.png)
 
@@ -25,7 +26,9 @@ Fireball is a cross-platform software powered by [Electron](https://github.com/a
 
 Learn what's going on from [Fireball Beta Roadmap](https://github.com/fireball-x/fireball/issues/3).
 
-## Prerequisite
+## Developer
+
+### Prerequisite
 
 - Install [node.js v0.12+](https://nodejs.org/) or [io.js v2.0+](https://iojs.org/en/index.html)
 - Install [gulp](https://github.com/gulpjs/gulp) command line tool
@@ -37,7 +40,7 @@ For **Windows** user, you need the following environment set up to be able to bu
 - [Visual Studio Community 2013](http://www.visualstudio.com/products/visual-studio-community-vs)
 - [Python 2.7](http://www.python.org/download/releases/2.7/) - make sure you can run `python --verson` in your command line tool. Read [this](https://docs.python.org/2/using/windows.html#excursus-setting-environment-variables) for setting up path correctly.
 
-## Install
+### Install
 
 In cloned project folder, run the following command to setup dev environment:
 
@@ -49,7 +52,7 @@ npm install
 
 This is all you have to do to set Fireball development environment.
 
-### Run Tasks Manually
+#### Run Tasks Manually
 
 Behind the scene, npm install script will run a series of gulp tasks. If anything goes wrong during the bootstrap process, you can manually run these commands to get back on track:
 
@@ -73,7 +76,7 @@ gulp npm-rebuild
 bower install
 ```
 
-### Choose Electron Download Mirror
+#### Choose Electron Download Mirror
 
 Download Electron can take time, especially when you're on the wrong side of wall. We use [electron-prebuilt](https://github.com/mafintosh/electron-prebuilt) for Electron binary download. You can choose if you want to use the china mirror during `gulp update-electron` task.
 
@@ -89,7 +92,7 @@ The first time you run this task (this task is included in `npm install` process
 
 You can change this file anytime to choose mirror for Electron downloading again.
 
-## Run
+### Run
 
 Here are ways to run fireball development version:
 
@@ -126,7 +129,7 @@ Otherwise, Package Studio will register your path as a package loading path thro
 the watch for the path, so any packages you add to this path after Studio opened, will
 be loaded automatically.
 
-## Update
+### Update
 
 To get the latest fireball build:
 
@@ -149,7 +152,7 @@ npm install some-npm-package@x.x.x
 bower install
 ```
 
-## Test
+### Test
 
 ```bash
 # Run all tests
@@ -167,12 +170,29 @@ npm run test -- editor-framework
 
 All test files are located in [test](/test/) folder or submodule's `test/` folder.
 
-## API Docs
+### API Docs
 
 ```bash
 # Generate and preview API docs
 npm run gendoc
 ```
+
+## Use Fireball
+
+### Release Version
+
+1. Download distribute version from [release page](https://github.com/fireball-x/fireball/releases).
+2. Extract the zip file to a folder of its own. This folder can locate anywhere on your disk.
+3. Click `Fireball.app` on Mac or `fireball.exe` on Windonws to launch fireball.
+4. Have fun!
+
+### Get Started
+
+Visit http://docs.fireball-x.com to learn how to use Fireball Game Engine.
+
+### Examples
+
+Checkout [Cocos2d-js examples](docs/fireball/examples.md).
 
 ## Feedback & Contribution
 
@@ -190,27 +210,3 @@ This error is due to non-ascii character in your home path, please check this gu
 ### Error: Permission denied (publickey)
 
 Usually this is due to incorrect setup of ssh key. Please troubleshoot with this guide: https://help.github.com/articles/error-permission-denied-publickey/#platform-linux
-
-## Fireball 0.4
-
-We are refactoring Fireball to make it compatible with more open source HTML5 game engines. Fireball 0.5 will fully support Cocos2D-JS api, and we will add more engine support in the near future. Fireball users can use each engine with its original api.
-
-For Fireball 0.4, we have wrapped Cocos2D-JS and Pixi.js with our own API. Please check out the following content.
-
-### Download
-
-1. Download distribute version from [release page](https://github.com/fireball-x/fireball/releases).
-2. Extract the zip file to a folder of its own. This folder can locate anywhere on your disk.
-3. Click `Fireball.app` on Mac or `fireball.exe` on Windonws to launch fireball.
-4. Have fun!
-
-### Get Started
-
-Visit http://docs.fireball-x.com to learn how to use Fireball Game Engine.
-
-### Examples
-
-- [Examples](https://github.com/fireball-x/examples) - Every Fireball components and features are demonstrated in this project. Check out the example one by one and you'll get what Fireball is capable of.
-- [Tutorial](https://github.com/fireball-x/tutorial) - Step by step guide to build your first game with Fireball.
-- [Duang Sheep](https://github.com/fireball-x/game-duang-sheep) - Flappy bird clone featuring a jumping sheep!
-- [1010!](https://github.com/fireball-x/game-1010) - 1010! clone, play tetris in a 10x10 grid.
