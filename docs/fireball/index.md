@@ -16,10 +16,10 @@ This is the user manual of Fireball Editor. It introduces Fireball Editor and sh
 
 * [JavaScript Primer](/manual/scripting/javascript-primer)
 * [Nodes In Scene](/manual/scripting/nodes-in-scene)
-* [Attachable Script(FireClass)](/manual/scripting/attachable-script)
+* [Behavior (Attachable Script)](/manual/scripting/attachable-script)
 * [Access Script](/manual/scripting/access-script)
 * [Mixin Mechanic](/manual/scripting/mixin-mechanic)
-* [FireClass](/manual/scripting/class)
+* [Advanced FireClass](/manual/scripting/class)
 * [Attributes](/manual/scripting/attributes)
 * [Module](/manual/scripting/module)
 

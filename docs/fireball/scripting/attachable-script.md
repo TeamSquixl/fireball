@@ -6,9 +6,9 @@ permalinks: manual/scripting/attachable-script
 
 What's the point of a scene editor if we can't attach scripts to scene nodes and give them behaviors that we can combine and tweak in Inspector? Fireball's great advantage is to allow you write script that can be attached to scene nodes, while you can still call any engine API from the script! Let's work it out.
 
-## FireClass
+## Behavior (Attachable Script)
 
-An attachable script defines a `FireClass`. The filename of the script is the class name. For example a script named `MyClass.js` creates a `FireClass` named `MyClass`.
+An attachable script must contain definition of a `Behavior`. The filename of the script is the class name. For example a script named `MyClass.js` creates a `Behavior` named `MyClass`.
 
 (screenshot)
 
@@ -18,9 +18,9 @@ Once the script is attached to a node, the class name will be used for identifyi
 
 The whole process is similar to how you write component script for an entity-component system but behind the scene they are quite different.
 
-For details, please refer to the [FireClass](/manual/scripting/class).
+Behavior is one of the most usual **FireClass**. For details and advanced usage of FireClass, please refer to the [FireClass](/manual/scripting/class).
 
-### Shared Instance of Attached Scripts
+### Shared Instance of Behavior
 
 Fireball use mixin to combine all scripts attached to a single node together. Thus for all of the scripts that attached to the same node, their instance (`this`) point to the same node.
 
@@ -49,7 +49,7 @@ var MyClass = Fire.Class({ // use Fire.Class to define your class
 
 The name `MyClass` in the script is not relevant, only the **filename of the script** is used for identifying this FireClass. Thus it's not allowed to create scripts with the same name in a single project.
 
-As long as your script contains a FireClass definition, it can be dragged and attached onto a node. Let's keep going to see how to add property and function to your script.
+As long as your script contains a Behavior definition, it can be dragged and attached onto a node. Let's keep going to see how to add property and function to your script.
 
 ## Add Properties
 
