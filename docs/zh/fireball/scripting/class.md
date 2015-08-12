@@ -375,7 +375,6 @@ permalinks: manual/scripting/class
 
 - type: 限定属性的数据类型
 - url: 限定属性为指定类型的 url
-- wrapper: 限定属性为指定类型的 Wrapper
 - visible: 设为 false 则不在 Inspector 面板中显示该属性
 - serializable: 设为 false 则不序列化该属性
 - displayName: 在 Inspector 面板中显示成指定名字
@@ -426,7 +425,7 @@ permalinks: manual/scripting/class
     ```js
         enemy: {
             default: null,
-            type: Fire.Runtime.NodeWrapper
+            type: cc.Node
         }
     ```
 - 当默认值为数值(Number)类型时，将 type 设置为 `Fire.Integer`，用来表示这是一个整数，这样属性在 Inspector 里就不能输入小数点。
@@ -451,38 +450,9 @@ permalinks: manual/scripting/class
         },
         enemyList: {
             default: [],
-            type: [Fire.Runtime.NodeWrapper]
+            type: [cc.Node]
         }
     ```
-
-#### <a name="wrapper"></a>wrapper参数
-
-前面提到了可以将 type 设置为 `Fire.Runtime.NodeWrapper`，这里的 Wrapper 被用来包装目标引擎的场景对象，NodeWrapper 是所有 Wrapper 的基类。但显然游戏开发者只需要关心目标引擎，并不需要知道 Fireball 提供了哪些 Wrapper。因此更好的选择是使用 `wrapper` 参数来代替 type。
-```js
-    enemy: {
-        default: null,
-        wrapper: cc.Node            // 声明 enemy 属性可以被 Inspector 赋值为任意 cocos 节点
-    },
-    target: {
-        default: null,
-        wrapper: cc.ParticleSystem  // 声明 target 属性只能被 Inspector 赋值为 cocos 的 ParticleSystem
-    }
-```
-
-注意，wrapper 并非场景对象，要获得相应的场景对象需要通过 wrapper 的 `targetN`：
-
-```js
-properties: {
-    enemy: {
-        default: null,
-        wrapper: cc.Node
-    }
-},
-onLoad: function () {
-    Fire.log(this.enemy.targetN instanceof cc.Node);    // true
-    Fire.log(this.enemy instanceof cc.Node);            // false
-}
-```
 
 #### <a name="url"></a>url参数
 
