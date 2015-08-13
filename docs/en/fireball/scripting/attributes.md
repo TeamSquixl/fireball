@@ -13,7 +13,6 @@ permalinks: manual/scripting/attributes
 [type](/manual/scripting/class#type) | 限定属性的数据类型（[点击范例](/manual/scripting/class#type)） | (Any) | undefined
 [visible](/manual/scripting/class#visible) | 在 Inspector 面板中显示或隐藏 | boolean | (注1)
 url | 该属性为指定资源的 url（[点击范例](/manual/scripting/class#url)） | function(构造函数) | undefined
-wrapper | 该属性为指定节点的 wrapper（[点击范例](/manual/scripting/class#wrapper)） | function(构造函数) | undefined
 displayName | 在 Inspector 面板中显示为另一个名字 | string | undefined
 tooltip | 在 Inspector 面板中添加属性的 Tooltip | string | undefined
 multiline | 在 Inspector 面板中使用多行文本框 | boolean | false
