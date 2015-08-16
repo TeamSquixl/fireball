@@ -35,6 +35,7 @@ Ipc.on('asset-db:assets-moved', function ( results ) {
 
     if ( needRecompile ) {
         Editor.Compiler.compileLater();
+        return;
     }
 });
 
@@ -58,6 +59,7 @@ Ipc.on('asset-db:assets-created', function ( results ) {
 
     if ( needRecompile ) {
         Editor.Compiler.compileLater();
+        return;
     }
 });
 
@@ -83,5 +85,6 @@ Ipc.on('asset-db:assets-deleted', function ( results ) {
 
     if ( needRecompile ) {
         Editor.Compiler.compileLater();
+        return;
     }
 });
