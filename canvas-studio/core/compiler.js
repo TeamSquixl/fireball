@@ -1,7 +1,7 @@
 ﻿var Path = require('path');
 
 var WAIT_MS = 100;
-var RELOAD_WINDOW_SCRIPTS = 'scene:stash-and-reload';
+var RELOAD_WINDOW_SCRIPTS = 'scene:soft-reload';
 //var COMPILE_AND_RELOAD = 'app:compile-and-reload';
 
 var compilingWorker = null;
