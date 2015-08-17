@@ -10,7 +10,7 @@ var Path = require('path');
 function start() {
     var Del = require('del');
     var buildPath = Path.join(os.tmpdir(),'fireball-game-builds');
-    Del(Path.join(buildPath + '**/*'), {force: true}, function() {
+    Del(buildPath + '/*/', {force: true}, function() {
         app.use(express.static(Path.join(os.tmpdir(), 'fireball-game-builds')));
 
         app.get('/', function (req, res) {
