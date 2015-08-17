@@ -76,7 +76,7 @@ function _getDefaultMainMenu () {
                 {
                     label: 'About Fireball',
                     click: function () {
-                        Editor.info('Fireball v0.5 alpha4 20150807');
+                        Editor.info('Fireball v0.5 alpha4 20150817');
                     }
                 },
                 { type: 'separator' },
