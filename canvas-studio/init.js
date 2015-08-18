@@ -338,12 +338,30 @@ Editor.JS.mixin(Editor.App, {
         Editor.Compiler._onWorkerEnd();
     },
 
-    'app:build-project': function ( options ) {
+    'app:build-project': function (options) {
         Editor.Builder.build(options);
     },
 
     'app:build-project-abort': function (error) {
         // forward ipc
         Editor.Builder.emit('app:build-project-abort', error);
+    },
+
+    'app:build-for-preview': function (options) {
+        if (!Editor.currentSceneUuid) {
+            return Editor.info('Not support stashed scene for now');
+        }
+        options = options || {};
+        options.title = Editor.projectName;
+        options.buildPath = Path.join(Editor.projectPath, 'temp', 'preview');
+        options.startScene = Editor.currentSceneUuid;
+        options.scenes = Editor.sceneList.map(function (x) {
+            return x.uuid;
+        });
+        Editor.Builder.buildForPreview(options, function (err) {
+            if (!err) {
+                // TODO - launch browser
+            }
+        });
     },
 });
