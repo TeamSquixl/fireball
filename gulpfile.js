@@ -115,7 +115,7 @@ gulp.task('package-studio', function(cb) {
     });
 });
 
-gulp.task('fireball', function(cb) {
+gulp.task('fireball', ['cp-apisrc'], function(cb) {
     var Commander = require('commander');
     Commander.option('--path <path>', 'Run open fireball project in path')
         .parse(process.argv);
