@@ -230,9 +230,7 @@ Editor.JS.mixin(Editor.App, {
 
             // start preview server
             function ( next ) {
-                var server = require('./core/preview-server');
-                server.start();
-                next ();
+                Editor.PreviewServer.start( next );
             },
 
             // open canvas-studio main window
@@ -363,5 +361,8 @@ Editor.JS.mixin(Editor.App, {
                 // TODO - launch browser
             }
         });
+    },
+
+    'app:play-on-device': function () {
     },
 });
