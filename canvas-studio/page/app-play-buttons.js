@@ -61,4 +61,9 @@ Polymer({
 
         Editor.log('Step');
     },
+
+    _onDeviceClick: function ( event ) {
+        event.stopPropagation();
+        Editor.sendToAll('scene:play-on-device');
+    },
 });

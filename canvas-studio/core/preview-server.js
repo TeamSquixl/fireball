@@ -1,48 +1,67 @@
-/**
- * Simple express app to run user build app
- * Created by nantas on 15/3/13.
- */
-var express = require('express');
-var app = express();
-var os = require('os');
-var Path = require('path');
-
-function start() {
+function start ( callback ) {
+    var Path = require('fire-path');
+    var OS = require('os');
     var Del = require('del');
-    var buildPath = Path.join(os.tmpdir(),'fireball-game-builds');
-    Del(buildPath + '/*/', {force: true}, function() {
-        app.use(express.static(Path.join(os.tmpdir(), 'fireball-game-builds')));
+    var Express = require('express');
+    var Jade = require('jade');
 
-        app.get('/', function (req, res) {
-            res.send('Please build your game project first!');
+    var buildPath = Path.join(OS.tmpdir(),'fireball-game-builds');
+    Del.sync( Path.join(buildPath, '**/*'), {force: true});
+
+    var app = Express();
+
+    app.set('views', Editor.url('app://canvas-studio/static/preview-templates') );
+    app.set('view engine', 'jade' );
+
+    // ============================
+    // Build
+    // ============================
+
+    app.use('/build', Express.static(buildPath));
+
+    app.get('/build', function (req, res) {
+        res.send('Please build your game project first!');
+    });
+
+    // ============================
+    // Preview
+    // ============================
+
+    app.get('/', function (req, res) {
+        res.render('index', {
+            pageTitle: 'Foobar!',
         });
+    });
 
-        // ============================
-        // error handling
-        // ============================
+    // ============================
+    // error handling
+    // ============================
 
-        app.use(function (err, req, res, next) {
-            console.error(err.stack);
+    app.use(function (err, req, res, next) {
+        console.error(err.stack);
+        next(err);
+    });
+
+    app.use(function (err, req, res, next) {
+        if (req.xhr) {
+            res.status(err.status || 500).send({error: err.message});
+        }
+        else {
             next(err);
-        });
+        }
+    });
 
-        app.use(function (err, req, res, next) {
-            if (req.xhr) {
-                res.status(err.status || 500).send({error: err.message});
-            }
-            else {
-                next(err);
-            }
-        });
+    app.use(function (req, res) {
+        res.status(404).send({error: "404 Error."});
+    });
 
-        app.use(function (req, res) {
-            res.status(404).send({error: "404 Error."});
-        });
+    var server = app.listen(7456, function () {
+        Editor.success('preview server running at http://localhost:7456');
 
-        var server = app.listen(7456, function () {
-            console.log('preview server running at http://localhost:7456');
-        });
+        if ( callback ) callback();
     });
 }
 
-module.exports.start = start;
+module.exports = {
+    start: start,
+};

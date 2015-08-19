@@ -35,6 +35,7 @@ Editor.MainMenu.reset();
 // init modules
 Editor.Compiler = require('./compiler');
 Editor.Builder = require('./builder');
+Editor.PreviewServer = require('./preview-server');
 
 // load scene utils
 require('./scene-utils');
