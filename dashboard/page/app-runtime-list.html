@@ -46,10 +46,11 @@
                 }
                 this.infos = infos;
 
-                if ( this.infos.length > 0 )
+                if ( this.infos.length > 0 ) {
                     this.description = this.infos[0].description;
                     this.curRuntimeName = this.infos[0].name;
                     this.curRuntimeLink = this.infos[0].link;
+                }
             },
 
             reset: function () {
