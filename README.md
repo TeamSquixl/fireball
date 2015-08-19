@@ -210,3 +210,9 @@ This error is due to non-ascii character in your home path, please check this gu
 ### Error: Permission denied (publickey)
 
 Usually this is due to incorrect setup of ssh key. Please troubleshoot with this guide: https://help.github.com/articles/error-permission-denied-publickey/#platform-linux
+
+### npm ERR! version not found: module_name@x.x.x
+
+If you choose to use China Mirror for npm installing during the bootstrap process, you will get all your npm packages from https://npm.taobao.org/ . Sometimes there're lag in syncing package between npmjs.org and npm.taobao.org, if that's the case, just go to https://npm.taobao.org/sync/connect and manually trigger a synchronization. Then you should be good to go.
+
+If you can't even find the package version on https://www.npmjs.com , please contact us or report an issue.
