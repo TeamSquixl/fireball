@@ -4,11 +4,13 @@ function start ( callback ) {
     var Del = require('del');
     var Express = require('express');
     var Jade = require('jade');
+    var Uuid = require('node-uuid');
 
     var buildPath = Path.join(OS.tmpdir(),'fireball-game-builds');
     Del.sync( Path.join(buildPath, '**/*'), {force: true});
 
     var app = Express();
+    var stashedUuid = Uuid.v4();
 
     app.set('views', Editor.url('app://canvas-studio/static/preview-templates') );
     app.set('view engine', 'jade' );
@@ -28,28 +30,96 @@ function start ( callback ) {
     // ============================
 
     app.get('/', function (req, res) {
+        var runtimePkg = require(Path.join(Editor.runtimePath, 'package.json'));
         res.render('index', {
-            pageTitle: 'Foobar!',
+            title: 'Fireball | ' + Editor.projectInfo.name,
+            runtimeScripts: runtimePkg.build.scriptsDev,
         });
     });
 
+    app.get('/app/*', function (req, res) {
+        var path = Editor.url( 'app://' + req.params[0] );
+        res.sendFile(path);
+    });
+
+    app.get('/project/*', function (req, res) {
+        var path = Path.join(Editor.projectPath, req.params[0]);
+        res.sendFile(path);
+    });
+
+    app.get('/runtime/*', function (req, res) {
+        var path = Path.join(Editor.runtimePath, req.params[0]);
+        res.sendFile(path);
+    });
+
+    app.get('/settings.json', function (req, res) {
+        var settings = {
+            scenes: Editor.sceneList,
+            rawAssets: {},
+        };
+
+        Editor.assetdb.queryMetas('assets://**/*', '', function (err, results) {
+            if (err) {
+                return callback(err);
+            }
+            var Asset = Fire.Asset;
+            var assets = {};
+
+            results.forEach( function ( meta ) {
+                if (meta && meta.useRawfile()) {
+                    var type = meta['asset-type'];
+                    if (type === 'folder') {
+                        return;
+                    }
+
+                    var ctor = Editor.assets[type];
+                    var isRaw = ctor && !Fire.isChildClassOf(ctor, Asset);
+                    var url = Editor.assetdb.uuidToUrl(meta.uuid);
+                    var idx = url.indexOf('://');
+                    if ( idx !== -1 ) {
+                        url = url.slice(idx+3);
+                    }
+
+                    assets[meta.uuid] = {
+                        url: url,
+                        raw: isRaw,
+                    };
+                }
+            });
+
+            settings.rawAssets = assets;
+            res.json(settings);
+        });
+    });
+
+    app.get('/stashed-scene.json', function (req, res) {
+        if ( Editor.stashedScene ) {
+            res.send(Editor.stashedScene.sceneJson);
+            return;
+        }
+
+        res.sendStatus(404);
+    });
+
     // serves raw assets
-    app.get(/^\/resource\/raw\//, function(req, res) {
+    // app.get(/^\/resource\/raw\//, function(req, res) {
+    app.get('/resource/raw/*', function(req, res) {
         var url = req.url;
         console.log('raw asset request: ' + url);
 
-        url = Path.join(Editor.projectPath, 'assets', url.slice('/resource/raw/'.length));
+        url = Path.join(Editor.projectPath, 'assets', req.params[0]);
 
         console.log('send: ' + url);
         res.sendFile(url);
     });
 
     // serves imported assets
-    app.get(/^\/resource\/import\//, function(req, res) {
+    // app.get(/^\/resource\/import\//, function(req, res) {
+    app.get('/resource/import/*', function(req, res) {
         var url = req.url;
         console.log('imported asset request: ' + url);
 
-        url = Path.join(Editor.importPath, url.slice('/resource/import/'.length));
+        url = Path.join(Editor.importPath, req.params[0]);
 
         console.log('send: ' + url);
         res.sendFile(url);

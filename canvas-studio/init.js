@@ -346,20 +346,6 @@ Editor.JS.mixin(Editor.App, {
     },
 
     'app:play-on-device': function () {
-        if (!Editor.currentSceneUuid) {
-            return Editor.info('Not support stashed scene for now');
-        }
-        var options = {};
-        options.title = Editor.projectName;
-        options.buildPath = Path.join(Editor.projectPath, 'temp', 'preview');
-        options.startScene = Editor.currentSceneUuid;
-        options.scenes = Editor.sceneList.map(function (x) {
-            return x.uuid;
-        });
-        Editor.Builder.buildForPreview(options, function (err) {
-            if (!err) {
-                // TODO - launch browser
-            }
-        });
+        Editor.log('play on device!!!');
     },
 });
