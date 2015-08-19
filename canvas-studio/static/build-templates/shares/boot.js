@@ -1,4 +1,7 @@
-;window.onload = function () {
+
+var isNative = typeof document !== 'undefined';
+
+function load() {
 
     function loadProjectSettings (callback) {
         Fire._JsonLoader('settings.json', function (error, json) {
@@ -26,9 +29,18 @@
     }
     loadProjectSettings(function (settings) {
         // init engine
-        var canvas = document.getElementById('GameCanvas');
-        var width = document.documentElement.clientWidth;
-        var height = document.documentElement.clientHeight;
+
+
+        var canvas,
+            width = 640,
+            height = 480;
+
+        if (isNative) {
+            canvas = document.getElementById('GameCanvas');
+            width = document.documentElement.clientWidth;
+            height = document.documentElement.clientHeight;
+        }
+
         var option = {
             width: width,
             height: height,
@@ -46,11 +58,13 @@
             // load scene
             Fire.engine.loadScene(settings.launchScene, null,
                 function () {
-                    // show canvas
-                    canvas.style.visibility = '';
-                    var div = document.getElementById('GameDiv');
-                    if (div) {
-                        div.style.backgroundImage = '';
+                    if (isNative) {
+                        // show canvas
+                        canvas.style.visibility = '';
+                        var div = document.getElementById('GameDiv');
+                        if (div) {
+                            div.style.backgroundImage = '';
+                        }
                     }
                     // play game
                     Fire.engine.play();
@@ -59,3 +73,10 @@
         });
     });
 };
+
+if (isNative) {
+    window.onload = load;
+}
+else {
+    load();
+}
