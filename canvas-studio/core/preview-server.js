@@ -1,3 +1,5 @@
+var sockets;
+
 function start ( callback ) {
     var Path = require('fire-path');
     var OS = require('os');
@@ -53,6 +55,8 @@ function start ( callback ) {
     });
 
     app.get('/settings.json', function (req, res) {
+        // TODO: dirty check, only rebuild if dirty
+
         var settings = {
             scenes: Editor.sceneList,
             rawAssets: {},
@@ -102,26 +106,18 @@ function start ( callback ) {
     });
 
     // serves raw assets
-    // app.get(/^\/resource\/raw\//, function(req, res) {
     app.get('/resource/raw/*', function(req, res) {
         var url = req.url;
-        console.log('raw asset request: ' + url);
-
         url = Path.join(Editor.projectPath, 'assets', req.params[0]);
 
-        console.log('send: ' + url);
         res.sendFile(url);
     });
 
     // serves imported assets
-    // app.get(/^\/resource\/import\//, function(req, res) {
     app.get('/resource/import/*', function(req, res) {
         var url = req.url;
-        console.log('imported asset request: ' + url);
-
         url = Path.join(Editor.importPath, req.params[0]);
 
-        console.log('send: ' + url);
         res.sendFile(url);
     });
 
@@ -152,8 +148,27 @@ function start ( callback ) {
 
         if ( callback ) callback();
     });
+
+    //
+    sockets = require('socket.io')(server);
+    sockets.on('connection', function ( socket ) {
+        socket.emit('connected');
+    });
+}
+
+var _browserReload = false;
+function browserReload ( callback ) {
+    if (_browserReload) {
+        return;
+    }
+    _browserReload = setTimeout(function () {
+        sockets.emit('browser:reload');
+        clearTimeout(_browserReload);
+        _browserReload = false;
+    }, 50);
 }
 
 module.exports = {
     start: start,
+    browserReload: browserReload,
 };

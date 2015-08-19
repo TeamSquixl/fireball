@@ -1,4 +1,9 @@
-window.onload = function () {
+document.addEventListener('DOMContentLoaded', function ( event ) {
+    var socket = window.__socket_io__();
+    socket.on('browser:reload', function () {
+        window.location.reload();
+    });
+
     function loadProjectSettings (callback) {
         Fire._JsonLoader('settings.json', function (error, json) {
             if (error) {
@@ -57,4 +62,4 @@ window.onload = function () {
             });
         });
     });
-};
+});

@@ -346,6 +346,7 @@ Editor.JS.mixin(Editor.App, {
     },
 
     'app:play-on-device': function () {
-        Editor.log('play on device!!!');
+        Editor.PreviewServer.browserReload();
+        Editor.log('Browse Reloaded');
     },
 });
