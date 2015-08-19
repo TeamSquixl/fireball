@@ -345,11 +345,11 @@ Editor.JS.mixin(Editor.App, {
         Editor.Builder.emit('app:build-project-abort', error);
     },
 
-    'app:build-for-preview': function (options) {
+    'app:play-on-device': function () {
         if (!Editor.currentSceneUuid) {
             return Editor.info('Not support stashed scene for now');
         }
-        options = options || {};
+        var options = {};
         options.title = Editor.projectName;
         options.buildPath = Path.join(Editor.projectPath, 'temp', 'preview');
         options.startScene = Editor.currentSceneUuid;
@@ -361,8 +361,5 @@ Editor.JS.mixin(Editor.App, {
                 // TODO - launch browser
             }
         });
-    },
-
-    'app:play-on-device': function () {
     },
 });

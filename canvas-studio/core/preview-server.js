@@ -33,6 +33,28 @@ function start ( callback ) {
         });
     });
 
+    // serves raw assets
+    app.get(/^\/resource\/raw\//, function(req, res) {
+        var url = req.url;
+        console.log('raw asset request: ' + url);
+
+        url = Path.join(Editor.projectPath, 'assets', url.slice('/resource/raw/'.length));
+
+        console.log('send: ' + url);
+        res.sendFile(url);
+    });
+
+    // serves imported assets
+    app.get(/^\/resource\/import\//, function(req, res) {
+        var url = req.url;
+        console.log('imported asset request: ' + url);
+
+        url = Path.join(Editor.importPath, url.slice('/resource/import/'.length));
+
+        console.log('send: ' + url);
+        res.sendFile(url);
+    });
+
     // ============================
     // error handling
     // ============================

@@ -343,6 +343,9 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
             else if (standaloneBuild) {
                 gulp.start('copy-built-target', callback);
             }
+            else {
+                callback();
+            }
         });
     }
     else {

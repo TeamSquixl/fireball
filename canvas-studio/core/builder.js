@@ -27,8 +27,11 @@ function _doBuild (options, callback) {
 
     //Editor.sendToCore('asset-db:query-resources', function ( results ) {
 
+
     // query all simple assets
+    console.time('queryMetas');
     Editor.assetdb.queryMetas('assets://**/*', '', function (err, results) {
+        console.timeEnd('queryMetas');
         if (err) {
             return callback(err);
         }
@@ -93,6 +96,7 @@ var Builder = Editor.JS.mixin(new Emitter(), {
     },
 
     buildForPreview: function (options, callback) {
+        console.time('buildForPreview');
         options = options || {};
         options.platform = 'web-preview';
         options.debug = true;
@@ -101,6 +105,7 @@ var Builder = Editor.JS.mixin(new Emitter(), {
             if (err) {
                 Editor.error(err);
             }
+            console.timeEnd('buildForPreview');
             callback(err);
         });
     }
