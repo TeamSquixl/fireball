@@ -235,7 +235,12 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
 
             // write config
             var json = JSON.stringify(settings, null, debug ? 4 : 0);
-            json = "_FireSettings = " + json + ';';
+            if (debug) {
+                json = "_FireSettings = " + json + ';\n';
+            }
+            else {
+                json = "_FireSettings=" + json;
+            }
             fs.writeFile(paths.settings, json, done);
         }
     );

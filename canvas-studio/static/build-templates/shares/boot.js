@@ -1,7 +1,5 @@
 (function () {
 
-    var isNative = typeof document !== 'undefined';
-
     function boot () {
 
         // retrieve minified raw assets

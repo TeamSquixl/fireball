@@ -59,7 +59,7 @@ module.exports = {
             res.sendFile(path);
         });
 
-        app.get('/settings.json', function (req, res) {
+        app.get('/settings.js', function (req, res) {
             // TODO: dirty check, only rebuild if dirty
 
             var settings = {
@@ -97,7 +97,8 @@ module.exports = {
                 });
 
                 settings.rawAssets = assets;
-                res.json(settings);
+                var script = "_FireSettings = " + JSON.stringify(settings, null, 4) + ';\n';
+                res.send(script);
             });
         });
 
