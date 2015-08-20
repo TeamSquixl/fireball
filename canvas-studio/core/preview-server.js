@@ -112,7 +112,7 @@ module.exports = {
                 });
 
                 settings.rawAssets = assets;
-                var script = "_FireSettings = " + JSON.stringify(settings, null, 4) + ';\n';
+                var script = '_FireSettings = ' + JSON.stringify(settings, null, 4) + ';\n';
                 res.send(script);
             });
         });
@@ -145,7 +145,7 @@ module.exports = {
         });
 
         app.use(function (req, res) {
-            res.status(404).send({error: "404 Error."});
+            res.status(404).send({error: '404 Error.'});
         });
 
         server = app.listen(7456, function () {
