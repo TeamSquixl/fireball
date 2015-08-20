@@ -12,7 +12,7 @@ module.exports = function ( options, cb ) {
     //
     Editor.registerPackagePath( Path.join( Editor.appHome, 'packages' ) );
 
-    var projectPath = options.args[0];
+    var projectPath = Path.resolve(options.args[0]);
 
     // initialize ~/.fireball/package-studio/
     var localPath = Path.join(Editor.appHome, 'package-studio');

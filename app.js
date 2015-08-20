@@ -15,7 +15,7 @@ global.__app = {
     init: function ( options, cb ) {
         var projectPath;
         if ( options.args.length > 0 ) {
-            projectPath = options.args[0];
+            projectPath = Path.resolve(options.args[0]);
         }
 
         //

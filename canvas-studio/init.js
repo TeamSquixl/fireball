@@ -12,7 +12,7 @@ Editor.requireLogin = false;
 
 // init
 module.exports = function ( options, cb ) {
-    Editor.projectPath = options.args[0];
+    Editor.projectPath = Path.resolve(options.args[0]);
     Editor.runtimePath = '';
     Editor.runtimeUrl = '';
     Editor.requireLogin = !Editor.isDev || options.requireLogin;
