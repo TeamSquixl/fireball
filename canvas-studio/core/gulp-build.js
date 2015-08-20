@@ -271,7 +271,6 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
             .on('end', callback);
     }
 
-    // web-desktop
     gulp.task(BUILD_ + 'web-desktop',
         [
             'compile',
@@ -284,7 +283,6 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
         }
     );
 
-    // web-mobile
     gulp.task(BUILD_ + 'web-mobile',
         [
             'compile',
@@ -297,15 +295,26 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
         }
     );
 
-    // web-preview
-    gulp.task(BUILD_ + 'web-preview',
+    //gulp.task(BUILD_ + 'web-preview',
+    //    [
+    //        'copy-compiled',
+    //        'copy-scripts',
+    //        'build-settings'
+    //    ],
+    //    function (done) {
+    //        buildHtml(paths.template_web_preview, done);
+    //    }
+    //);
+
+    gulp.task(BUILD_ + 'native-mac',
         [
-            'copy-compiled',
+            'compile',
             'copy-scripts',
+            'build-assets',
             'build-settings'
         ],
         function (done) {
-            buildHtml(paths.template_web_preview, done);
+            buildHtml(paths.template_web_desktop, done);
         }
     );
 
