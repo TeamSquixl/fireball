@@ -170,6 +170,8 @@ module.exports = function ( options, cb ) {
 // mixin app
 Editor.JS.mixin(Editor.App, {
     runDashboard: function () {
+        Editor.quit();
+
         var Spawn = require('child_process').spawn;
         var App = require('app');
         var exePath = App.getPath('exe');
@@ -178,8 +180,6 @@ Editor.JS.mixin(Editor.App, {
             stdio: 'ignore',
         });
         child.unref();
-
-        Editor.quit();
     },
 
     run: function () {

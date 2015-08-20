@@ -1,41 +1,27 @@
+(function () {
 
-var isNative = typeof document !== 'undefined';
+    function boot () {
 
-function load() {
-
-    function loadProjectSettings (callback) {
-        Fire._JsonLoader('settings.json', function (error, json) {
-            if (error) {
-                Fire.error(error);
+        // retrieve minified raw assets
+        var rawAssets = _FireSettings.rawAssets;
+        for (var uuid in rawAssets) {
+            var info = rawAssets[uuid];
+            if (typeof info === 'object') {
+                if (Array.isArray(info)) {
+                    rawAssets[uuid] = {url: info[0], raw: false};
+                }
             }
             else {
-                // retrieve minified raw assets
-                var rawAssets = json.rawAssets;
-                for (var uuid in rawAssets) {
-                    var info = rawAssets[uuid];
-                    if (typeof info === 'object') {
-                        if (Array.isArray(info)) {
-                            rawAssets[uuid] = { url: info[0], raw: false };
-                        }
-                    }
-                    else {
-                        rawAssets[uuid] = { url: info, raw: true };
-                    }
-                }
-                //
-                callback(json);
+                rawAssets[uuid] = {url: info, raw: true};
             }
-        });
-    }
-    loadProjectSettings(function (settings) {
+        }
+
         // init engine
-
-
         var canvas,
             width = 640,
             height = 480;
 
-        if (isNative) {
+        if (Fire.isWeb) {
             canvas = document.getElementById('GameCanvas');
             width = document.documentElement.clientWidth;
             height = document.documentElement.clientHeight;
@@ -45,20 +31,20 @@ function load() {
             width: width,
             height: height,
             canvas: canvas,
-            scenes: settings.scenes,
-            //rawUrl: settings.rawUrl
+            scenes: _FireSettings.scenes,
+            //rawUrl: _FireSettings.rawUrl
         };
         Fire.engine.init(option, function () {
             //// makes the container's size equals to the frame's size
             //Fire.Screen.ContainerStrategy.EqualToFrame.apply();
 
             // init assets
-            Fire.AssetLibrary.init('resource/import', 'resource/raw', settings.rawAssets);
+            Fire.AssetLibrary.init('resource/import', 'resource/raw', _FireSettings.rawAssets);
 
             // load scene
-            Fire.engine.loadScene(settings.launchScene, null,
+            Fire.engine.loadScene(_FireSettings.launchScene, null,
                 function () {
-                    if (isNative) {
+                    if (Fire.isWeb) {
                         // show canvas
                         canvas.style.visibility = '';
                         var div = document.getElementById('GameDiv');
@@ -70,13 +56,16 @@ function load() {
                     Fire.engine.play();
                 }
             );
-        });
-    });
-};
 
-if (isNative) {
-    window.onload = load;
-}
-else {
-    load();
-}
+            // purge
+            _FireSettings = undefined;
+        });
+    }
+
+    if (Fire.isWeb) {
+        window.onload = boot;
+    }
+    else {
+        boot();
+    }
+})();

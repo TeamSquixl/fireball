@@ -63,7 +63,7 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
         }),
         engine: Path.resolve(cwd, engine),
         res: Path.join(dest, 'resource'),
-        settings: Path.join(dest, 'settings.json')
+        settings: Path.join(dest, 'settings.js')
     };
     paths.scriptsToCopy = [paths.engine].concat(paths.runtimeScripts);
 
@@ -197,7 +197,8 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
                 scenes: [],
                 launchScene: '',
                 rawAssets: {},
-                resBundle: opts.resBundle
+                resBundle: opts.resBundle,
+                platform: platform
             };
             // scenes
             var scenes = opts.scenes;
@@ -234,6 +235,12 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
 
             // write config
             var json = JSON.stringify(settings, null, debug ? 4 : 0);
+            if (debug) {
+                json = "_FireSettings = " + json + ';\n';
+            }
+            else {
+                json = "_FireSettings=" + json;
+            }
             fs.writeFile(paths.settings, json, done);
         }
     );
@@ -269,7 +276,6 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
             .on('end', callback);
     }
 
-    // web-desktop
     gulp.task(BUILD_ + 'web-desktop',
         [
             'compile',
@@ -282,7 +288,6 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
         }
     );
 
-    // web-mobile
     gulp.task(BUILD_ + 'web-mobile',
         [
             'compile',
@@ -295,15 +300,26 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
         }
     );
 
-    // web-preview
-    gulp.task(BUILD_ + 'web-preview',
+    //gulp.task(BUILD_ + 'web-preview',
+    //    [
+    //        'copy-compiled',
+    //        'copy-scripts',
+    //        'build-settings'
+    //    ],
+    //    function (done) {
+    //        buildHtml(paths.template_web_preview, done);
+    //    }
+    //);
+
+    gulp.task(BUILD_ + 'native-mac',
         [
-            'copy-compiled',
+            'compile',
             'copy-scripts',
+            'build-assets',
             'build-settings'
         ],
         function (done) {
-            buildHtml(paths.template_web_preview, done);
+            buildHtml(paths.template_web_desktop, done);
         }
     );
 

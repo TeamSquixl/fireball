@@ -54,3 +54,7 @@ Editor.events.on('focus', function () {
 Editor.events.on('blur', function () {
     Editor.assetdb.watchON();
 });
+
+Editor.events.on('quit', function () {
+    Editor.PreviewServer.stop();
+});
