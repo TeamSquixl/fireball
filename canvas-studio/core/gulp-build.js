@@ -63,7 +63,7 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
         }),
         engine: Path.resolve(cwd, engine),
         res: Path.join(dest, 'resource'),
-        settings: Path.join(dest, 'settings.json')
+        settings: Path.join(dest, 'settings.js')
     };
     paths.scriptsToCopy = [paths.engine].concat(paths.runtimeScripts);
 
@@ -197,7 +197,8 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
                 scenes: [],
                 launchScene: '',
                 rawAssets: {},
-                resBundle: opts.resBundle
+                resBundle: opts.resBundle,
+                platform: platform
             };
             // scenes
             var scenes = opts.scenes;
@@ -234,6 +235,7 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
 
             // write config
             var json = JSON.stringify(settings, null, debug ? 4 : 0);
+            json = "_FireSettings = " + json + ';';
             fs.writeFile(paths.settings, json, done);
         }
     );
