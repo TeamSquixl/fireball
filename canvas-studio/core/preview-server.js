@@ -166,8 +166,10 @@ module.exports = {
      */
     stop: function () {
         if ( server ) {
-            server.close();
-            Editor.info('shutdown preview server');
+            server.close( function () {
+                Editor.info('shutdown preview server');
+                server = null;
+            });
         }
     },
 
