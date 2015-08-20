@@ -40,6 +40,8 @@ module.exports = {
             res.render('index', {
                 title: 'Fireball | ' + Editor.projectInfo.name,
                 runtimeScripts: runtimePkg.build.scriptsDev,
+                width: Editor.stashedScene.designWidth,
+                height: Editor.stashedScene.designHeight,
             });
         });
 
@@ -176,7 +178,7 @@ module.exports = {
     /**
      * browserReload
      */
-    browserReload: function ( callback ) {
+    browserReload: function () {
         if (_browserReload) {
             return;
         }

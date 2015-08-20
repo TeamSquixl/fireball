@@ -349,4 +349,8 @@ Editor.JS.mixin(Editor.App, {
         Editor.PreviewServer.browserReload();
         Editor.log('Browse Reloaded');
     },
+
+    'app:browser-reload': function () {
+        Editor.PreviewServer.browserReload();
+    },
 });
