@@ -12,7 +12,6 @@ module.exports = {
         var OS = require('os');
         var Del = require('del');
         var Express = require('express');
-        var Jade = require('jade');
 
         var buildPath = Path.join(OS.tmpdir(),'fireball-game-builds');
         Del.sync( Path.join(buildPath, '**/*'), {force: true});
@@ -57,6 +56,22 @@ module.exports = {
         app.get('/runtime/*', function (req, res) {
             var path = Path.join(Editor.runtimePath, req.params[0]);
             res.sendFile(path);
+        });
+
+        // serves raw assets
+        app.get('/resource/raw/*', function(req, res) {
+            var url = req.url;
+            url = Path.join(Editor.projectPath, 'assets', req.params[0]);
+
+            res.sendFile(url);
+        });
+
+        // serves imported assets
+        app.get('/resource/import/*', function(req, res) {
+            var url = req.url;
+            url = Path.join(Editor.importPath, req.params[0]);
+
+            res.sendFile(url);
         });
 
         app.get('/settings.js', function (req, res) {
@@ -109,22 +124,6 @@ module.exports = {
             }
 
             res.sendStatus(404);
-        });
-
-        // serves raw assets
-        app.get('/resource/raw/*', function(req, res) {
-            var url = req.url;
-            url = Path.join(Editor.projectPath, 'assets', req.params[0]);
-
-            res.sendFile(url);
-        });
-
-        // serves imported assets
-        app.get('/resource/import/*', function(req, res) {
-            var url = req.url;
-            url = Path.join(Editor.importPath, req.params[0]);
-
-            res.sendFile(url);
         });
 
         // ============================
