@@ -6,23 +6,152 @@ permalinks: manual/editor-overview
 
 > This chapter will introduce you all the features of Fireball Editor. It would be a good place for being familiar with Fireball Editor, and getting ready for your future Fireball works.
 > Please make sure you have finished reading the following articles before going further:
-> - [Get Fireball](/manual/start/get-fireball/)
-> - [New Project](/manual/start/new-project/)
+> - [Introduction](/manual/introduction)
+> - [Dashboard](/manual/dashboard)
 
-# Introduction
+## Overview
 
 You'll have no chance to build an exciting game without understanding what all the editor tools can do for you first, so hold your horse for a while and meet the Fireball Editor along with thrilling features. And, whenever you are in doubt, don't forget this chapter is a good place to look up for as well.
 
 
-Fireball Editor mainly consists of serveral panels, which are designed for finishing specific tasks, respectively. You can adjust their sizes and positions by your own taste. Beside of these panels, there are other UIs which are essential for building a game, including menu bar, tool bar and tool windows, and you should know about them as well.
+Fireball Editor mainly consists of several panels. These panels cover project asset management, scene editing, data inspecting, building and other extended functions which completes the full workflow of creating a game. You can adjust each panel's size and position by your own taste. Beside of these panels, there are other UIs which are essential for building a game, including menus, tool bar and DevTools window, and you should know about them as well.
 
 
-Check out the screenshot below - it gives a basic concept of the UI layout (In the default layout, **Game Panel** and **Scene Panel** are overlapped, and you may need to switch between them by clicking the `Scene` tab and `Game` tab). We will discuss every piece of features in the sections below.
+Check out the screenshot below - it gives a basic concept of the UI layout. We will discuss every piece of features in the sections below.
 
-![editor-overview-intro](/manual/start/editor-overview/editor-overview-intro.png)
+![editor-overview-intro](https://cloud.githubusercontent.com/assets/344547/9374257/9d4c2ba0-4726-11e5-99bd-afaac5e59940.png)
 
-# Menus
-##Fireball
+## Assets
+
+![Assets](https://cloud.githubusercontent.com/assets/344547/9374759/8e996776-472b-11e5-93fa-c22247676283.png)
+
+This is where you can access and manage assets of your game. You'd better start from here if you just created an empty project. In that case you'll see an empty list waiting for you to drag stuff into it.
+
+### Basics
+
+The list matches file content inside your project's `assets` folder. (to learn the file structure of a Fireball project, read [Project Structure](/manual/project-structure) ) If your project assets folder have several sub-folders, you will see them as folder icon ![folder](https://cloud.githubusercontent.com/assets/344547/9375313/c04287fc-4731-11e5-8cda-259bebe5584a.png) in **Assets** panel as well. If you see a right arrow icon on the left of a folder in the list, you can click on it to expand the nested list it contains. Click on an expanded folder to "fold" it so you have more space.
+
+The files in Assets view are displayed with an icon and filename. Icon indicates the type of file identified by file extension, here's the details:
+
+
+- ![asset](https://cloud.githubusercontent.com/assets/344547/9375307/c016678a-4731-11e5-93a0-b0673e894c6c.png) **Default asset**: if a file cannot be recognized as one of the registered type, this default asset icon will be used.
+- ![atlas](https://cloud.githubusercontent.com/assets/344547/9375310/c018bdd2-4731-11e5-9b3c-1772695feb4f.png) **Atlas plist**: A common sprite atlas asset type with `.plist` extension, you can create this type of assets in tools such as [TexturePacker](https://www.codeandweb.com/texturepacker)
+- ![audio-clip](https://cloud.githubusercontent.com/assets/344547/9375309/c0182fac-4731-11e5-80d9-e74b92f0e098.png) **Audio clip**: Any audio file with `.mp3`, `.wav`, `.ogg`
+- ![bitmap-font](https://cloud.githubusercontent.com/assets/344547/9375308/c018043c-4731-11e5-823a-9c60222a6c35.png) **Bitmap font**: a font format commonly used in games to render characters as sprite. You can use these tools ([Glyph Designer](http://glyphdesigner.71squared.com/) [AngleCode Bmfont](http://www.angelcode.com/products/bmfont/) ) to create `.fnt` bitmap font files.
+- ![javascript](https://cloud.githubusercontent.com/assets/344547/9375314/c044c364-4731-11e5-9990-b3356ffd1e45.png)![typescript](https://cloud.githubusercontent.com/assets/344547/9375320/c06efc4c-4731-11e5-85c0-c21419fffb62.png)![coffeescript](https://cloud.githubusercontent.com/assets/344547/9375311/c03314d4-4731-11e5-945b-e1c6a72a0be6.png)![css](https://cloud.githubusercontent.com/assets/344547/9375312/c03f1c20-4731-11e5-8e90-ca90d442e12c.png)![html](https://cloud.githubusercontent.com/assets/344547/9375315/c044f352-4731-11e5-8788-e0e569574fdf.png) **Script files**: including Javascript `.js`, TypeScript `.ts`, Coffeescript `.coffee`, CSS `.css`, HTML `.html`. These file format are all supported for scripting your game or editor extensions.
+- ![scene](https://cloud.githubusercontent.com/assets/344547/9375317/c057cfea-4731-11e5-8d57-e43d9dfd03b6.png) **Scene**: Fireball's scene file. Can only be created in **Assets** view.
+- ![text](https://cloud.githubusercontent.com/assets/344547/9375319/c06c4718-4731-11e5-99e2-a47912dc5c2d.png) **Text file**: a file with extension `.txt`.
+- ![ttf-font](https://cloud.githubusercontent.com/assets/344547/9375321/c0733c8a-4731-11e5-9648-77d857c60c55.png) **TTF font**: TrueType font format.
+
+
+### Add Assets to Project
+
+There are three ways of add new assets to project:
+
+- create asset in **Assets** view.
+- drag asset files from your file system (such as Finder for Mac or Explorer for Windows) into **Assets** view.
+- copy or move asset files to your project's `assets` folder in your file system, then focus Fireball Editor window to automatically scan and import new assets.
+
+Add new files from file system is self explanatory, let's see how to creating asset in  **Assets** view:
+
+- Click on the top-left ![image](https://cloud.githubusercontent.com/assets/344547/9375817/dbe3e608-4737-11e5-90d1-5a575600c398.png) plus button.
+- or right click anywhere on **Assets** panel, and select `Create` sub menu.
+- In either way, you will see the following options in `Create` context menu:
+  - Folder
+  - JavaScript
+  - CoffeeScript
+  - Scene
+- click one of them and your asset will be created in currently selected folder.
+
+There seems to be not many options at the moment, but as development goes, Fireball will be able to create more types of assets with builtin tools, and saves user money and trouble to find external tools.
+
+### Manage Assets
+
+You can rename/move/delete assets in this panel.
+
+- to rename an asset, right click the asset and select `rename` from context menu.
+- to move an asset, drag the asset around the tree view, until you're happy with where its new location is. The new folder to hold the asset will be highlighted in orange.
+- to delete an asset, right click and select `delete` or select the asset and press <kbd>Cmd + Backspace</kbd> on mac or <kbd>Del</kbd> on windows.
+
+Besides these operations, there are other options in right click context menu that gives you more details about the asset:
+
+- `Reveal in Finder` (mac) `Reveal in Explorer` (win): select this and Fireball will open the folder that contains the asset in Finder/Explorer.
+- `Reveal in Library`: open the library folder that contains the imported copy of the asset.
+- `Show UUID`: print the UUID of the asset in console panel. This is mainly for debug purpose and normal user should not need it.
+
+### Search Asset
+
+By typing in the search field at top of **Assets** panel,  the asset tree view will only show assets whose filename contains your typed search keyword.
+
+![search asset](https://cloud.githubusercontent.com/assets/344547/9376761/ffbc3312-4743-11e5-9b3e-d7f5abe64b95.png)
+
+It's convenient to find the asset you want this way if your project is getting bigger. Once you find the asset you want, select it in the filtered list, and click the pin icon at the right of search field. It will go back to assets tree view and keep the asset you find highlighted.
+
+
+## Hierarchy
+![hierarchy panel](https://cloud.githubusercontent.com/assets/344547/9374769/9ba11b76-472b-11e5-9c1f-2c3f540da3fa.png)
+
+**Hierarchy** panel is a tree view contains all nodes in the current open scene. Each entry in this tree view represents an individual **node**. And nodes are usually organized hierarchically (parent-child relationship in other words). This panel's main purpose is to manage the hierarchical structure of current scene, also giving you quick access to each node so you can edit them.
+
+### Create Node
+
+
+
+### Entity List
+
+**Entities** in a scene will be present in terms of their relationship.  Those that owns children will show a little arrow ![collapse-arrow](/manual/start/editor-overview/collapse-arrow.png) in front of their names. Parent **Entities** will be expanded or collapsed by clicking the arrow.
+
+Properties of selected **Entities** will be shown in the **Inspector Panel**, while the handlers of the **Entities** will appear in the **Scene Panel** in the meantime. You can select multiple **Entities** in the list by pressing <kbd>Shift</kbd> key or <kbd>Ctrl</kbd> key, continuously or not.
+
+You can also change the relationship by dragging **Entities** in the list. Say, dragging **Entity** A onto **Entity** B will make A become B's child.
+
+Click right mouse button in the list will pop up a context menu, whose features includes:
+* **Duplicate**: Make a copy of selected **Entity** and add it to the end of the list. It is the easiest way to create multiple **Entities** with same or similar properties.
+* **Rename**: Rename the selected **Entity**. You can do so in the **Inspector Panel** as well.
+* **Delete**: Delete the selected **Entity**. You can do so by pressing <kbd>Delete</kbd> key as well.
+* **Create Empty**: Create an empty **Entity** in the scene.
+An empty **Entity** solely contains its **Transform information**, i.e. its position, rotation and scale. The default property values are:
+  - ***Position*** x=0, y=0
+  - ***Rotation*** 0
+  - ***Scale*** x=1, y=1
+* **Create Empty Child**
+Create a **Child Entity** that belongs to the selected **Entity**.
+For the situation of no **Entity** is selected, this function will create an empty **Entity** as a root one, which behaves exactly the same as **Create Empty** function.
+
+## Add **Entity**
+Click the ![add-button](/manual/start/editor-overview/add-button.png) in the upper-left corner in the panel will show you the **Entity** creation menu, whose features includes:
+* **Create Empty**: Create an empty **Entity** in the scene.
+An empty **Entity** solely contains its **Transform information**, i.e. its position, rotation and scale. The default property values are:
+  - ***Position*** x=0, y=0
+  - ***Rotation*** 0
+  - ***Scale*** x=1, y=1
+* **Create Empty Child**
+Create a **Child Entity** that belongs to the selected **Entity**.
+For the situation of no **Entity** is selected, this function will create an empty **Entity** as a root one, which behaves exactly the same as **Create Empty** function.
+
+## Search **Entity**
+The search box is designed for filtering and locating **Entities** with specific keywords quickly. When there are numerous **Entities** in the scene, or the relationship between them are quite complicating, the search box will improve your efficiency in a great deal.
+
+
+## Scene Panel
+![scene-panel](https://cloud.githubusercontent.com/assets/344547/9374374/c5ee4920-4727-11e5-803d-78de5f3d4fa1.png)
+The **Scene Panel** is the core of Fireball Editor. It's usually used for stage designing and building, such as setting up background, floor, obstacles and other visual elements. Thanks to its WYSIWYG feature, it can also be used for layout GUI and test interactive elements.
+
+### Navigation
+
+Currently there are two operation for scene panel navigation:
+
+- <kbd>Shift + Mouse Drag</kbd>: pan the scene view.
+- <kbd>Mouse Scroll</kbd>: zoom in and out.
+
+The **Scene Panel** is very easy to master. All you need is to click or drag a selection box to selected the **Entities** you want to edit, transform them will the tools in tool bar, and check the results. When multiple **Entities** are selected, the items will be highlighten in the **Hierarchy Panel**, and handlers will be shown in the **Scene Panel** (but their positions depends on your **handler position setting**, referring to the [Toolbar](#toolbar) manual).
+
+When the scene is large, you can use your mouse scroller for zooming.
+
+Also, you can quick select **Entities** by putting keywords in the search box in the upper-right corner.
+
+## Menus
+## Fireball
 * **Hide Fireball (Shortcut: <kbd>H</kbd> )**
 *In construction*
 * **Hide Others (Shortcut: <kbd>Shift + H</kbd> )**
@@ -169,44 +298,7 @@ Clicking this button will pop up the shortcut mapping table for quick reference.
 ## User Profile ![tool-user](/manual/start/editor-overview/tool-user.png)
 *In construction*
 
-# Hierarchy Panel
-![hierarchy-panel](/manual/start/editor-overview/hierarchy-panel.png)
-**Hierarchy Panel** is for managing all **Entities** (game objects) in the scene. **Entities** are organized hierarchically in the **Hierarchy Panel** to indicate the parent-child relationship between **Entities**. Child **Entities** will inherit some properties of their parents. For instance, when moving, rotating or scaling parent **Entities**, their children will transform with them.
 
-## Entity List
-
-**Entities** in a scene will be present in terms of their relationship.  Those that owns children will show a little arrow ![collapse-arrow](/manual/start/editor-overview/collapse-arrow.png) in front of their names. Parent **Entities** will be expanded or collapsed by clicking the arrow.
-
-Properties of selected **Entities** will be shown in the **Inspector Panel**, while the handlers of the **Entities** will appear in the **Scene Panel** in the meantime. You can select multiple **Entities** in the list by pressing <kbd>Shift</kbd> key or <kbd>Ctrl</kbd> key, continuously or not.
-
-You can also change the relationship by dragging **Entities** in the list. Say, dragging **Entity** A onto **Entity** B will make A become B's child.
-
-Click right mouse button in the list will pop up a context menu, whose features includes:
-* **Duplicate**: Make a copy of selected **Entity** and add it to the end of the list. It is the easiest way to create multiple **Entities** with same or similar properties.
-* **Rename**: Rename the selected **Entity**. You can do so in the **Inspector Panel** as well.
-* **Delete**: Delete the selected **Entity**. You can do so by pressing <kbd>Delete</kbd> key as well.
-* **Create Empty**: Create an empty **Entity** in the scene.
-An empty **Entity** solely contains its **Transform information**, i.e. its position, rotation and scale. The default property values are:
-  - ***Position*** x=0, y=0
-  - ***Rotation*** 0
-  - ***Scale*** x=1, y=1
-* **Create Empty Child**
-Create a **Child Entity** that belongs to the selected **Entity**.
-For the situation of no **Entity** is selected, this function will create an empty **Entity** as a root one, which behaves exactly the same as **Create Empty** function.
-
-## Add **Entity**
-Click the ![add-button](/manual/start/editor-overview/add-button.png) in the upper-left corner in the panel will show you the **Entity** creation menu, whose features includes:
-* **Create Empty**: Create an empty **Entity** in the scene.
-An empty **Entity** solely contains its **Transform information**, i.e. its position, rotation and scale. The default property values are:
-  - ***Position*** x=0, y=0
-  - ***Rotation*** 0
-  - ***Scale*** x=1, y=1
-* **Create Empty Child**
-Create a **Child Entity** that belongs to the selected **Entity**.
-For the situation of no **Entity** is selected, this function will create an empty **Entity** as a root one, which behaves exactly the same as **Create Empty** function.
-
-## Search **Entity**
-The search box is designed for filtering and locating **Entities** with specific keywords quickly. When there are numerous **Entities** in the scene, or the relationship between them are quite complicating, the search box will improve your efficiency in a great deal.
 
 # Assets Panel  
 ![assets-panel](/manual/start/editor-overview/assets-panel.png)
@@ -289,37 +381,7 @@ The **Inspector Panel** will show editable properties and their values as soon a
   This is the main working area of the **Inspector Panel**, including all **Components** of the selected **Entity** and all their editable properties. Typically, **Components** of an **Entity** will be listed in the sequence as added, but `Fire.Transform` will be the first one constantly, as it is the basic component. Click the arrow icon on the left of **Component** name will expand or collapse its details, which can save you some space. Click the X button will delete the **Component** from the **Entity**.
   For details of **Component** properties, please refer to **Component** documentation.
 
-## **Asset** Property Editing
 
-![inspector-asset](/manual/start/editor-overview/inspector-asset.png)
-
-Comparing with **Entity** property panel, the one of **Assets** are much simpler, for the reason that **Assets** are not used directly in game scenes, which makes them unnecessary to be edited in detail in the editor - they are always fine tuned in particular external tools (such as image processing softwares).
-
-Generally, parameters in **Asset** property panel consist of two major types (some kinds of **Assets** probably have only one type of parameters for editing):
-* **Meta**
-  Meta data of **Assets** in Fireball Editor, including their behaviour or presenting methods in the engine. For instance, you can set the **Asset** type as sprite, texture or normal map for imported images.
-* **Asset**
-  The raw properties of the **Asset**, such as the image size, the audio sampling rate, etc. These properties usually cannot be changed in Fireball Editor but for reference.
-
-**Asset** property panel provides preview window as well, for ensuring the editing and modifications. For different types of **Assets**:
-* If it's an image, preview window will show the image within the constraint of the window size, and note its original size in the bottom.
-* If it's an audio, preview window will show a playback tool bar for playing, stopping and looping the audio. Some basic information will be shown in the preview window meanwhile, including channels, sampling rate, format and playback time.
-
-的You will need to click the ![inspector-apply](/manual/start/editor-overview/inspector-apply.png) button in the upper-right corner of the **Inspector Panel** once making changes to an **Asset**, for applying your modifications to relevant **Entities**. Or you can click ![inspector-revert](/manual/start/editor-overview/inspector-revert.png) button to discard the changes you made.
-
-# Scene Panel
-![scene-panel](/manual/start/editor-overview/scene-panel.png)
-The **Scene Panel** is designed to editor the current game scene. It is the most 'frank' panel and most frequently used one in game making process, if you ask me.
-
-The **Scene Panel** are usually used for stage designing and building, such as setting up background, floor, obstacles and other visual elements. Thanks to its visual feature, it can also be used for UI layout and any WYSIWYG elements.
-
-**It is notable that every scene must have at least one camera for game view, or no picture will be shown when game runs.** However, it is a relief that you don't need to worry about it. Fireball Editor has created a default camera for you when a scene is created.
-
-The **Scene Panel** is very easy to master. All you need is to click or drag a selection box to selected the **Entities** you want to edit, transform them will the tools in tool bar, and check the results. When multiple **Entities** are selected, the items will be highlighten in the **Hierarchy Panel**, and handlers will be shown in the **Scene Panel** (but their positions depends on your **handler position setting**, referring to the [Toolbar](#toolbar) manual).
-
-When the scene is large, you can use your mouse scroller for zooming.
-
-Also, you can quick select **Entities** by putting keywords in the search box in the upper-right corner.
 
 # Game Panel
 ![game-panel](/manual/start/editor-overview/game-panel.png)

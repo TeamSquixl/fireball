@@ -28,17 +28,21 @@ If you're non-programmer and have no idea what I'm talking about. Don't worry yo
 
 ## Scene-Graph to Hierarchy View
 
-Fireball supports any [scene-graph](https://en.wikipedia.org/wiki/Scene_graph) based engine. Usually in those engines a series of function calls are used for building hierarchy structure or tree structure for all nodes in a scene. Fireball turns those function calls into an editable graphical panel: Hierarchy View.
+Fireball supports any [scene-graph](https://en.wikipedia.org/wiki/Scene_graph) based engine. Usually in those engines a series of function calls are used for building hierarchy structure or tree structure for all nodes in a scene. Fireball turns those function calls into an editable graphical panel: Hierarchy.
 
 In this panel you can create/remove a node, expand/collapse a node, add child to a node or move a node to be child of another.
 
-Hierarchy View is the key junction that connects other core modules. For example the Inspector only works when you have selected a node.
+Hierarchy is the key junction that connects other core modules. For example the Inspector only works when you have selected a node. For details on how Hierarchy works, [read this section](/manual/editor-overview#hierarchy).
+
+**Note:** If you're unclear of the concept 'Node', you can read this [comprehensive article from Cocos2d-x programming guide](http://www.cocos2d-x.org/programmersguide/2/index.html#scene-graph).
 
 ## Inspector
 
 A panel to display detailed information about your currently selected node, including all attached scripts and their properties. It also display properties for basic node, such as position/rotation/scale.
 
-## Attach Scripts to Node using Mixin
+For details on how Inspector works, [read this section](/manual/editor-overview#inspector) in Editor Overview.
+
+### Attach Scripts to Node using Mixin
 
 The most valuable feature of Fireball, is the ability to add component-like data binding and behaviors to nodes by attaching script.
 
