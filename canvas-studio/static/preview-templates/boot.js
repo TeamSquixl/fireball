@@ -10,15 +10,15 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
         }
     });
 
-    function resize () {
-        var div = document.getElementById('GameDiv');
-        var width = document.documentElement.clientWidth;
-        var height = document.documentElement.clientHeight;
-        div.style.width = width + "px";
-        div.style.height = height + "px";
-    }
-    window.addEventListener('load', resize);
-    window.addEventListener('resize', resize);
+    // function resize () {
+    //     var div = document.getElementById('GameDiv');
+    //     var width = document.documentElement.clientWidth;
+    //     var height = document.documentElement.clientHeight;
+    //     div.style.width = width + "px";
+    //     div.style.height = height + "px";
+    // }
+    // window.addEventListener('load', resize);
+    // window.addEventListener('resize', resize);
 
     // init engine
     var canvas = document.getElementById('GameCanvas');
