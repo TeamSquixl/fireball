@@ -346,11 +346,10 @@ Editor.JS.mixin(Editor.App, {
     },
 
     'app:play-on-device': function () {
-        Editor.PreviewServer.browserReload();
-        Editor.log('Browse Reloaded');
+        Shell.openExternal('http://localhost:7456');
     },
 
-    'app:browser-reload': function () {
+    'app:reload-on-device': function () {
         Editor.PreviewServer.browserReload();
     },
 });

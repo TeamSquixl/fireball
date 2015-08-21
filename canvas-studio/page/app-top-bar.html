@@ -13,6 +13,24 @@
             font-size: 15px;
             font-weight: bold;
         }
+
+        .label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #090;
+        }
+
+        .label::selection {
+            background-color: #007acc;
+        }
+
+        .fa-wifi {
+            margin-left: 5px;
+            margin-right: 5px;
+            font-size: 20px;
+
+            color: #090;
+        }
     </style>
 
     <template>
@@ -25,6 +43,9 @@
             <app-play-buttons></app-play-buttons>
         </div>
         <div class="flex-1 layout horizontal end end-justified">
+            <span class="label">[[previewURL]]</span>
+            <i class="fa fa-wifi"></i>
+            <editor-label class="mini orange">[[connectedCount]]</editor-label>
         </div>
     </template>
 

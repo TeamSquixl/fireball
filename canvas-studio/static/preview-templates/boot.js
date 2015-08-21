@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
     socket.on('browser:reload', function () {
         window.location.reload();
     });
+    socket.on('browser:confirm-reload', function () {
+        var r = confirm( 'Reload?' );
+        if ( r ) {
+            window.location.reload();
+        }
+    });
 
     // init engine
     var canvas = document.getElementById('GameCanvas');

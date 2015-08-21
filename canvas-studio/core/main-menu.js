@@ -175,7 +175,14 @@ function _getDefaultMainMenu () {
                    label: 'Play',
                    accelerator: 'CmdOrCtrl+P',
                    click: function () {
-                       Editor.sendToMainWindow('editor:toggle-play');
+                       Editor.sendToAll('scene:play-on-device');
+                   },
+                },
+                {
+                   label: 'Reload Connected Devices',
+                   accelerator: 'CmdOrCtrl+Shift+P',
+                   click: function () {
+                       Editor.sendToAll('scene:reload-on-device');
                    },
                 },
             ]

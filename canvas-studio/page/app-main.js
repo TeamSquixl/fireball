@@ -32,7 +32,11 @@ Polymer({
         Ipc.on( 'compiler:state-changed', function ( state ) {
             this.set( 'compilerState', state );
         }.bind(this) );
-        
+
+        Ipc.on( 'preview-server:connects-changed', function ( count ) {
+            this.$.tools.set( 'connectedCount', count );
+        }.bind(this) );
+
         window.addEventListener('beforeunload', function ( event ) {
           Editor.Metrics.trackEditorClose();
         });

@@ -1,7 +1,25 @@
-var sockets;
+var socketIO;
 var app;
 var server;
 var _browserReload = false;
+
+
+function _initSocket ( server ) {
+    var _connects = 0;
+
+    socketIO = require('socket.io')(server);
+    socketIO.on('connection', function ( socket ) {
+        socket.emit('connected');
+
+        _connects += 1;
+        Editor.sendToMainWindow('preview-server:connects-changed', _connects);
+
+        socket.on('disconnect', function () {
+            _connects -= 1;
+            Editor.sendToMainWindow('preview-server:connects-changed', _connects);
+        });
+    });
+}
 
 module.exports = {
     /**
@@ -157,10 +175,7 @@ module.exports = {
         });
 
         //
-        sockets = require('socket.io')(server);
-        sockets.on('connection', function ( socket ) {
-            socket.emit('connected');
-        });
+        _initSocket(server);
     },
 
     /**
@@ -183,7 +198,7 @@ module.exports = {
             return;
         }
         _browserReload = setTimeout(function () {
-            sockets.emit('browser:reload');
+            socketIO.emit('browser:reload');
             clearTimeout(_browserReload);
             _browserReload = false;
         }, 50);

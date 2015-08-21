@@ -1,21 +1,12 @@
 <dom-module id="app-play-buttons" >
     <link rel="import" type="css" href="app-play-buttons.css">
     <template>
-        <div id="play" class="btn"
-            on-click="_onPlayClick"
-            selected="{{playing}}"
-        >
+        <div id="play" class="btn" on-click="_onPlayClick">
             <i class="fa fa-play"></i>
         </div>
-        <div id="pause" class="btn" on-click="_onPauseClick">
-            <i class="fa fa-pause"></i>
-        </div>
-        <div id="step" class="btn" on-click="_onStepClick">
-            <i class="fa fa-step-forward"></i>
-        </div>
 
-        <div id="device" class="btn" on-click="_onDeviceClick">
-            <i class="fa fa-html5"></i>
+        <div id="reload" class="btn" on-click="_onReloadClick">
+            <i class="fa fa-rotate-right"></i>
         </div>
     </template>
 
