@@ -31,6 +31,8 @@
             width: width,
             height: height,
             canvas: canvas,
+            designWidth: _FireSettings.designWidth,
+            designHeight: _FireSettings.designHeight,
             scenes: _FireSettings.scenes,
             //rawUrl: _FireSettings.rawUrl
         };
@@ -52,8 +54,6 @@
                             div.style.backgroundImage = '';
                         }
                     }
-
-                    Fire.engine.designResolution = Fire.v2(_FireSettings.designWidth, _FireSettings.designHeight);
 
                     // play game
                     Fire.engine.play();
