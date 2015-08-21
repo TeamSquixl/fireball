@@ -52,6 +52,9 @@
                             div.style.backgroundImage = '';
                         }
                     }
+
+                    Fire.engine.designResolution = Fire.v2(_FireSettings.designWidth, _FireSettings.designHeight);
+
                     // play game
                     Fire.engine.play();
                 }

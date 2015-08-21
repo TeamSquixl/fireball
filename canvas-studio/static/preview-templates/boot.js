@@ -10,6 +10,16 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
         }
     });
 
+    function resize () {
+        var div = document.getElementById('GameDiv');
+        var width = document.documentElement.clientWidth;
+        var height = document.documentElement.clientHeight;
+        div.style.width = width + "px";
+        div.style.height = height + "px";
+    }
+    window.addEventListener('load', resize);
+    window.addEventListener('resize', resize);
+
     // init engine
     var canvas = document.getElementById('GameCanvas');
     var width = document.documentElement.clientWidth;
@@ -36,6 +46,8 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
                     if (div) {
                         div.style.backgroundImage = '';
                     }
+
+                    Fire.engine.designResolution = Fire.v2(_FireSettings.designWidth, _FireSettings.designHeight);
 
                     // play game
                     Fire.engine.play();

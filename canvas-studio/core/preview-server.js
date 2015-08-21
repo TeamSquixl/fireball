@@ -58,8 +58,6 @@ module.exports = {
             res.render('index', {
                 title: 'Fireball | ' + Editor.projectInfo.name,
                 runtimeScripts: runtimePkg.build.scriptsDev,
-                width: Editor.stashedScene.designWidth,
-                height: Editor.stashedScene.designHeight,
             });
         });
 
@@ -100,6 +98,8 @@ module.exports = {
             var settings = {
                 scenes: Editor.sceneList,
                 rawAssets: {},
+                designWidth: Editor.stashedScene.designWidth,
+                designHeight: Editor.stashedScene.designHeight,
             };
 
             Editor.assetdb.queryMetas('assets://**/*', '', function (err, results) {
