@@ -1,5 +1,5 @@
 ---
-title: Assets Panel
+title: Main Menu
 category: manual
 permalinks: manual/editor-interface/main-menu
 ---

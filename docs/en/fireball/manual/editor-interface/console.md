@@ -1,5 +1,5 @@
 ---
-title: Assets Panel
+title: Console Panel
 category: manual
 permalinks: manual/editor-interface/console
 ---

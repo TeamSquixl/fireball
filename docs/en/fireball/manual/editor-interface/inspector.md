@@ -1,5 +1,5 @@
 ---
-title: Assets Panel
+title: Inspector Panel
 category: manual
 permalinks: manual/editor-interface/inspector
 ---

@@ -1,5 +1,5 @@
 ---
-title: Assets Panel
+title: Scene Panel
 category: manual
 permalinks: manual/editor-interface/scene
 ---

@@ -1,5 +1,5 @@
 ---
-title: Assets Panel
+title: Hierarchy Panel
 category: manual
 permalinks: manual/editor-interface/hierarchy
 ---

@@ -67,3 +67,7 @@ By typing in the search field at top of **Assets** panel,  the asset tree view w
 ![search asset](https://cloud.githubusercontent.com/assets/344547/9376761/ffbc3312-4743-11e5-9b3e-d7f5abe64b95.png)
 
 It's convenient to find the asset you want this way if your project is getting bigger. Once you find the asset you want, select it in the filtered list, and click the pin icon at the right of search field. It will go back to assets tree view and keep the asset you find highlighted.
+
+---
+
+Continue to read [Hierarchy](/manual/editor-interface/hierarchy).
