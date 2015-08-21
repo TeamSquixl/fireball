@@ -69,6 +69,8 @@ function _doBuild (options, callback) {
             resBundle: resBundle,       // the table of resource paths to uuid
             unImportedAssets: unImportedAssets,
             debug: options.debug,       // development build
+            designWidth: options.previewWidth,
+            designHeight: options.previewHeight,
             //resUuid: options.resUuid,
         };
         (options.buildTask || buildTask).startWithArgs(Builder, args, callback);

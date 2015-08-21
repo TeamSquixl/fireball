@@ -192,13 +192,17 @@ exports.startWithArgs = function (ipcProxy, opts, callback) {
 
     // build project settings
     gulp.task('build-settings', ['copy-scripts'/*, 'res-setting'*/],    // wait until dest folder created
+
         function (done) {
+
             var settings = {
                 scenes: [],
                 launchScene: '',
                 rawAssets: {},
                 resBundle: opts.resBundle,
-                platform: platform
+                platform: platform,
+                designWidth: opts.designWidth,
+                designHeight: opts.designHeight,
             };
             // scenes
             var scenes = opts.scenes;
