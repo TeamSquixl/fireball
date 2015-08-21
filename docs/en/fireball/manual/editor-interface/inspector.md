@@ -28,3 +28,7 @@ The **Inspector Panel** will show editable properties and their values as soon a
 * **Component** List
   This is the main working area of the **Inspector Panel**, including all **Components** of the selected **Entity** and all their editable properties. Typically, **Components** of an **Entity** will be listed in the sequence as added, but `Fire.Transform` will be the first one constantly, as it is the basic component. Click the arrow icon on the left of **Component** name will expand or collapse its details, which can save you some space. Click the X button will delete the **Component** from the **Entity**.
   For details of **Component** properties, please refer to **Component** documentation.
+
+---
+
+Continue to read [Console](/manual/editor-interface/console).

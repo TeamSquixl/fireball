@@ -21,3 +21,7 @@ Filter console information by keywords. When **Regex** checkbox is ticked, conte
 * **Level filter combobox** ![console-level](/manual/start/editor-overview/console-level.png):
 Display information of only one severity level. All levels will be shown when **All** is selected.
 * **Collapse checkbox**: Ticking this checkbox will merge same outputs, with a leading number that tells how many times it has been repeated. This feature is rather useful and space economic when there are many outputs and their sequence don't matter.
+
+---
+
+Continue to read [Main Menu](/manual/editor-interface/main-menu).

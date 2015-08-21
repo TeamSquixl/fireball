@@ -55,3 +55,7 @@ You can set design resolution (width and height) by the widget on top of **Scene
 Design Resolution decides how much of scene content (in pixels) will be shown in the final game view. Game developer use this set of values together with screen content policy to make sure the game can be scaled up and down on different devices.
 
 Your design resolution setting will be shown as a purple frame in the scene, only the content inside the purple frame will make into the game!
+
+---
+
+Continue to read [Inspector](/manual/editor-interface/inspector).

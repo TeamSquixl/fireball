@@ -40,3 +40,7 @@ Right click on a node to bring up its context menu, you can do these jobs:
 - Create a new node as child of current selected node.
 - Duplicate node, make the new node a sibling of current selected node. Can also be done with <kbd>Cmd/Ctrl + D</kbd>
 - Rename node, can also be done with pressing <kbd>Enter</kbd> on mac or <kbd>F2</kbd> on windows.
+
+---
+
+Continue to read [Scene](/manual/editor-interface/scene).
