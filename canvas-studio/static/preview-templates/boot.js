@@ -19,6 +19,54 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
     var designWidth = _FireSettings.designWidth;
     var designHeight = _FireSettings.designHeight;
 
+    var rotated = false;
+    var paused = false;
+    var btnRotate = document.getElementById('btn-rotate');
+    var optsDevice = document.getElementById('opts-device');
+    var btnPause = document.getElementById('btn-pause');
+
+
+    function updateResolution () {
+        var idx = optsDevice.value;
+        var w, h;
+
+        if ( idx === 0 ) {
+            if ( !rotated ) {
+                w = designWidth;
+                h = designHeight;
+            } else {
+                w = designHeight;
+                h = designWidth;
+            }
+        }
+        else {
+            var info = devices[idx];
+            if ( !rotated ) {
+                w = info.width;
+                h = info.height;
+            } else {
+                w = info.height;
+                h = info.width;
+            }
+        }
+
+        var gameDiv = document.getElementById('GameDiv');
+        gameDiv.style.width = w + 'px';
+        gameDiv.style.height = h + 'px';
+    }
+
+    // init rotate button
+    btnRotate.addEventListener('click', function () {
+        rotated = !rotated;
+        if ( rotated ) {
+            btnRotate.classList.add('checked');
+        } else {
+            btnRotate.classList.remove('checked');
+        }
+        updateResolution();
+    });
+
+    // init device resolutions
     var devices = [
         { name: 'Apple iPad', width: 1024, height: 768, ratio: 2 },
         { name: 'Apple iPad Mini', width: 1024, height: 768, ratio: 1 },
@@ -32,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
         { name: 'Goolge Nexus 7', width: 960, height: 600, ratio: 2 },
     ];
 
-    var optsDevice = document.getElementById('opts-device');
     devices.forEach( function ( info, idx ) {
         var opt = document.createElement('option');
         opt.value = idx+1;
@@ -41,30 +88,17 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
     });
 
     optsDevice.addEventListener( 'change', function ( event ) {
-        var gameDiv = document.getElementById('GameDiv');
-
-        // event.target.value;
-        var idx = event.target.value;
-        if ( idx === 0 ) {
-            gameDiv.style.width = designWidth + 'px';
-            gameDiv.style.height = designHeight + 'px';
-            return;
-        }
-
-        var info = devices[idx];
-        gameDiv.style.width = info.width + 'px';
-        gameDiv.style.height = info.height + 'px';
+        updateResolution();
     });
 
-    var paused = false;
-    var btnPause = document.getElementById('btn-pause');
+    // init pause button
     btnPause.addEventListener('click', function () {
         if ( Fire.engine.isPaused ) {
             Fire.engine.play();
-            btnPause.classList.remove('paused');
+            btnPause.classList.remove('checked');
         } else {
             Fire.engine.pause();
-            btnPause.classList.add('paused');
+            btnPause.classList.add('checked');
         }
     });
 
