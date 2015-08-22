@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function ( event ) {
+    // socket
+    // =======================
+
     var socket = window.__socket_io__();
     socket.on('browser:reload', function () {
         window.location.reload();
@@ -10,17 +13,34 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
         }
     });
 
-    // function resize () {
-    //     var div = document.getElementById('GameDiv');
-    //     var width = document.documentElement.clientWidth;
-    //     var height = document.documentElement.clientHeight;
-    //     div.style.width = width + "px";
-    //     div.style.height = height + "px";
-    // }
-    // window.addEventListener('load', resize);
-    // window.addEventListener('resize', resize);
+    // init toolbar
+    // =======================
+
+    var paused = false;
+    var btnPause = document.getElementById('btn-pause');
+    btnPause.addEventListener('click', function () {
+        if ( Fire.engine.isPaused ) {
+            Fire.engine.play();
+            btnPause.classList.remove('paused');
+        } else {
+            Fire.engine.pause();
+            btnPause.classList.add('paused');
+        }
+    });
 
     // init engine
+    // =======================
+
+    function resize () {
+        // var div = document.getElementById('GameDiv');
+        // var width = document.documentElement.clientWidth;
+        // var height = document.documentElement.clientHeight;
+        // div.style.width = width + 'px';
+        // div.style.height = height + 'px';
+    }
+    window.addEventListener('load', resize);
+    window.addEventListener('resize', resize);
+
     var canvas = document.getElementById('GameCanvas');
     var width = document.documentElement.clientWidth;
     var height = document.documentElement.clientHeight;
@@ -33,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
         scenes: _FireSettings.scenes,
         //rawUrl: _FireSettings.rawUrl
     };
+
     Fire.engine.init(option, function () {
         // init assets
         Fire.AssetLibrary.init('resource/import', 'resource/raw', _FireSettings.rawAssets);
@@ -42,6 +63,9 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
             var scene = Fire.deserialize(json);
             Fire.engine._initScene(scene, function () {
                 Fire.engine._launchScene(scene, function () {
+                    var splash = document.getElementById('splash');
+                    splash.style.display = 'none';
+
                     // show canvas
                     canvas.style.visibility = '';
                     var div = document.getElementById('GameDiv');
