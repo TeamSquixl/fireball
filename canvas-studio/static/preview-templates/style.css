@@ -41,7 +41,8 @@ body, canvas, div {
 .wrapper {
     position: relative;
 
-    border: 2px solid #555;
+    border: 1px solid #444;
+    background: #222;
 }
 
 .toolbar {
@@ -73,7 +74,7 @@ body, canvas, div {
 
 .toolbar select:focus {
     outline: none;
-    border: 1px solid #09f;
+    /* border: 1px solid #09f; */
 }
 
 .toolbar button {

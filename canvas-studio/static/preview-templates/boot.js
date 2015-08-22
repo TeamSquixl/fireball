@@ -16,6 +16,46 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
     // init toolbar
     // =======================
 
+    var designWidth = _FireSettings.designWidth;
+    var designHeight = _FireSettings.designHeight;
+
+    var devices = [
+        { name: 'Apple iPad', width: 1024, height: 768, ratio: 2 },
+        { name: 'Apple iPad Mini', width: 1024, height: 768, ratio: 1 },
+        { name: 'Apple iPhone 4', width: 320, height: 480, ratio: 2 },
+        { name: 'Apple iPhone 5', width: 320, height: 568, ratio: 2 },
+        { name: 'Apple iPhone 6', width: 375, height: 667, ratio: 2 },
+        { name: 'Apple iPhone 6 Plus', width: 414, height: 736, ratio: 3 },
+        { name: 'Goolge Nexus 4', width: 384, height: 640, ratio: 2 },
+        { name: 'Goolge Nexus 5', width: 360, height: 640, ratio: 3 },
+        { name: 'Goolge Nexus 6', width: 412, height: 732, ratio: 3.5 },
+        { name: 'Goolge Nexus 7', width: 960, height: 600, ratio: 2 },
+    ];
+
+    var optsDevice = document.getElementById('opts-device');
+    devices.forEach( function ( info, idx ) {
+        var opt = document.createElement('option');
+        opt.value = idx+1;
+        opt.text = info.name;
+        optsDevice.add( opt, null );
+    });
+
+    optsDevice.addEventListener( 'change', function ( event ) {
+        var gameDiv = document.getElementById('GameDiv');
+
+        // event.target.value;
+        var idx = event.target.value;
+        if ( idx === 0 ) {
+            gameDiv.style.width = designWidth + 'px';
+            gameDiv.style.height = designHeight + 'px';
+            return;
+        }
+
+        var info = devices[idx];
+        gameDiv.style.width = info.width + 'px';
+        gameDiv.style.height = info.height + 'px';
+    });
+
     var paused = false;
     var btnPause = document.getElementById('btn-pause');
     btnPause.addEventListener('click', function () {
@@ -51,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
         designWidth: _FireSettings.designWidth,
         designHeight: _FireSettings.designHeight,
         scenes: _FireSettings.scenes,
-        //rawUrl: _FireSettings.rawUrl
+        // rawUrl: _FireSettings.rawUrl
     };
 
     Fire.engine.init(option, function () {
