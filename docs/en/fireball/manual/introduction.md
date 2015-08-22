@@ -36,17 +36,24 @@ Hierarchy is the key junction that connects other core modules. For example the 
 
 **Note:** If you're unclear of the concept 'Node', you can read this [comprehensive article from Cocos2d-x programming guide](http://www.cocos2d-x.org/programmersguide/2/index.html#scene-graph).
 
-## Inspector
+## Node Type and Behavior
 
-A panel to display detailed information about your currently selected node, including all attached scripts and their properties. It also display properties for basic node, such as position/rotation/scale.
+Engines supported by Fireball are usually consists of a lot individual classes. You can create instance of these classes in [Hierarchy](/manual/editor-interface/hierarchy) panel. For example a Sprite node is an instance of `cc.Sprite` (cocos2d-js) class, a LabelBMFont node is an instance of `cc.LabelBMFont` class. Different type of nodes are capable of rendering sprite, text, UI elements, tilemap and animation.
 
-For details on how Inspector works, [read this section](/manual/editor-overview#inspector) in Editor Overview.
+In Fireball, user can add properties and functions to any type of node easily by creating a **Behavior** script and attach it to the node.
 
-### Attach Scripts to Node using Mixin
+### Inspector
 
-The most valuable feature of Fireball, is the ability to add component-like data binding and behaviors to nodes by attaching script.
+[Inspector](/manual/editor-interface/inspector) is a panel to display detailed information about your currently selected node. We call these editable information **properties**. There are properties of node class and properties defined in behavior scripts.
 
-JavaScript's [mixin](https://en.wikipedia.org/wiki/Mixin) feature makes this possible. All you have to do is drag your script to the Inspector of a certain node. The script will be added to Inspector View. You can drag more script onto a single node. Inspector will show each script separately with their properties.
-But behind the scene all scripts attached are "mixed" together to create a mixin.
+![inspector](https://cloud.githubusercontent.com/assets/344547/9423058/c973e162-48e5-11e5-8858-5d9661dee749.png)
 
-There are detailed guide and rules for this core system, we will introduce them in later articles.
+Programmers can write behavior script with properties that can be edited in **Inspector**, effectively delegate data inputing and tweaking work to non-programmers such as artists and designers.
+
+For details on how Inspector works, [read this section](/manual/editor-interface/inspector) in Editor Overview.
+
+### Attach Behavior to Node
+
+To add behaviors to a node, all you have to do is drag your script to the **Inspector** with the node selected. The behavior will be added to Inspector. You can drag more script onto a single node. Inspector will show each behavior separately with their properties.
+
+To learn the details on how behavior works, please read [Behavior](/manual/scripting/attachable-script) guide.

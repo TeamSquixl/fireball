@@ -4,24 +4,22 @@ category: manual
 permalinks: manual/editor-interface/main-menu
 ---
 
-## Menus
 ## Fireball
+* **About Fireball**
+Display about information and copyrights of Fireball Editor.
 * **Hide Fireball (Shortcut: <kbd>H</kbd> )**
-*In construction*
+*mac only* Hide Fireball window.
 * **Hide Others (Shortcut: <kbd>Shift + H</kbd> )**
-*In construction*
+*mac only* Hide all other windows except Fireball
 * **Show All**
-*In construction*
+*mac only* Show all hidden window.
 * **Quit (Shortcut: <kbd>Ctrl/Command + Q</kbd> )**
 Exit Fireball Editor
-* **Check For Updates**
-Check if there is any new version of Fireball Editor to update.
-* **About**
-Display about information and copyrights of Fireball Editor.
-* **Panels**
-*In construction*
 
-##File
+## File
+
+* **Open Project...**
+Close Fireball Editor and open Dashboard.
 * **New Scene (Shortcut: <kbd>Ctrl/Command + N</kbd> )**
 Create a new scene in current project.
 A game consists of one or more scenes. You'll need to create new scenes when you indend to make indepent modules such as new stages, main menu, loading screen, setting screen, etc.
@@ -47,48 +45,41 @@ Copy the selected Entity into the clipboard.
 Paste the Entity in the clipboard into the current scene.
 * **Select All (Shortcut: <kbd>A</kbd> )**
 Select all Entities in the current scene.
+* **Play (Shortcut: <kbd>Ctrl/Command + P</kbd> )**
+Play current scene in browser.
+* **Reload Connected Device (Shortcut: <kbd>Shift + Ctrl/Command + P</kbd>)**
+Reload browser tab that currently playing the current scene.
 
-##Entity
-> In Fireball Engine, a game object is called a **Entity**. **Entity** will appear or behave differently by attaching different resources or components. The presentation, interactions and logic execution of a scene are organized by multiple **Entities**.
+## Panel
 
-* **Create Empty**
-Create an empty **Entity** in the scene.
-An empty **Entity** solely contains its **Transform information**, i.e. its position, rotation and scale. The default property values are:
-  - ***Position*** x=0, y=0
-  - ***Rotation*** 0
-  - ***Scale*** x=1, y=1
-* **Create Empty Child**
-Create a **Child Entity** that belongs to the selected **Entity**.
-For the situation of no **Entity** is selected, this function will create an empty **Entity** as a root one, which behaves exactly the same as **Create Empty** function.
+* **Assets (Shortcut: <kbd>Ctrl/Command + 2</kbd>**
+Open or focus **Assets** panel.
+* **Hierarchy (Shortcut: <kbd>Ctrl/Command + 4</kbd>**
+Open or focus **Hierarchy** panel.
+* **Inspector (Shortcut: <kbd>Ctrl/Command + 3</kbd>**
+Open or focus **Inspector** panel.
+* **Scene (Shortcut: <kbd>Ctrl/Command + 1</kbd>**
+Open or focus **Scene** panel.
 
-##View
-*In construction*
+## Layout
+* **Default**
+Classic layout with **Assets**, **Inspector**, **Hierarchy**, **Scene** and **Console** panels open.
+* **Assets**
+A layout designed for asset and data extension developer, with **Assets**, **Inspector**, **AssetDB Debugger** and **Console** panel open.
 
-##Window
-* **Close (Shortcut: <kbd>W</kbd> )**
-Close the Fireball Editor window.
 
 ##Developer
+
 * **Reload (Shortcut: <kbd>Ctrl/Command + R</kbd> )**
 Reload the Fireball Editor.
-* **Recompile (Shortcut: <kbd>F7</kbd> )**
+* **Compile (Shortcut: <kbd>F7</kbd> )**
 Recompile all scripts in the current scene.
 * **Developer Tools (Shortcut: <kbd>Alt + Ctrl/Command + I</kbd> )**
 Open the **Developer Tools** window.
 Various useful and powerful features are provided in **Developer Tools** for analyzing, debugging and tracing, which are essential for game script developers. You will find more information about **Developer Tools** in the [Tool Windows](#tool-windows) section.
-* **Show Selected Asset in Library**
-Open the sub-directory of the Library folder where stores the currently selected asset in system file explorer.
-* **Test**
-  * **Reload Window Scripts**
-*In construction*
-  * **Reload Core Plugins**
-*In construction*
-  * **Thrown an Uncaught Exception**
-*In construction*
-  * **Ipc send2panel foo:bar@foobar@fire**
-*In construction*
-  * **AssetDB Debugger**
-Open the **AssetDB Debugger**, which is for tracking asset modifications and correspondings during debugging. You will find more information about **AssetDB Debugger** in the [Tool Windows](#tool-windows) section.
+* **Run Test**
+Run unit tests.
+
 
 ##Help
 * **Website**
