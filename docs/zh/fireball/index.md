@@ -1,5 +1,5 @@
 ---
-title: User Manual
+title: 用户手册
 permalinks: manual/index
 ---
 
@@ -7,21 +7,21 @@ This is the user manual of Fireball Editor. It introduces Fireball Editor and sh
 
 ## Get Started
 
-* [What's Fireball](/manual/introduction)
-* [Dashboard](/manual/dashboard)
-* [Project Structure](/manual/project-structure)
-* [Editor Overview](/manual/editor-overview)
+* [Fireball简介](/manual/introduction)
+* [Dashboard项目管理](/manual/dashboard)
+* [项目结构](/manual/project-structure)
+* [编辑器入门](/manual/editor-overview)
 
 ## Scripting
 
-* [JavaScript Primer](/manual/scripting/javascript-primer)
-* [Nodes In Scene](/manual/scripting/nodes-in-scene)
-* [Behavior (Attachable Script)](/manual/scripting/attachable-script)
-* [Access Script](/manual/scripting/access-script)
-* [Mixin Mechanic](/manual/scripting/mixin-mechanic)
-* [Advanced FireClass](/manual/scripting/class)
-* [Attributes](/manual/scripting/attributes)
-* [Module](/manual/scripting/module)
+* [JavaScript入门](/manual/scripting/javascript-primer)
+* [场景和节点](/manual/scripting/nodes-in-scene)
+* [行为(可挂载脚本)](/manual/scripting/attachable-script)
+* [访问脚本成员](/manual/scripting/access-script)
+* [脚本挂载机制](/manual/scripting/mixin-mechanic)
+* [FireClass高级用法](/manual/scripting/class)
+* [Inspector相关属性](/manual/scripting/attributes)
+* [模块化脚本](/manual/scripting/module)
 
 ### Engine Specific Scripting Guide
 

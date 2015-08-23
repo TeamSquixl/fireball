@@ -1,5 +1,5 @@
 ---
-title: Attachable Script (FireClass)
+title: Behavior 
 category: manual
 permalinks: manual/scripting/attachable-script
 ---
