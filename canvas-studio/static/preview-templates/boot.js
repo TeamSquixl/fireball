@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
         var idx = optsDevice.value;
         var w, h;
 
-        if ( idx === 0 ) {
+        if ( idx === '0' ) {
             if ( !rotated ) {
                 w = designWidth;
                 h = designHeight;
@@ -53,6 +53,8 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
         var gameDiv = document.getElementById('GameDiv');
         gameDiv.style.width = w + 'px';
         gameDiv.style.height = h + 'px';
+
+        Fire.engine.canvasSize = new Fire.v2( w, h );
     }
 
     // init rotate button
@@ -106,21 +108,20 @@ document.addEventListener('DOMContentLoaded', function ( event ) {
     // =======================
 
     function resize () {
-        // var div = document.getElementById('GameDiv');
-        // var width = document.documentElement.clientWidth;
-        // var height = document.documentElement.clientHeight;
-        // div.style.width = width + 'px';
-        // div.style.height = height + 'px';
+        // var content = document.getElementById('content');
+        // var bcr = content.getBoundingClientRect();
+        // Fire.engine.canvasSize = new Fire.v2( bcr.width, bcr.height );
     }
     window.addEventListener('load', resize);
     window.addEventListener('resize', resize);
 
     var canvas = document.getElementById('GameCanvas');
-    var width = document.documentElement.clientWidth;
-    var height = document.documentElement.clientHeight;
+    var width = canvas.clientWidth;
+    var height = canvas.clientHeight;
+
     var option = {
-        width: width,
-        height: height,
+        width: _FireSettings.designWidth,
+        height: _FireSettings.designHeight,
         canvas: canvas,
         designWidth: _FireSettings.designWidth,
         designHeight: _FireSettings.designHeight,

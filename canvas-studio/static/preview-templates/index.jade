@@ -15,9 +15,9 @@
   body
     include ./toolbar.jade
 
-    div.content
+    div.content#content
       div.wrapper#GameDiv
-        canvas#GameCanvas(width=1280 height=720)
+        canvas#GameCanvas(width=32 height=32)
         div#splash
 
     script(type='text/javascript' charset='utf-8' src='/socket.io/socket.io.js')
