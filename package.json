@@ -124,7 +124,7 @@
     "package-examples",
     "benchmark"
   ],
-  "electronVersion": "0.30.4",
+  "electronVersion": "0.30.5",
   "main": "app.js",
   "firedoc": {
     "linkNatives": true,
