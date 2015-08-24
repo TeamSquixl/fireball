@@ -121,7 +121,12 @@ window.onload = function ( event ) {
     function resize () {
         var content = document.getElementById('content');
         var bcr = content.getBoundingClientRect();
-        Fire.engine.canvasSize = new Fire.v2( bcr.width, bcr.height );
+
+        var div = document.getElementById('GameDiv');
+        div.style.width = bcr.width + 'px';
+        div.style.height = bcr.height + 'px';
+
+        // Fire.engine.canvasSize = new Fire.v2( bcr.width, bcr.height );
     }
 
     if ( isMobile() ) {
