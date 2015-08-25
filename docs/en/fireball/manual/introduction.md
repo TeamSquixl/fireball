@@ -17,7 +17,7 @@ Fireball is the first cross-engine integrated game development editor in the ind
 With three layers of framework work together, it give users a full-featured game editor that can:
 
 - Create and edit scenes to organize your game content.
-- Allow user to drag script to entities(node) to add function and behaviors in scene.
+- Allow user to drag script to nodes (or game objects, display objects, entities, whatever it's called in your beloved engine) to add function and behaviors in scene.
 - Serialize script variables and allow user edit those data in Inspector.
 - Run and preview game within editor, pause anytime to debug, hot update your scripts, change any variable exposed to editor.
 - Provide asset database system that manage url(file path) and uuid binding for all resources. Thus user can move/rename/duplicate assets after import to the project without breaking any reference.
