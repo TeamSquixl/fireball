@@ -15,6 +15,8 @@ var buffer = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 
+FIRE_TEST = false;
+FIRE_EDITOR = true;
 var UuidUtils = Editor.require('app://engine-framework/src/editor/uuid-utils');
 
 Editor.require('app://asset-db');
