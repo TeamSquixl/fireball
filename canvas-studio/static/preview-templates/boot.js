@@ -119,8 +119,7 @@ window.onload = function ( event ) {
     var engineInited = false;
 
     function resize () {
-        var content = document.getElementById('content');
-        var bcr = content.getBoundingClientRect();
+        var bcr = document.documentElement.getBoundingClientRect();
 
         var div = document.getElementById('GameDiv');
         div.style.width = bcr.width + 'px';
