@@ -458,7 +458,7 @@ gulp.task('update-shared-packages', function(cb) {
 // =====================================
 
 gulp.task('build-engine', function(cb) {
-    var buildPaths = ['engine-framework', 'runtime/runtime-cocos2d-js'];
+    var buildPaths = ['engine-framework', 'runtime/runtime-cocos2d-js', 'runtime/runtime-pixi'];
     var count = buildPaths.length;
     var cmdStr = process.platform === 'win32' ? 'gulp.cmd' : 'gulp';
     function doBuild (cwd, done) {
