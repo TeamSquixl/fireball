@@ -669,12 +669,13 @@ gulp.task('make-dist-win', gulpSequence('rename-electron-win', 'copy-app-dist', 
 // HACK dist version jade module
 
 gulp.task('copy-missing-packages', function(cb) {
+    var appLoc = process.platform === 'win32' ? 'dist/resources/app' : 'dist/Fireball.app/Contents/Resources/app';
     if (process.platform === 'win32') {
-        Fs.copySync('node_modules/xmldom', 'dist/Fireball.app/Contents/Resources/app/node_modules/xmldom');
+        Fs.copySync('node_modules/xmldom',  appLoc + '/node_modules/xmldom');
     }
-    Fs.copySync('node_modules/jade', 'dist/Fireball.app/Contents/Resources/app/node_modules/jade', {clobber: true});
+    Fs.copySync('node_modules/jade', appLoc + '/node_modules/jade', {clobber: true});
     var flatten = require('flatten-packages');
-    flatten('dist/Fireball.app/Contents/Resources/app/node_modules/jade', {}, function (err, res) {
+    flatten( appLoc + '/node_modules/jade', {}, function (err, res) {
       if (err) console.error(err);
       if (res) {
           console.log(res);
