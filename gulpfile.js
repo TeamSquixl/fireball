@@ -655,10 +655,31 @@ gulp.task('flatten-modules', function(cb) {
     var flatten = require('flatten-packages');
     flatten(appLoc, {}, function (err, res) {
       if (err) console.error(err);
-      if (res) return console.log(res);
+      if (res) {
+          console.log(res);
+          return cb();
+      }
     });
 });
 
-gulp.task('make-dist-mac', gulpSequence('rename-electron-mac', 'copy-app-dist', 'flatten-modules'));
+gulp.task('make-dist-mac', gulpSequence('rename-electron-mac', 'copy-app-dist', 'flatten-modules', 'copy-missing-packages'));
 
-gulp.task('make-dist-win', gulpSequence('rename-electron-win', 'copy-app-dist', 'flatten-modules'));
+gulp.task('make-dist-win', gulpSequence('rename-electron-win', 'copy-app-dist', 'flatten-modules', 'copy-missing-packages'));
+
+// HACK dist version jade module
+
+gulp.task('copy-missing-packages', function(cb) {
+    var appLoc = process.platform === 'win32' ? 'dist/resources/app' : 'dist/Fireball.app/Contents/Resources/app';
+    if (process.platform === 'win32') {
+        Fs.copySync('node_modules/xmldom',  appLoc + '/node_modules/xmldom');
+    }
+    Fs.copySync('node_modules/jade', appLoc + '/node_modules/jade', {clobber: true});
+    var flatten = require('flatten-packages');
+    flatten( appLoc + '/node_modules/jade', {}, function (err, res) {
+      if (err) console.error(err);
+      if (res) {
+          console.log(res);
+          return cb();
+      }
+    });
+});
