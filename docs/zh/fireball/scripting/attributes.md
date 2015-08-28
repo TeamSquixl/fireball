@@ -36,6 +36,7 @@ rawType | 该属性的类型是宿主平台上的原生对象 | string | undefin
 
 ## 其它属性
 
-参数名 | 说明 | 类型 | 备注 
+参数名 | 说明 | 类型 | 备注
 --- | --- |:---:|:---:
+[default](/manual/scripting/class#default) | 定义属性的默认值 | (Any) | 可序列化属性的 default 值修改后并不影响已保存或打开的场景
 notify | 当属性修改时触发指定方法 | function (oldValue) {} | 需要已定义 default
