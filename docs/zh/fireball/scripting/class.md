@@ -1,18 +1,18 @@
 ---
-title: 类型定义
+title: Advanced FireClass
 categories: manual
 permalinks: manual/scripting/class
 ---
 
-> 所有“备注”都属于进阶内容，初学者不需要了解。
+> All "Note" section is advanced learning material, beginner can safely skip those parts.
 
-`Fire.Class` 是一个很常用的 API，用于声明 Fireball 中的类，为了方便区分，我们把使用 Fire.Class 声明的类叫做 **FireClass**。相比其它 JavaScript 的类型系统，FireClass 的特别之处在于扩展性强，能够定义丰富的元数据。
+`Fire.Class` can define classes with Fireball specific features. To make things clear, we call it **FireClass** if a class is defined by `Fire.Class`. **FireClass** can be extended very easily, and able to define type-rich data.
 
-## 概述
+## Overview
 
-### 创建Fire.Class
+### Create FireClass
 
-调用 **Fire.Class** 方法，传入一个原型对象，在原型对象中以键值对的形式设定所需的类型参数，就能创建出所需要的类。
+To define a FireClass, you need to call `Fire.Class` with a prototype object as parameter. Add properties according to a certain key-value pair pattern to the prototype object to customize your class.
 
 ```js
     var Sprite = Fire.Class({
@@ -20,20 +20,21 @@ permalinks: manual/scripting/class
     });
 ```
 
-这段代码将创建好的类赋值给了 Sprite 变量，另外还提供了 `name` 参数来作为类名，类名用于序列化，一般可以省略。
-为了论述方便，本文将这里传入的这个 `{ name: 'Sprite' }` 对象统称为**原型对象**，本文重点介绍如何定义原型对象。
+The above code snippet created a FireClass and assigned it to `Sprite` variable. The variable name has nothing to do with class name. You can add a `name` property as class name, it only matters when you need the class to be serialized.
 
-### 创建对象
+To make writing easier, we call this Fireball specific `{ name: 'Sprite' }` pattern of defining class **prototype object**. The following sections will focus on how to create and do scripting in this prototype object.
 
-由于 FireClass 本身就是一个 JavaScript 构造函数，使用 new 就可以创建对象：
+### Create Class Instance
+
+FireClass is a JavaScript prototype, so you can create class instance with `new` keyword.
 
 ```js
     var obj = new Sprite();
 ```
 
-### 构造函数
+### Constructor
 
-如果在原型对象中声明了 `constructor`，指定的构造函数就将在每个实例的创建过程中调用，FireClass 的构造函数**不允许**定义**构造参数**。
+If you add a `constructor` property in prototype object, the function will be called during the instantiation of the FireClass. FireClass does not allow parameter for constructor.
 
 ```js
     var Sprite = Fire.Class({
@@ -44,83 +45,83 @@ permalinks: manual/scripting/class
     var obj = new Sprite();
 ```
 
-注：Behavior 是特殊的 FireClass，不能定义构造函数，它的构造职能可由 `onLoad` 方法代替。
+**Note**: Behavior is a special kind of FireClass, you cannot add `constructor` to Behavior's prototype object, but you can use `onLoad` for initialization.
 
-### 判断类型
+### Test Class Prototype
 
-`instanceof` 可以用来判断对象的类型：
+`instanceof` can be used for testing if an object uses the FireClass prototype.
 
 ```js
     console.log(obj instanceof Sprite);     // true
 ```
 
-**备注**
+**Note**
 
-- 如果不需要序列化，类名可以省略。类名可以是任意字符串，但不允许重复。可以使用 Fire.getClassName 来获得类名，使用 Fire.getClassByName 来查找对应的类。
-- 专业开发者如果确实需要使用构造参数，可以在 constructor 的 arguments 里获取。但如果这个类需要序列化，必须保证构造参数都缺省的情况下仍然能 new 出对象。
+- If your class doesn't need serialization, you can safely omit `name` property. Class name can be any string but there should not have classes with the same name in one project. You can use `Fire.getClassName` to get class name, use `Fire.getClassByName` to use name to find class.
+- If advanced developer need to use constructor with parameter, you can use `arguments` inside `constructor` to get parameters. But if this class need to be serialized, you must make sure the class can be instantiated with `new` keyword without any constructor parameter.
 
-## 成员
+## Members
 
-### 实例变量
+### Instance Variable
 
-实例变量请统一在构造函数中声明：
+Instance variables should be declared in constructor:
 
 ```js
     var Sprite = Fire.Class({
         constructor: function () {
-            // 声明实例变量并赋默认值
+            // declare instance variable and gives default value
             this.url = "";
             this.id = 0;
         }
     });
     var obj = new Sprite();
-    // 赋值
+    // assign value
     obj.url = 'img/fb.png';
     obj.id = 1;
 ```
 
-### 实例方法
+### Instance Method
 
-实例方法请在原型对象中声明：
+Instance methods defined as prototype object's properties:
 
 ```js
     var Sprite = Fire.Class({
         constructor: function () {
             // ...
         },
-        // 声明一个名叫"load"的实例方法
+        // declare an instance method named "load"
         load: function () {
             // load this.url
         };
     });
     var obj = new Sprite();
-    // 调用实例方法
+    // call instance method
     obj.load();
 ```
 
-### 类变量和类方法
+### Static Class Variable and Method
 
-静态的类变量或类方法可以直接添加到定义好的 Class：
+Static class variable and class method can be added to class outside of prototype object:
 
 ```js
     var Sprite = Fire.Class({ ... });
 
-    // 声明类变量
+    // declare class variable
     Sprite.count = 0;
-    // 声明类方法
+    // declare class method
     Sprite.getBounds = function (spriteList) {
         // ...
     };
 ```
 
-也可以在原型对象的 `statics` 中声明：
+You can also declare them in `statics` property of prototype object:
 
 ```js
     var Sprite = Fire.Class({
         statics: {
-            // 声明类变量
+            // declare class variable
             count: 0,
-            // 声明类方法
+            // declare class method
             getBounds: function (spriteList) {
                 // ...
             }
@@ -128,86 +129,86 @@ permalinks: manual/scripting/class
     });
 ```
 
-**完整代码如下：**
+**A Full FireClass definition script:**
 
 ```js
     var Sprite = Fire.Class({
         name: 'Sprite',
         constructor: function () {
-            // 声明实例变量并赋默认值
+            // instance variables
             this.url = "";
             this.id = 0;
         },
-        // 声明一个名叫"load"的实例方法
+        // instance method named `load`
         load: function () {
             // load this.url
         };
     });
-    // 实例化
+    // class instantiation
     var obj = new Sprite();
-    // 访问实例变量
+    // access instance variable
     obj.url = 'sprite.png';
-    // 调用实例方法
+    // call instance method
     obj.load();
 
-    // 声明类变量
+    // declare static class variable
     Sprite.count = 0;
-    // 声明类方法
+    // declare static class method
     Sprite.getBounds = function (spriteList) {
         // ...
     };
 
-    // 调用类方法
+    // call static class method
     Sprite.getBounds([obj]);
 ```
 
-**备注**
+**Note**
 
-- 如果是**私有**成员，建议在成员命名前面加上下划线"_"以示区分。
+- For **private** member that should not be accessible from outside, it's recommended to add `_` prefix to the member name.
 
     ```js
     var Sprite = Fire.Class({
         name: 'Sprite',
         constructor: function () {
-            // 私有实例变量
+            // private instance variable
             this._myData = 0;
         },
-        // 私有实例方法
+        // private instance method
         _load: function () {
             // ...
         };
     });
-    // 私有类变量
+    // private static class variable
     Sprite._list = [];
     ```
 
-- 如果是**私有**静态成员，也可以用闭包(Closure)实现。
+- For **private** static member, you can also use closure
 
     ```js
-    // 私有静态方法
+    // private static method
     var doLoad = function (sprite) {
         // do load ...
     };
-    // 私有静态变量
+    // private static variable
     var url = 'foo.png';
 
     var Sprite = Fire.Class({
         load: function () {
-            // 调用局部作用域内的方法
+            // call method with local scope
             doLoad(this, url);
         };
     });
     ```
 
-- 这里所说的“实例成员”(instance member)包含了“实例变量”(member variable)和“实例方法”(instance method)。
-- 这里所说的“类成员”(static member)包含了“类变量”(static variable)和“类方法”(static method)。
-- 类变量的继承实现方式是将父类的静态变量**浅拷贝**给子类实现的。
+- The concept *instance member* here includes instance variable and instance method.
+- The concept *static member* here includes static variable and static method.
+- To inherit a static variable, you should **shallow copy** the variable to the child class.
 
-## 继承
+## Inheritance
 
-### 声明方式
+### How to
 
-继承时请在原型对象里声明 `extends`：
+To inherit a class, put the class type to prototype object's `extends` property:
 
 ```js
     // define base class
@@ -222,7 +223,7 @@ permalinks: manual/scripting/class
     var obj = new Sprite();
 ```
 
-`instanceof` 也可以用来判断对象所在的类型是否继承自某个父类：
+`instanceof` can be used to detect if an object are created with a class inherits from a certain parent class:
 
 ```js
     var sub = new Sprite();
@@ -231,9 +232,9 @@ permalinks: manual/scripting/class
     console.log(base instanceof Sprite);    // false
 ```
 
-### 父构造函数
+### Parent Class Constructor
 
-请注意，不论子类的构造函数是否提供，子类实例化前父类的构造函数都会先被自动调用。
+You should notice that no matter if child class has constructor, the parent's constructor will be called before the child is instantiated.
 
 ```js
     var Node = Fire.Class({
@@ -244,9 +245,10 @@ permalinks: manual/scripting/class
     var Sprite = Fire.Class({
         extends: Node,
         constructor: function () {
-            // 子构造函数被调用前，父构造函数已经被调用过，所以 this.name 已经被初始化过了
+            // before this code is executed, parent's constructor is already called
+            // so this.name is defined.
             console.log(this.name);    // "node"
-            // 重新设置 this.name
+            // assign another value to this.name
             this.name = "sprite";
         }
     });
@@ -254,9 +256,9 @@ permalinks: manual/scripting/class
     console.log(obj.name);    // "sprite"
 ```
 
-### 重载
+### Override
 
-所有实例方法都是虚方法，子类方法可以直接重载父类方法：
+All instance method are considered virtual, so you can override any method in child class:
 
 ```js
     var Node = Fire.Class({
@@ -273,7 +275,7 @@ permalinks: manual/scripting/class
     console.log(obj.getName());    // "sprite"
 ```
 
-如果想要调用父类方法，必须直接通过父类的 prototype，并且以 call 或 apply 的形式调用：
+If you want to access parent method from child, you should use `call` or `apply` on parent's prototype:
 
 ```js
     var Node = Fire.Class({
@@ -291,7 +293,7 @@ permalinks: manual/scripting/class
     console.log(obj.getName());    // "node>sprite"
 ```
 
-使用 `Fire.isChildClassOf` 来判断两个类的继承关系：
+Use `Fire.isChildClassOf` to detect if there are inheritance between two classes:
 
 ```js
     var Texture = Fire.Class();
@@ -301,27 +303,27 @@ permalinks: manual/scripting/class
     console.log(Fire.isChildClassOf(Texture2D, Texture));   // true
 ```
 
-请注意，两个传入参数都必须是类的构造函数，而不是类的对象实例。如果传入的两个类相等，`isChildClassOf` 也会返回 true。
+Please note parameter of `Fire.isChildClassOf` should all be class constructor, not class instance. If you pass two identical classes it will return `true` as well.
 
-**备注**
+**Note**
 
-- 可以通过子类的静态变量 `$super` 来访问父类。
-- 所有实例成员和类成员都将被子类继承。
-- 如果你想实现原生的 JavaScript 继承，也就是说你的父类和子类都不是 FireClass，那你可以通过 Fire.JS.extend 方法来继承。
+- You can access parent class with static member `$super` from child class.
+- All instance members and static members will be inherited by child class.
+- If you prefer vanilla JavaScript type of inheritance, in other words your parent and child are not both FireClass. You can use [Fire.JS.extend](http://docs.fireball-x.com/api/modules/Fire.JS.html#method_extend) for that.
 
-## 属性
+## Properties
 
-### <a name="default"></a>属性定义和访问
+### <a name="default"></a>Define and Access Properties
 
-属性(Property)是特殊的实例变量，能够显示在 Inspector 中，也能被序列化。属性不在构造函数里定义，而是声明在原型对象的 `properties` 字典里。
+Properties are special type of instance variable that you can see and edit them in **Inspector**. They can be serialized as well. To define properties, add key-object pair under prototype object's `properties` key.
 
-**下面在 Player 类定义一个 playerName 属性：**
+Let's add a property named `playerName` in `Player` class.
 
 ```js
     var Player = Fire.Class({
         extends: Fire.Behavior,
 
-        properties {
+        properties: {
             playerName: {
                 default: 'Jare'
             }
@@ -329,16 +331,16 @@ permalinks: manual/scripting/class
     });
 ```
 
-这样一来 playerName 就能显示在 Inspector 面板里，并且当保存 Player 所在的场景时，playerName 也会被保存起来。
+This way `playerName` will be shown in **Inspector**, and it's value will be saved together with current scene.
 
-这里的 `default` 用来声明属性的默认值，同时也定义了值类型是字符串。默认值只有在第一次创建对象的时候才会用到，也就是说对可序列化属性来说， default 值修改后并不影响已保存或编辑中的场景对象，除非将对象重新创建一次。
+The `default` key is used to give property a default value. For value types a default value also tells Fireball the type of property. Default value is only used when class is instantiated for the first time. In other words, for serialized properties, change default value in class script does not affect class instance in scene (which is already saved), unless you remove the class instance and recreate it.
 
-**属性本身也是实例变量，可以直接访问：**
+Properties themselves are instance members, that can be accessed easily:
 
 ```js
     var Sprite = Fire.Class({
         constructor: function () {
-            console.log(this.width);    // 读取默认 width
+            console.log(this.width);    // access width
         },
 
         properties: {
@@ -353,11 +355,11 @@ permalinks: manual/scripting/class
     });
 ```
 
-在构造函数被调用前，属性已经被定义好了，可以在构造函数内访问或者重新给属性赋值。
+Properties are defined before constructor function is called, so they can be accessed or has value changed in constructor function.
 
-### 属性参数
+### Property Attributes
 
-每个属性可附带任意多个参数(Attribute)，用于指定在 Inspector 中的显示方式、序列化方式等。
+Each property can have multiple attributes, to customize the way property is shown in **Inspector** and how its serialized.
 
 ```js
     properties {
@@ -369,46 +371,46 @@ permalinks: manual/scripting/class
     }
 ```
 
-以上代码规定了 score 在 Inspector 里只能输入整数，并且当鼠标移到参数上时，显示对应 Tooltip。
+The above code make sure you can only input integer value for `score` in **Inspector**. Also when move your mouse over the property it should display tooltip.
 
-下面是常用参数，详细用法请参阅[属性参数](/manual/scripting/attributes)。
+Below are common attributes, for more details please read [Property Attributes](/manual/scripting/attributes).
 
-- type: 限定属性的数据类型
-- url: 限定属性为指定类型的 url
-- visible: 设为 false 则不在 Inspector 面板中显示该属性
-- serializable: 设为 false 则不序列化该属性
-- displayName: 在 Inspector 面板中显示成指定名字
-- tooltip: 在 Inspector 面板中添加属性的 Tooltip
+- type: define data type of the property
+- url: define asset type of property (asset accessed with url).
+- visible: set it to `false` to hide the property in **Inspector**.
+- serializable: set it to `false` will make the property non-serializabe.
+- displayName: show different name in **Inspector**
+- tooltip: mouse over tooltip in **Inspector**
 
-#### <a name="visible"></a>visible参数
+#### <a name="visible"></a>Visible Attribute
 
-默认情况下，是否显示在 Inspector 取决于属性名是否以下划线"_"开头。如果以下划线开头，则默认不显示在 Inspector，否则默认显示。
+By default, if a property is shown in **Inspector** depends on if the property name starts with `_`. All properties with `_` prefix are hidden in **Inspector**.
 
-如果要强制显示在 Inspector，可以设置`visible`参数为 true:
+To enforce showing these properties in  **Inspector**, you can set `visible` attribute to `true`:
 
 ```js
     properties {
-        _id: {      // 下划线开头原本会隐藏
+        _id: {      //
             default: 0,
-            visible: true
+            visible: true // force showing property despite `_` prefix
         }
     }
 ```
 
-如果要强制隐藏，可以设置`visible`参数为 false:
+To force hiding a property, you can set `visible` attribute to `false`:
 
 ```js
     properties {
-        id: {       // 非下划线开头原本会显示
+        id: {       // force hiding property
             default: 0,
             visible: false
         }
     }
 ```
 
-#### <a name="serializable"></a>serializable参数
+#### <a name="serializable"></a>Serializable Attribute
 
-属性默认情况下都会被序列化，如果不想序列化，可以设置`serializable: false`。
+All properties by default are serializable, you can set `serializable: false` if you like otherwise.
 
 ```js
     temp_url: {
@@ -417,36 +419,40 @@ permalinks: manual/scripting/class
     }
 ```
 
-#### <a name="type"></a>type参数
+#### <a name="type"></a>Type Attribute
 
-当`default`不能提供足够详细的类型信息时，为了能在 Inspector 里正确编辑属性，则需要用`type`显式声明具体的类型：
+If `default` attribute alone cannot provide enough details about type information, we need to use `type` explicitly declare property type in order to correctly display and edit the property:
 
-- 当默认值为 null 时，将 type 设置为指定类型的构造函数，这样才能在 Inspector 中给属性正确赋值。
+- For reference data type, usually the default value is `null`. We need to set a specific type so `Inspector` knows how to create an instance and edit the property:
+
     ```js
         enemy: {
             default: null,
             type: cc.Node
         }
     ```
-- 当默认值为数值(Number)类型时，将 type 设置为 `Fire.Integer`，用来表示这是一个整数，这样属性在 Inspector 里就不能输入小数点。
+- For primary value type (such as Number), set `type` to `Fire.Integer` to constrain property value to integer. This way user will not be able to input decimal point in **Inspector**:
+
     ```js
         score: {
             default: 0,
             type: Fire.Integer
         }
     ```
-- 将 type 设置为枚举类型，就能在 Inspector 中选择枚举值。
+- Set `type` to a enum type (can be defined with [Fire.defineEnum](http://docs.fireball-x.com/api/modules/Fire.html#method_defineEnum)), you'll be able to select value from a drop down list in **Inspector**.
+
     ```js
         wrap: {
             default: Fire.Texture.WrapMode.Clamp,
             type: Fire.Texture.WrapMode
         }
     ```
-- 当 default 设置为**数组**`[]`时，如果要在 Inspector 中编辑数组元素，也需要设置 type 为构造函数、枚举，或者 `Fire.Integer`, `Fire.Float`, `Fire.Boolean`, `Fire.String`。
+- If `default` is set to an empty array (`[]`), you need to use `type` to represent each element's data type in order to show and edit property in **Inspector** properly.
+
     ```js
         nameList: {
             default: [],
-            type: [Fire.String]     // 声明数组的每个元素都是字符串类型
+            type: [Fire.String]     // this make sure each array element's type is `Fire.String`
         },
         enemyList: {
             default: [],
@@ -454,9 +460,10 @@ permalinks: manual/scripting/class
         }
     ```
 
-#### <a name="url"></a>url参数
+#### <a name="url"></a>Url Attribute
 
-如果属性是用来保存资源的 url，为了能在 Inspector 中设置资源，或者能正确序列化，你就需要提供 url 参数。
+Some properties are used for referencing asset url. You need to use `url` key to define property type so you can drag the asset you want to **Inspector** and serialize it.
+
 ```js
     texture: {
         default: "",
@@ -464,10 +471,10 @@ permalinks: manual/scripting/class
     },
 ```
 
-**备注**
+**Note**
 
-- 属性都能被子类继承，但子类和父类的属性不能重名。
-- 如果属性的默认值需要调用其它方法才能获得，可以在构造函数里重新赋值。
+- Properties will be inherited by child class, but you can't override parent's properties.
+- If a property's default value need to be fetched or calculated, you can assign its value in `constructor` function.
 
     ```js
     var Sprite = Fire.Class({
@@ -480,13 +487,13 @@ permalinks: manual/scripting/class
     });
     ```
 
-## GetSet方法
+## GetSet Method
 
-在属性中设置了 get 或 set 以后，访问属性的时候，就能触发预定义的 get 或 set 方法。
+You can add `get` or `set` method in a property. This way `get` or `set` method will be called whenever the property is accessed.
 
 ### get
 
-在属性中设置 get 方法：
+To add a `get` method:
 
 ```js
     properties: {
@@ -498,8 +505,8 @@ permalinks: manual/scripting/class
     }
 ```
 
-get 方法可以返回任意类型的值。
-这个属性同样能显示在 Inspector 中，并且可以在包括构造函数内的所有代码里直接访问。
+`get` method can return any type of value.
+This property will be shown in **Inspector**, and can be accessed from anywhere.
 
 ```js
     var Sprite = Fire.Class({
@@ -517,9 +524,9 @@ get 方法可以返回任意类型的值。
     });
 ```
 
-请注意：
+**Note**:
 
-- 设定了 get 以后，这个属性就不能被序列化，也不能指定默认值，但仍然可附带除了 "default", "serializable" 以外的任意参数。
+- A property with `get` method cannot be serialized, and cannot have default value. But you can add any attribute to it except `default` and `serializable`.
 
     ```js
         width: {
@@ -531,7 +538,7 @@ get 方法可以返回任意类型的值。
         }
     ```
 
-- get 属性本身是只读的，但返回的对象并不是只读的。用户使用代码依然可以修改对象内部的属性，例如：
+- A property with `get` method is read-only, but the returned object or value is not. You can still modify internal object in your script.
 
     ```js
     var Sprite = Fire.Class({
@@ -544,13 +551,13 @@ get 方法可以返回任意类型的值。
         ...
     });
     var obj = new Sprite();
-    obj.position = new Fire.Vec2(10, 20);   // 错误！position 是只读的！
-    obj.position.x = 100;                   // 允许！position 对象本身可以修改！
+    obj.position = new Fire.Vec2(10, 20);   // WRONG! position is read-only
+    obj.position.x = 100;                   // ALLOWED! position object can be modified!
     ```
 
 ### set
 
-在属性中设置 set 方法：
+To add a `set` method:
 
 ```js
     width: {
@@ -560,9 +567,9 @@ get 方法可以返回任意类型的值。
     }
 ```
 
-set 方法接收一个传入参数，这个参数可以是任意类型。
+`set` method can have a parameter with any type.
 
-set 可以和 get 一起使用：
+`set` can be used together with `get`:
 
 ```js
     width: {
@@ -577,6 +584,6 @@ set 可以和 get 一起使用：
     }
 ```
 
-请注意：
-- 如果没有和 get 一起定义，则 set 自身不能附带任何参数。
-- 和 get 一样，设定了 set 以后，这个属性就不能被序列化，也不能指定默认值。
+**Note**:
+- If not defined together with a `get` method, you cannot pass parameter to `set` method.
+- You can't serialize a property if it has a `set` method.
