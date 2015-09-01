@@ -23,8 +23,10 @@
 
         if (Fire.isWeb) {
             canvas = document.getElementById('GameCanvas');
-            width = document.documentElement.clientWidth;
-            height = document.documentElement.clientHeight;
+
+            var div = document.getElementById('GameDiv');
+            width = div.clientWidth;
+            height = div.clientHeight;
         }
 
         var option = {
