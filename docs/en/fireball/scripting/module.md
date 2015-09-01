@@ -1,50 +1,52 @@
 ---
-title: 模块化
+title: Module
 categories: manual
 permalinks: manual/scripting/module
 ---
 
-Fireball 允许你将代码拆分成多个脚本文件，并且让它们相互引用。要实现这点，你需要了解如何在 Fireball 中定义和使用模块，这个步骤简称为**模块化**。
+In Fireball you can split your program into multiple module script and reference each other. Let's see how to define and use modules in Fireball scripts (also known as *modularization*).
 
-> 在本文中，“模块”和“脚本”这两个术语通常是等价的。所有“备注”都属于进阶内容，一开始不需要了解。
+> In this article, we consider module and script equal to each other. All sections with **note** are advanced material, beginner can safely skip those.
 
-## 概述
+## Overview
 
-如果你还不确定模块化究竟能做什么，模块化相当于：
-- C/C++ 中的 include
-- C# 中的 using
-- Java 和 Python 中的 import
-- HTML 中的 link
+If you're not sure what can modularization do for you, it's basically (with significant differences):
 
-模块化使你可以在 Fireball 中引用其它脚本文件：  
-- 访问其它文件公开的参数
-- 调用其它文件公开的方法
-- 使用其它文件公开的类型
-- 使用或继承其它 Behavior
+- `include` in C/C++
+- `using` in C#
+- `import` in Java and Python
+- `link` in HTML
 
-Fireball 中的 JavaScript 使用和 node.js 几乎相同的方式来实现模块化：
-- 每一个单独的脚本文件就构成一个模块。
-- 每个模块都是一个单独的作用域（在该模块内使用`var`定义的局部变量，无法被其它模块读取）。
-- 以**同步**的 `require` 方法来引用其它模块。
-- 设置 `module.exports` 为导出的变量。
+Modularization allow you to access other script in Fireball:
 
-不论模块如何定义，所有用户代码最终会由 Fireball 编译为原生的 JavaScript，可直接在手机浏览器中运行。
+- Access public member of other script files
+- Call public method of other script files
+- Use public type of other script files
+- Access or inherit other Behaviors
 
-## 引用模块
+The way Fireball modularize scripts are nearly identical to JavaScript and node.js:
+- Each individual script file is a module.
+- Each module has its own scope ( in the module, any variable declared with `var` keyword cannot be accessed by other scripts )
+- Use `require` method to reference other modules
+- Put public variables in `module.exports` to allow access from other scripts
+
+All of your script file, be it module or not, will be compiled to native JavaScript by Fireball and can run in any modern Mobile browser.
+
+## Reference Modules
 
 ### require
 
-除了 Fireball 提供的接口，所有用户定义的模块都需要使用 **require** 来访问。假设我们要访问的是其它脚本里定义的 Behavior，叫做 Rotate：
+Except API provided by Fireball, all user defined modules need to use `require` to access. Let's say we need to access a Behavior script called `Rotate`:
 
 ```js
 var Rotate = require('rotate');
 ```
 
-require 返回的就是被模块导出的对象，通常我们都会将结果存到一个变量。传进 require 的字符串就是模块的**文件名**，这个名字不包含路径也不包含后缀，而且大小写敏感。
+The return object of `require` method is target module's exported object. Usually we will store the object into a variable. The script file name should be passed to `require`. You should not include path or file extension, also keep in mind it's case sensitive.
 
-### require完整范例
+### Full Example
 
-接着我们就可以使用 Rotate 派生一个子类，新建一个脚本 `sinRotate.js`：
+Let's create a child class extending `Rotate`, named `SinRotate.js`:
 
 ```js
 var Rotate = require('rotate');
@@ -57,18 +59,18 @@ var SinRotate = Fire.Class({
 });
 ```
 
-这里我们定义了一个新的 Behavior 叫 SinRotate，它继承自 Rotate，并对 update 方法进行了重写。同时这个 Behavior 也可以被其它脚本接着访问，只要用 require('sinRotate')。
+We defined a new Behavior called `SinRotate` which inherits `Rotate` and overrides `update` method. This Behavior can be accessed by other script with `require('SinRotate')`.
 
-备注：
-  - require 可以在脚本的任何地方任意时刻进行调用。
-  - 游戏开始时会自动 require 所有脚本，这时每个模块内部定义的代码就会被执行一次，所以之后无论又被 require 几次，返回的始终是同一份实例。
-  - 调试时，可以随时在 Developer Tools 中 require 项目里的任意模块。
+**Note**:
+- `require` can be called anywhere in your script.
+- When the game loads all scripts will be required and executed once. No matter how many times a module is required, you still got the same module instance.
+- When debugging in **DevTools** console, you can require any module in the project.
 
-## <a name="define"></a>定义模块
+## <a name="define"></a>Define Module
 
-### 定义Behavior
+### Define Behavior
 
-每一个单独的脚本文件就是一个模块，例如新建一个脚本 `rotate.js`，在里面定义一个 Behavior：
+Create a new script file named `Rotate.js`, define a Behavior like this:
 
 ```js
 var Rotate = Fire.Class({
@@ -82,11 +84,11 @@ var Rotate = Fire.Class({
 });
 ```
 
-当你在脚本中声明了一个 Behavior，Fireball 会默认设置它为导出模块，其它脚本直接 require 这个模块就能使用这个 Behavior。
+A Behavior class should have `extends: Fire.Behavior` in prototype object. Fireball will automatically export Behavior module for you. So you can require this Behavior from any other scripts.
 
-### 定义普通JavaScript模块
+### Define Non-FireClass JavaScript Module
 
-模块里不单单能定义 Behavior，实际上你可以定义任意 JavaScript 对象。假设有个脚本 `config.js`
+You can use any JavaScript file as module. Let's say we have a normal JavaScript file `config.js`.
 
 ```js
 var config = {
@@ -101,7 +103,7 @@ var config = {
 config.load();
 ```
 
-现在如果我们要在其它脚本中访问 config 对象：
+If we want to access `config` object in this script:
 
 ```js
 // player.js
@@ -109,18 +111,17 @@ var config = require('config');
 Fire.log('speed is', config.moveSpeed);
 ```
 
-结果会有报错：`TypeError: Cannot read property 'moveSpeed' of null`，这是因为 config 没有设置为导出对象。我们还需要在 `config.js` 的最后把 **module.exports** 设置成 config：
+You'll get a error: `TypeError: Cannot read property 'moveSpeed' of null`. Because we haven't set export for `config.js` file. To make it work, just use `module.exports` to add `config` object:
 
 ```js
 module.exports = config;
 ```
 
-这样做的原因是只要有其它脚本 require 它，获得的实际上就是这里的 module.exports 对象。
+> Why we don't have to set exports for Behaviors?
+  Behavior is the most common FireClass and will be treated differently by Fireball.
+  Fireball will automatically set exports for the whole Behavior module.
 
-> 那为什么定义 Behavior 时可以不用设置 exports ？
-  因为 Behavior 是 Fireball 中的特殊类型，如果一个脚本定义了 Behavior 却没有声明 exports，Fireball 会自动将 exports 设置为 Behavior。
-
-完整代码如下：
+Full code for this example:
 
 ```js
 // config.js
@@ -143,13 +144,13 @@ var config = require('config');
 Fire.log('speed is', config.moveSpeed);
 ```
 
-这样便能正确输出：`speed is 10`。
+You'll get correct output: `speed is 10`.
 
-## 更多示例
+## More Examples
 
-### 导出变量
+### Export Variable
 
-- module.exports 默认是一个空对象(`{}`)，可以直接往里面增加新的字段。
+- `module.exports` by default is an empty object (`{}`), you can add new key-value pairs to it.
 
     ```js
     // foobar.js:
@@ -164,7 +165,7 @@ Fire.log('speed is', config.moveSpeed);
     foobar.foo();    // "foo"
     foobar.bar();    // "bar"
     ```
-- module.exports 的值可以是任意 JavaScript 类型。
+- `module.exports` can add any JavaScript type:
 
     ```js
     // foobar.js:
@@ -181,9 +182,9 @@ Fire.log('speed is', config.moveSpeed);
     Fire.log(foobar.bar);    // "bar"
     ```
 
-### 封装私有变量
+### Encapsulate Private Member
 
-每个脚本都是一个单独的作用域，在脚本内使用 **var** 定义的局部变量，将无法被模块外部访问。我们可以这样来封装模块内的私有变量：
+All variables defined with `var` is only accessible inside the file scope of the script. So we define private member in module scope like this:
 
 ```js
 // foobar.js:
@@ -207,11 +208,11 @@ var foo = require("foobar");
 Fire.log(foo.isDirty());           // true
 ```
 
-**警告：定义变量前一定要在前面加上 var**，否则将会变成全局变量！
+**Note**: If you omit `var` when define variable, it will become a global variable! (Accessible from any script in your project)
 
 ```js
 // foobar.js:
-dirty = false;        // 不推荐将 dirty 设成全局变量！前面应该加上 var ！
+dirty = false;        // This makes dirty a global variable! don't if you're not sure!
 module.exports = {
     setDirty: function () {
         dirty = true;
@@ -219,6 +220,6 @@ module.exports = {
 };
 ```
 
-## 循环引用
+## Circular Reference
 
 (TODO)
