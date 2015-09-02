@@ -311,7 +311,7 @@ permalinks: manual/scripting/class
 
 ## 属性
 
-### <a name="default"></a>属性定义和访问
+### 属性定义和访问
 
 属性(Property)是特殊的实例变量，能够显示在 Inspector 中，也能被序列化。属性不在构造函数里定义，而是声明在原型对象的 `properties` 字典里。
 
@@ -331,7 +331,7 @@ permalinks: manual/scripting/class
 
 这样一来 playerName 就能显示在 Inspector 面板里，并且当保存 Player 所在的场景时，playerName 也会被保存起来。
 
-这里的 `default` 用来声明属性的默认值，同时也定义了值类型是字符串。默认值只有在第一次创建对象的时候才会用到，也就是说对可序列化属性来说， default 值修改后并不影响已保存或编辑中的场景对象，除非将对象重新创建一次。
+这里的 `default` 用来声明属性的默认值，同时也定义了值类型是字符串。默认值的类型不限，但只有在第一次创建对象的时候才会用到。
 
 **属性本身也是实例变量，可以直接访问：**
 
@@ -380,7 +380,7 @@ permalinks: manual/scripting/class
 - displayName: 在 Inspector 面板中显示成指定名字
 - tooltip: 在 Inspector 面板中添加属性的 Tooltip
 
-#### <a name="visible"></a>visible参数
+#### <a name="visible参数"></a>visible参数
 
 默认情况下，是否显示在 Inspector 取决于属性名是否以下划线"_"开头。如果以下划线开头，则默认不显示在 Inspector，否则默认显示。
 

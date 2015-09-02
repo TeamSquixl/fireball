@@ -12,32 +12,32 @@ Following attributes are also available to `get` method.
 
 Attribute Name | Description | Type | Default Value
 --- | --- |:---:|:---:
-[type](/manual/scripting/class#type) | define data/value type of property（see [example](/manual/scripting/class#type)） | (Any) | undefined
-[visible](/manual/scripting/class#visible) | Whether to show or hide property in Inspector | boolean | (注1)
-url | 该属性为指定资源的 url（[点击范例](/manual/scripting/class#url)） | function(构造函数) | undefined
-displayName | 在 Inspector 面板中显示为另一个名字 | string | undefined
-tooltip | 在 Inspector 面板中添加属性的 Tooltip | string | undefined
-multiline | 在 Inspector 面板中使用多行文本框 | boolean | false
-readonly | 在 Inspector 面板中只读 | boolean | false
-nullable | 在该属性的控件前附加一个单选框 | { propName: string, default: boolean } | undefined
-watch | 监听其它属性的状态，来刷新本控件 | { "prop names": function (this, uiCtrl) {} } | undefined
-range | 以滑动条的形式限定数值的最大最小值 | [min, max] | undefined
+[type](/manual/scripting/class#type) | define data/value type of property (see [example](/manual/scripting/class#type)) | (Any) | undefined
+[visible](/manual/scripting/class#visible) | Whether to show or hide property in Inspector | boolean | (Note1)
+url | if property is for referencing asset url, use this attribute (see [example](/manual/scripting/class#url)) | function(constructor) | undefined
+displayName | Inspector will show displayName instead of property name | string | undefined
+tooltip | Add tooltip when mouse over this property in Inspector | string | undefined
+multiline | Enable multiline input field for text property | boolean | false
+readonly | Mark this property readonly in Inspector | boolean | false
+watch | watch other property updates and run a callback function | { "prop names": function (this, uiCtrl) {} } | undefined
+range | constrain property range and edit property value with a slider | [min, max] | undefined
 
-注：
- 1. visible 的默认值取决于属性名。当属性名以下划线"_"开头时，默认隐藏，否则默认显示。
+Note:
+ 1. whether a property is visible by default is determined by its name. Property starts with a `_` is hidden by default.
 
-## 序列化相关属性
+## Serialization
 
-这些属性不能用于 get 方法
+These attributes are related to serialization, and cannot be used with `get` method.
 
-参数名 | 说明 | 类型 | 默认值
+Attribute Name | Description | Type | Default Value
 --- | --- |:---:|:---:
-[serializable](/manual/scripting/class#serializable) | 序列化该属性 | boolean | true
-editorOnly | 在导出项目前剔除该属性 | boolean | false
-rawType | 该属性的类型是宿主平台上的原生对象 | string | undefined
+[serializable](/manual/scripting/class#serializable) | This property will be serialized | boolean | true
+editorOnly | This property will be removed after building | boolean | false
+rawType | This property is native object type for host platform | string | undefined
 
-## 其它属性
+## Other Attributes
 
-参数名 | 说明 | 类型 | 备注
+Attribute Name | Description | Type | Note
 --- | --- |:---:|:---:
-notify | 当属性修改时触发指定方法 | function (oldValue) {} | 需要已定义 default
+[default](/manual/scripting/class#default) | default value of the property | (Any) | For serializable property, changing the default value will not affecting property value after it's modified in Inspector
+notify | trigger the function when property value is changed | function (oldValue) {} | need to have default value
