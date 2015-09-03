@@ -46,7 +46,7 @@ window.onload = function ( event ) {
             }
         }
         else {
-            var info = devices[idx];
+            var info = devices[idx-1];
             if ( !rotated ) {
                 w = info.width;
                 h = info.height;
