@@ -71,6 +71,7 @@ window.onload = function ( event ) {
         } else {
             btnRotate.classList.remove('checked');
         }
+        setCookie('rotate', rotated.toString());
         updateResolution();
     });
 
@@ -96,6 +97,8 @@ window.onload = function ( event ) {
     });
 
     optsDevice.addEventListener( 'change', function ( event ) {
+        var idx = optsDevice.value;
+        setCookie('device', idx.toString());
         updateResolution();
     });
 
@@ -109,6 +112,47 @@ window.onload = function ( event ) {
             btnPause.classList.add('checked');
         }
     });
+
+    // coockie
+    // =======================
+    function setCookie (name, value, days) {
+        days = days || 30;              //cookie will be saved for 30 days
+        var expires  = new Date();
+        expires.setTime(expires.getTime() + days*24*60*60*1000);
+        document.cookie = name + "="+ escape (value) + ";expires=" + expires.toGMTString();
+    }
+
+    function getCookie (name) {
+        var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+        if(arr != null) return (arr[2]);
+        return null;
+    }
+
+    // init options
+    function initOptions () {
+        var defaultDevice = getCookie('device');
+        var defaultRotate = getCookie('rotate');
+
+        var hasDefaultDevice = defaultDevice != null;
+        var hasDefaultRotate = defaultRotate != null;
+
+        if (hasDefaultDevice) {
+            optsDevice.value = parseInt(defaultDevice);
+        }
+
+        if (hasDefaultRotate && defaultRotate === 'true') {
+            rotated = !rotated;
+            if ( rotated ) {
+                btnRotate.classList.add('checked');
+            } else {
+                btnRotate.classList.remove('checked');
+            }
+        }
+
+        if (hasDefaultDevice || hasDefaultRotate) {
+            updateResolution();
+        }
+    }
 
     // init engine
     // =======================
@@ -148,6 +192,8 @@ window.onload = function ( event ) {
     };
 
     Fire.engine.init(option, function () {
+        initOptions();
+
         // init assets
         Fire.AssetLibrary.init('resource/import', 'resource/raw', _FireSettings.rawAssets);
         engineInited = true;
