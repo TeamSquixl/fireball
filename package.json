@@ -18,7 +18,8 @@
     "install": "gulp bootstrap && bower install && gulp npm-rebuild && gulp update",
     "test": "node ./utils/run-tests.js",
     "gendoc": "gulp cp-apisrc && firedoc build ./utils/api --theme notab --http && open apidocs/index.html",
-    "gendoc-local": "gulp cp-apisrc && firedoc build ./utils/api --theme notab && open apidocs/index.html"
+    "gendoc-local": "gulp cp-apisrc && firedoc build ./utils/api --theme notab && open apidocs/index.html",
+    "make-changelog": "github_changelog_generator -u fireball-x -p fireball --include-labels editor,engine,enhancement,bug --exclude-labels duplicate,question,invalid,wontfix,discussion"
   },
   "dependencies": {
     "async": "1.4.2",
