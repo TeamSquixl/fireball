@@ -1,9 +1,9 @@
 [submodule "engine-framework"]
 	path = engine-framework
-	url = git@github.com:fireball-x/engine-framework.git
+	url = git@github.com:rasentry/engine-framework.git
 [submodule "editor-framework"]
 	path = editor-framework
-	url = git@github.com:fireball-x/editor-framework.git
+	url = git@github.com:rasentry/editor-framework.git
 [submodule "asset-db"]
 	path = asset-db
-	url = git@github.com:fireball-x/asset-db.git
+	url = git@github.com:rasentry/asset-db.git
